@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="../css/style.css">
+     <title>Não sei o Nome</title>
+</head>
+<body class="login-page" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #F5F5DC;">
+     <div class="container-form">
+          <div class="text-form">
+               <i class="fa-solid fa-heart"></i>
+               <h1>Rede Solidária</h1>
+               <p>Conectando comunidades em momentos de emergência</p>
+          </div>
+          <form action="/login" method="POST">
+               <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com">
+               </div>
+               <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="suasenha" required>
+               </div>
+               <button type="submit">Entrar</button>
+          </form>
+          <a class="register-link" href="../pages/register.html">Criar Conta</a>
+     </div>
+</body>
+</html>
