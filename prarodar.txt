@@ -1,0 +1,16 @@
+instalar dependencias
+cd backend
+npm install
+
+no postgresql tem que criar um banco de dados e executar no query tool
+
+CREATE TABLE usuarios ( id SERIAL PRIMARY KEY, nome VARCHAR(100), email VARCHAR(100) UNIQUE, senha VARCHAR(100), cidade VARCHAR(100) );
+
+TEM QUE MUDAR A SENHA DO BANCO DE DADOS, backend->config->db.js  ai muda pela senha do seu banco de dados
+
+no pasta backend tem que rodar 
+node server.js
+
+e na pasta frontend tem que executar com a extensao live server
+
+E O POSTGRE TEM QUE ESTA ABERTO
