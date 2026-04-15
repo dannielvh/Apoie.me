@@ -1,12 +1,16 @@
 .header {
   background: #FFFFFF;
   color: #333333;
+  width: 100%;
 
   &__container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
+     justify-content: space-between;
+     align-items: center;
+
+     max-width: 1200px;   // controla largura do conteúdo
+     margin: 0 auto;      // centraliza na tela
+     padding: 15px 20px;  // espaço lateral
   }
 
   &__logo {
@@ -41,11 +45,53 @@
         font-size: 16px;
 
         &:hover {
-          background-color: #2E7D32;
-          color: #fff;
+          background-color: #9ed19e;
+          color: #2E7D32;
           border-radius: 5px;
         }
       }
+    }
+  }
+
+   &__toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  // MOBILE
+  @media (max-width: 768px) {
+
+    &__toggle {
+      display: block;
+    }
+
+    &__nav {
+      position: absolute;
+      top: 70px;
+      right: 0;
+      background: #fff;
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+      ul {
+        flex-direction: column;
+        gap: 0;
+
+        li a {
+          display: block;
+          padding: 15px;
+          border-bottom: 1px solid #eee;
+        }
+      }
+    }
+
+    &__nav.active {
+      display: flex;
     }
   }
 }

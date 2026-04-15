@@ -1,0 +1,179 @@
+.mapa-page {
+  background-color: #f5f5dc;
+
+  .mapa {
+    padding: 40px 20px;
+
+    .cidade {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+
+      label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      &__select-wrapper {
+        position: relative;
+
+        i {
+          position: absolute;
+          left: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #2e7d32;
+          font-size: 16px;
+        }
+
+        select {
+          width: 100%;
+          padding: 12px 12px 12px 35px; // espaço pro ícone
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          font-size: 14px;
+          cursor: pointer;
+          outline: none;
+          background: #fff;
+          transition: 0.2s;
+
+          appearance: none; // remove estilo padrão
+
+          &:hover {
+            border-color: #2e7d32;
+          }
+
+          &:focus {
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+          }
+        }
+
+        // seta custom
+        &::after {
+          content: "▼";
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 12px;
+          color: #777;
+          pointer-events: none;
+        }
+      }
+    }
+
+    &__container {
+      display: flex;
+      gap: 20px;
+
+      max-width: 1200px; // igual header
+      margin: 0 auto; // centraliza
+      width: 100%;
+    }
+
+    &__visual {
+      background: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+
+      flex: 0 0 60%; // 60%
+      min-height: 500px;
+    }
+
+    &__info {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+      flex: 0 0 40%; // 40%
+    }
+
+    #pontos-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .ponto {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      &__header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        i {
+          color: #2e7d32;
+          font-size: 18px;
+        }
+
+        strong {
+          font-size: 16px;
+        }
+      }
+
+      &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        p {
+          font-size: 14px;
+          color: #333;
+        }
+
+        small {
+          font-size: 12px;
+          color: #777;
+        }
+      }
+
+      &__btn {
+        margin-top: 5px;
+        padding: 8px;
+        border: none;
+        background: #2e7d32;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.3s;
+
+        &:hover {
+          background: #256628;
+        }
+      }
+    }
+
+    // 📱 MOBILE
+    @media (max-width: 768px) {
+      &__container {
+        flex-direction: column;
+      }
+
+      &__visual,
+      &__info {
+        flex: 1 1 100%;
+        width: 100%;
+      }
+
+      &__visual {
+        min-height: 250px;
+      }
+    }
+  }
+}

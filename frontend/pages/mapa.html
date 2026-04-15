@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="../css/style.css">
+     <title>Mapa de Apoio</title>
+</head>
+
+<body class="mapa-page">
+     <div id="header"></div>
+
+     <section class="mapa">
+
+          <div class="mapa__container">
+
+               <!-- LADO ESQUERDO (MAPA FUTURO) -->
+               <div class="mapa__visual">
+                    <!-- aqui depois entra mapa (Google Maps / Leaflet etc) -->
+                    <p>Mapa em breve</p>
+               </div>
+
+               <!-- LADO DIREITO (CIDADES + PONTOS) -->
+               <div class="mapa__info">
+
+                    <div class="cidade">
+
+                         <label for="cidade-select">Escolha a cidade</label>
+
+                         <div class="cidade__select-wrapper">
+                              <i class="fa-solid fa-city"></i>
+
+                              <select id="cidade-select">
+                                   <option value="">Selecione uma cidade</option>
+                                   <option value="divinopolis">Divinópolis</option>
+                                   <option value="belo-horizonte">Belo Horizonte</option>
+                                   <option value="itauna">Itaúna</option>
+                              </select>
+                         </div>
+
+                    </div>
+
+                    <div id="pontos-lista">
+                         <!-- JS vai preencher aqui -->
+                    </div>
+
+               </div>
+
+          </div>
+
+     </section>
+
+
+     <script src="../js/mapa.js"></script>
+     <script src="../js/header.js"></script>
+</body>
+
+</html>
