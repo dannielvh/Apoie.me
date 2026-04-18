@@ -162,6 +162,19 @@
 .mapa-page .mapa {
   padding: 40px 20px;
 }
+.mapa-page .mapa .text-mapa {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.mapa-page .mapa .text-mapa h1 {
+  font-size: 28px;
+  color: #2e7d32;
+  margin-bottom: 10px;
+}
+.mapa-page .mapa .text-mapa p {
+  font-size: 16px;
+  color: #555;
+}
 .mapa-page .mapa .cidade {
   display: flex;
   flex-direction: column;
@@ -250,6 +263,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: 0.2s;
 }
 .mapa-page .mapa .ponto__header {
   display: flex;
@@ -280,15 +294,22 @@
   margin-top: 5px;
   padding: 8px;
   border: none;
-  background: #2e7d32;
-  color: #fff;
+  background: #f5f5dc;
+  color: #000000;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
   transition: 0.3s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 .mapa-page .mapa .ponto__btn:hover {
-  background: #256628;
+  background: #2e7d32;
+  color: #fff;
+}
+.mapa-page .mapa .ponto:hover {
+  transform: translateY(-3px);
+  border-color: #2e7d32;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 @media (max-width: 768px) {
   .mapa-page .mapa__container {
@@ -300,6 +321,56 @@
   }
   .mapa-page .mapa__visual {
     min-height: 250px;
+  }
+}
+.mapa-page .info-mapa {
+  padding: 40px 20px;
+}
+.mapa-page .info-mapa .container-infos {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.mapa-page .info-mapa .infos {
+  flex: 0 0 30%;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: 0.2s;
+}
+.mapa-page .info-mapa .infos:hover {
+  transform: translateY(-5px);
+}
+.mapa-page .info-mapa .infos h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  color: #2e7d32;
+}
+.mapa-page .info-mapa .infos h3 i {
+  font-size: 18px;
+}
+.mapa-page .info-mapa .infos p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+@media (max-width: 900px) {
+  .mapa-page .info-mapa .infos {
+    flex: 0 0 45%;
+  }
+}
+@media (max-width: 600px) {
+  .mapa-page .info-mapa .infos {
+    flex: 0 0 100%;
   }
 }
 
@@ -346,6 +417,11 @@
 .header__nav ul li a:hover {
   background-color: #9ed19e;
   color: #2E7D32;
+  border-radius: 5px;
+}
+.header__nav ul li a.active {
+  background-color: #2E7D32;
+  color: #ffffff;
   border-radius: 5px;
 }
 .header__toggle {
