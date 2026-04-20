@@ -238,7 +238,9 @@
   justify-content: center;
   border-radius: 8px;
   flex: 0 0 60%;
-  min-height: 500px;
+  min-height: 400px;
+  max-height: 500px;
+  height: 100%;
 }
 .mapa-page .mapa__info {
   background: #fff;
@@ -252,6 +254,16 @@
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+.mapa-page .mapa #pontos-lista::-webkit-scrollbar {
+  width: 6px;
+}
+.mapa-page .mapa #pontos-lista::-webkit-scrollbar-thumb {
+  background: #2e7d32;
+  border-radius: 10px;
 }
 .mapa-page .mapa .ponto {
   padding: 15px;

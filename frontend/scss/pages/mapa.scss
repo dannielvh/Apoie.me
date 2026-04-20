@@ -95,7 +95,9 @@
       border-radius: 8px;
 
       flex: 0 0 60%; // 60%
-      min-height: 500px;
+      min-height: 400px;
+      max-height: 500px;
+      height: 100%;
     }
 
     &__info {
@@ -112,6 +114,19 @@
       flex-direction: column;
       gap: 10px;
       margin-top: 20px;
+
+      max-height: 480px; // ajusta conforme tamanho do card
+      overflow-y: auto;
+      padding-right: 5px; // evita cortar scrollbar
+    }
+
+    #pontos-lista::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #pontos-lista::-webkit-scrollbar-thumb {
+      background: #2e7d32;
+      border-radius: 10px;
     }
 
     .ponto {

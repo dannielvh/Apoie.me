@@ -4,9 +4,8 @@ const sugestoes = document.getElementById("sugestoes");
 const lista = document.getElementById("pontos-lista");
 
 let cidades = [];
-let timeout;
 
-// NORMALIZAR TEXTO (remove acento)
+// NORMALIZAR
 function normalizar(texto) {
   return texto
     .toLowerCase()
@@ -14,7 +13,7 @@ function normalizar(texto) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-// CARREGAR CIDADES (IBGE)
+// CARREGAR CIDADES
 async function carregarCidades() {
   try {
     const res = await fetch(
@@ -26,22 +25,18 @@ async function carregarCidades() {
   }
 }
 
-// AUTOCOMPLETE + BUSCA
+// AUTOCOMPLETE (SÓ MOSTRA, NÃO BUSCA)
 input.addEventListener("input", () => {
   const valor = input.value;
 
   sugestoes.innerHTML = "";
-  clearTimeout(timeout);
 
-  // 🔥 evita lixo de requisição
-  if (!valor || valor.length < 3) return;
+  if (!valor) return;
 
-  // FILTRAR CIDADES
   const filtradas = cidades.filter((c) =>
     normalizar(c.nome).includes(normalizar(valor))
   );
 
-  // MOSTRAR SUGESTÕES
   filtradas.slice(0, 10).forEach((cidade) => {
     const li = document.createElement("li");
     li.textContent = cidade.nome;
@@ -50,23 +45,14 @@ input.addEventListener("input", () => {
       input.value = cidade.nome;
       sugestoes.innerHTML = "";
 
-      clearTimeout(timeout); // 🔥 evita requisição duplicada
-
-      buscarPontos(cidade.nome);
+      buscarPontos(cidade.nome); // 🔥 só aqui chama API
     });
 
     sugestoes.appendChild(li);
   });
-
-  // 🔥 BUSCA AUTOMÁTICA (debounce)
-  timeout = setTimeout(() => {
-    if (valor.length >= 3) {
-      buscarPontos(valor);
-    }
-  }, 500);
 });
 
-// BUSCAR PONTOS NO BACKEND
+// BUSCAR PONTOS
 async function buscarPontos(cidade) {
   try {
     lista.innerHTML = "<p>Carregando...</p>";
@@ -79,12 +65,12 @@ async function buscarPontos(cidade) {
 
     renderPontos(dados);
   } catch (err) {
-    console.error("Erro ao buscar pontos:", err);
+    console.error("Erro:", err);
     lista.innerHTML = "<p>Erro ao carregar dados.</p>";
   }
 }
 
-// RENDERIZAR PONTOS
+// RENDER
 function renderPontos(pontos) {
   lista.innerHTML = "";
 
@@ -118,19 +104,6 @@ function renderPontos(pontos) {
   });
 }
 
-// EVENTO BOTÃO DETALHES
-lista.addEventListener("click", (e) => {
-  if (e.target.classList.contains("ponto__btn")) {
-    const id = e.target.getAttribute("data-id");
+// INIT
+window.addEventListener("load", carregarCidades);
 
-    alert("Ver detalhes do ponto ID: " + id);
-
-    // futuro:
-    // window.location.href = `/ponto.html?id=${id}`;
-  }
-});
-
-// INICIALIZAÇÃO
-window.addEventListener("load", () => {
-  carregarCidades();
-});
