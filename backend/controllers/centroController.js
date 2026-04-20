@@ -8,8 +8,11 @@ exports.listarCentros = async (req, res) => {
         let values = [];
 
         if (cidade) {
-            query += ' WHERE LOWER(cidade) = LOWER($1)';
-            values.push(cidade);
+            query += `
+                WHERE unaccent(lower(cidade)) 
+                LIKE unaccent(lower($1))
+            `;
+            values.push(`%${cidade}%`);
         }
 
         const result = await pool.query(query, values);

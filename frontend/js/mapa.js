@@ -1,28 +1,88 @@
 // ELEMENTOS
-const select = document.getElementById("cidade-select");
+const input = document.getElementById("cidade-input");
+const sugestoes = document.getElementById("sugestoes");
 const lista = document.getElementById("pontos-lista");
 
+let cidades = [];
+let timeout;
+
+// NORMALIZAR TEXTO (remove acento)
+function normalizar(texto) {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 
 // CARREGAR CIDADES (IBGE)
 async function carregarCidades() {
   try {
-    const res = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios');
-    const cidades = await res.json();
-
-    cidades.forEach(cidade => {
-      const option = document.createElement("option");
-
-      option.value = cidade.nome.toLowerCase();
-      option.textContent = cidade.nome;
-
-      select.appendChild(option);
-    });
-
+    const res = await fetch(
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios"
+    );
+    cidades = await res.json();
   } catch (err) {
     console.error("Erro ao carregar cidades:", err);
   }
 }
 
+// AUTOCOMPLETE + BUSCA
+input.addEventListener("input", () => {
+  const valor = input.value;
+
+  sugestoes.innerHTML = "";
+  clearTimeout(timeout);
+
+  // 🔥 evita lixo de requisição
+  if (!valor || valor.length < 3) return;
+
+  // FILTRAR CIDADES
+  const filtradas = cidades.filter((c) =>
+    normalizar(c.nome).includes(normalizar(valor))
+  );
+
+  // MOSTRAR SUGESTÕES
+  filtradas.slice(0, 10).forEach((cidade) => {
+    const li = document.createElement("li");
+    li.textContent = cidade.nome;
+
+    li.addEventListener("click", () => {
+      input.value = cidade.nome;
+      sugestoes.innerHTML = "";
+
+      clearTimeout(timeout); // 🔥 evita requisição duplicada
+
+      buscarPontos(cidade.nome);
+    });
+
+    sugestoes.appendChild(li);
+  });
+
+  // 🔥 BUSCA AUTOMÁTICA (debounce)
+  timeout = setTimeout(() => {
+    if (valor.length >= 3) {
+      buscarPontos(valor);
+    }
+  }, 500);
+});
+
+// BUSCAR PONTOS NO BACKEND
+async function buscarPontos(cidade) {
+  try {
+    lista.innerHTML = "<p>Carregando...</p>";
+
+    const res = await fetch(
+      `http://localhost:3000/api/centros?cidade=${encodeURIComponent(cidade)}`
+    );
+
+    const dados = await res.json();
+
+    renderPontos(dados);
+  } catch (err) {
+    console.error("Erro ao buscar pontos:", err);
+    lista.innerHTML = "<p>Erro ao carregar dados.</p>";
+  }
+}
 
 // RENDERIZAR PONTOS
 function renderPontos(pontos) {
@@ -33,7 +93,7 @@ function renderPontos(pontos) {
     return;
   }
 
-  pontos.forEach(p => {
+  pontos.forEach((p) => {
     const div = document.createElement("div");
     div.classList.add("ponto");
 
@@ -58,32 +118,7 @@ function renderPontos(pontos) {
   });
 }
 
-
-// BUSCAR PONTOS NO BACKEND
-async function buscarPontos(cidade) {
-  try {
-    const res = await fetch(`http://localhost:3000/api/centros?cidade=${cidade}`);
-    const dados = await res.json();
-
-    renderPontos(dados);
-
-  } catch (err) {
-    console.error("Erro ao buscar pontos:", err);
-    lista.innerHTML = "<p>Erro ao carregar dados.</p>";
-  }
-}
-
-
-// EVENTOS
-select.addEventListener("change", () => {
-  const cidade = select.value;
-
-  if (!cidade) return;
-
-  buscarPontos(cidade);
-});
-
-// botão detalhes (delegação)
+// EVENTO BOTÃO DETALHES
 lista.addEventListener("click", (e) => {
   if (e.target.classList.contains("ponto__btn")) {
     const id = e.target.getAttribute("data-id");
@@ -95,9 +130,7 @@ lista.addEventListener("click", (e) => {
   }
 });
 
-// =============================
 // INICIALIZAÇÃO
-// =============================
 window.addEventListener("load", () => {
   carregarCidades();
 });

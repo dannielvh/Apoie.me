@@ -44,18 +44,15 @@
           font-size: 16px;
         }
 
-        select {
+        input {
           width: 100%;
           padding: 12px 12px 12px 35px; // espaço pro ícone
           border: 1px solid #ccc;
           border-radius: 8px;
           font-size: 14px;
-          cursor: pointer;
           outline: none;
           background: #fff;
           transition: 0.2s;
-
-          appearance: none; // remove estilo padrão
 
           &:hover {
             border-color: #2e7d32;
@@ -263,6 +260,39 @@
       .infos {
         flex: 0 0 100%; // 1 por linha
       }
+    }
+  }
+}
+
+#sugestoes {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+
+  border-radius: 0 0 8px 8px;
+
+  max-height: 200px;
+  overflow-y: auto;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  z-index: 10;
+
+  li {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+
+    &:hover {
+      background: #f5f5f5;
     }
   }
 }
