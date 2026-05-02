@@ -152,6 +152,144 @@
   width: 650px;
 }
 
+.cadastro-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5dc;
+  padding: 20px;
+}
+.cadastro-page .container-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 500px;
+  width: 100%;
+  min-height: 600px;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.cadastro-page .container-form .text-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+.cadastro-page .container-form .text-form i {
+  font-size: 48px;
+  color: #fff;
+  background-color: #2e7d32;
+  padding: 15px;
+  border-radius: 50%;
+}
+.cadastro-page .container-form .text-form h1 {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  color: #2e7d32;
+  font-size: 24px;
+}
+.cadastro-page .container-form .text-form p {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  color: #666;
+  font-size: 16px;
+}
+.cadastro-page .container-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.cadastro-page .container-form form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+.cadastro-page .container-form form .form-group label {
+  font-family: "Inter", sans-serif;
+  color: #666;
+  font-size: 14px;
+}
+.cadastro-page .container-form form .form-group input,
+.cadastro-page .container-form form .form-group select,
+.cadastro-page .container-form form .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.cadastro-page .container-form form .form-group input:focus,
+.cadastro-page .container-form form .form-group select:focus,
+.cadastro-page .container-form form .form-group textarea:focus {
+  border-color: #2e7d32;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.15);
+}
+.cadastro-page .container-form form .form-group textarea {
+  resize: none;
+  min-height: 80px;
+}
+.cadastro-page .container-form form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+.cadastro-page .container-form form button:hover {
+  background-color: #1b5e20;
+}
+.cadastro-page .container-form .register-link {
+  margin-top: 15px;
+  font-family: "Inter", sans-serif;
+  color: #2e7d32;
+  font-size: 14px;
+  text-decoration: none;
+}
+.cadastro-page .container-form .register-link:hover {
+  text-decoration: underline;
+}
+.cadastro-page .cidade__select-wrapper {
+  position: relative;
+  width: 100%;
+}
+.cadastro-page .sugestoes-lista {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  list-style: none;
+  margin-top: 5px;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.cadastro-page .sugestoes-lista li {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.cadastro-page .sugestoes-lista li:hover {
+  background: #f0f0f0;
+}
+
 .dashboard-page {
   background-color: #F5F5DC;
 }
