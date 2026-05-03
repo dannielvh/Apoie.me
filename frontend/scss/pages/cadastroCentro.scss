@@ -1,0 +1,158 @@
+.cadastro-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5dc;
+  padding: 20px;
+
+  .container-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 500px;
+    width: 100%;
+    min-height: 600px;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .text-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+
+      i {
+        font-size: 48px;
+        color: #fff;
+        background-color: #2e7d32;
+        padding: 15px;
+        border-radius: 50%;
+      }
+
+      h1 {
+        text-align: center;
+        font-family: "Inter", sans-serif;
+        color: #2e7d32;
+        font-size: 24px;
+      }
+
+      p {
+        text-align: center;
+        font-family: "Inter", sans-serif;
+        color: #666;
+        font-size: 16px;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+
+        label {
+          font-family: "Inter", sans-serif;
+          color: #666;
+          font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          font-size: 14px;
+
+          &:focus {
+            border-color: #2e7d32;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.15);
+          }
+        }
+
+        textarea {
+          resize: none;
+          min-height: 80px;
+        }
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #2e7d32;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: 0.2s;
+
+        &:hover {
+          background-color: #1b5e20;
+        }
+      }
+    }
+
+    .register-link {
+      margin-top: 15px;
+      font-family: "Inter", sans-serif;
+      color: #2e7d32;
+      font-size: 14px;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .cidade__select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .sugestoes-lista {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    list-style: none;
+    margin-top: 5px;
+    padding: 0;
+
+    max-height: 200px;
+    overflow-y: auto;
+
+    z-index: 1000;
+
+    li {
+      padding: 10px;
+      cursor: pointer;
+      font-size: 14px;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+}
