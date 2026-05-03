@@ -20,10 +20,10 @@ const tipos = [
   "Acolhimento",
   "Jurídico",
   "Voluntariado",
-  "Emergência"
+  "Emergência",
 ];
 
-tipos.forEach(t => {
+tipos.forEach((t) => {
   const option = document.createElement("option");
   option.value = t;
   option.textContent = t;
@@ -46,7 +46,7 @@ function normalizar(texto) {
 async function carregarCidades() {
   try {
     const res = await fetch(
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios"
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios",
     );
     cidades = await res.json();
   } catch (err) {
@@ -64,11 +64,11 @@ inputCidade.addEventListener("input", () => {
 
   if (valor.length < 2) return;
 
-  const filtradas = cidades.filter(c =>
-    normalizar(c.nome).includes(normalizar(valor))
+  const filtradas = cidades.filter((c) =>
+    normalizar(c.nome).includes(normalizar(valor)),
   );
 
-  filtradas.slice(0, 8).forEach(cidade => {
+  filtradas.slice(0, 8).forEach((cidade) => {
     const li = document.createElement("li");
     li.textContent = cidade.nome;
 
@@ -129,9 +129,9 @@ form.addEventListener("submit", async (e) => {
     tipo: selectTipo.value,
     rua: document.getElementById("rua").value.trim(),
     horario: document.getElementById("horario").value.trim(),
-    cnpj: inputCNPJ.value.replace(/\D/g, ""), // limpa máscara
+    cnpj: inputCNPJ.value ? inputCNPJ.value.replace(/\D/g, "") : null,
     telefone: inputTel.value.trim(),
-    descricao: document.getElementById("descricao").value.trim()
+    descricao: document.getElementById("descricao").value.trim(),
   };
 
   if (!dados.nome || !dados.cidade || !dados.tipo || !dados.rua) {
@@ -144,9 +144,9 @@ form.addEventListener("submit", async (e) => {
     const res = await fetch("http://localhost:3000/api/centros", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(dados)
+      body: JSON.stringify(dados),
     });
 
     const data = await res.json();
@@ -162,7 +162,6 @@ form.addEventListener("submit", async (e) => {
 
     form.reset();
     sugestoes.innerHTML = "";
-
   } catch (err) {
     msg.textContent = "Erro na requisição";
     msg.style.color = "red";
