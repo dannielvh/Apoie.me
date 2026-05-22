@@ -1,10 +1,5 @@
 const token = localStorage.getItem('token');
 
-// verifica se está logado
-if (!token) {
-  alert('Você precisa estar logado');
-  window.location.href = 'login.html';
-}
 
 //  função de doação
 async function fazerDoacao(valor) {
