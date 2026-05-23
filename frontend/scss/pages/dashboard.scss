@@ -1,3 +1,511 @@
-.dashboard-page {
-     background-color: #F5F5DC;
+/* ========================================================= */
+/* DASHBOARD - APOIE.ME                                      */
+/* Baseado nas cores da tela de login                        */
+/* ========================================================= */
+
+
+/* ========================================================= */
+/* CONTAINER PRINCIPAL                                       */
+/* ========================================================= */
+
+.dashboard-container {
+     display: flex;
+     flex-direction: column;
+     gap: 2rem;
+
+     padding: 2rem;
+
+     min-height: 100vh;
+
+     background-color: #f5f7f6;
+}
+
+
+/* ========================================================= */
+/* ÁREA DE BOAS-VINDAS                                       */
+/* ========================================================= */
+
+.dashboard-welcome {
+
+     .welcome-text {
+
+          h1 {
+               font-family: 'Inter', sans-serif;
+               font-size: 2rem;
+               color: #2E7D32;
+
+               margin-bottom: 0.5rem;
+          }
+
+          p {
+               font-family: 'Inter', sans-serif;
+               font-size: 1rem;
+               color: #666666;
+
+               line-height: 1.5;
+          }
+
+     }
+
+}
+
+
+/* ========================================================= */
+/* GRID DOS CARDS SUPERIORES                                 */
+/* ========================================================= */
+
+.stats-grid {
+     display: grid;
+
+     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+     gap: 1.5rem;
+}
+
+
+/* ========================================================= */
+/* CARD SUPERIOR                                             */
+/* ========================================================= */
+
+.stat-card {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+
+     background-color: #ffffff;
+
+     padding: 1.5rem;
+
+     border-radius: 12px;
+
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+     transition: 0.3s ease;
+
+     &:hover {
+          transform: translateY(-4px);
+
+          box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+     }
+
+
+     /* Ícone do card */
+     .stat-icon {
+          width: 60px;
+          height: 60px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          border-radius: 50%;
+
+          background-color: #2E7D32;
+
+          color: #ffffff;
+
+          font-size: 1.4rem;
+
+
+          /* Variações */
+          &.urgent {
+               background-color: #c62828;
+          }
+
+          &.donation {
+               background-color: #388E3C;
+          }
+
+          &.success {
+               background-color: #1B5E20;
+          }
+     }
+
+
+     /* Informações */
+     .stat-info {
+
+          h2 {
+               font-family: 'Inter', sans-serif;
+               font-size: 1.8rem;
+               color: #2E7D32;
+          }
+
+          p {
+               font-family: 'Inter', sans-serif;
+               color: #666666;
+               margin-top: 0.3rem;
+          }
+
+     }
+
+}
+
+
+/* ========================================================= */
+/* CONTEÚDO PRINCIPAL                                        */
+/* ========================================================= */
+
+.dashboard-content {
+     display: grid;
+
+     grid-template-columns: 2fr 1fr;
+
+     gap: 2rem;
+}
+
+
+/* ========================================================= */
+/* CABEÇALHO DAS SEÇÕES                                      */
+/* ========================================================= */
+
+.section-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+
+     margin-bottom: 1.5rem;
+
+     h2 {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+
+          font-family: 'Inter', sans-serif;
+          font-size: 1.4rem;
+
+          color: #2E7D32;
+     }
+
+
+     .see-all-btn {
+          background-color: #2E7D32;
+
+          color: #ffffff;
+
+          border: none;
+
+          padding: 0.7rem 1rem;
+
+          border-radius: 6px;
+
+          font-family: 'Inter', sans-serif;
+
+          cursor: pointer;
+
+          transition: 0.3s ease;
+
+          &:hover {
+               background-color: #1B5E20;
+          }
+     }
+
+}
+
+
+/* ========================================================= */
+/* LISTA DE NECESSIDADES                                     */
+/* ========================================================= */
+
+.urgent-needs-list {
+     display: flex;
+     flex-direction: column;
+
+     gap: 1.5rem;
+}
+
+
+/* ========================================================= */
+/* CARD DE NECESSIDADE                                       */
+/* ========================================================= */
+
+.need-card {
+     background-color: #ffffff;
+
+     padding: 1.5rem;
+
+     border-radius: 12px;
+
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+     transition: 0.3s ease;
+
+     &:hover {
+          transform: translateY(-4px);
+
+          box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+     }
+
+
+     /* Topo do card */
+     .need-card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          margin-bottom: 1rem;
+
+          h3 {
+               font-family: 'Inter', sans-serif;
+               color: #2E7D32;
+               font-size: 1.2rem;
+          }
+     }
+
+
+     /* Badge de urgência */
+     .urgency-badge {
+          padding: 0.4rem 0.8rem;
+
+          border-radius: 20px;
+
+          font-size: 0.85rem;
+          font-weight: bold;
+
+          font-family: 'Inter', sans-serif;
+
+
+          &.critical {
+               background-color: #ffebee;
+               color: #c62828;
+          }
+
+          &.high {
+               background-color: #fff3e0;
+               color: #ef6c00;
+          }
+
+          &.medium {
+               background-color: #fff8e1;
+               color: #f9a825;
+          }
+     }
+
+
+     /* Item solicitado */
+     .need-item {
+          font-family: 'Inter', sans-serif;
+          color: #666666;
+
+          margin-bottom: 1rem;
+     }
+
+
+     /* Quantidades */
+     .need-quantity {
+          display: flex;
+          justify-content: space-between;
+
+          margin-bottom: 0.7rem;
+
+          font-family: 'Inter', sans-serif;
+          color: #666666;
+          font-size: 0.95rem;
+     }
+
+
+     /* Barra de progresso */
+     .progress-bar {
+          width: 100%;
+          height: 10px;
+
+          background-color: #dcdcdc;
+
+          border-radius: 20px;
+
+          overflow: hidden;
+
+          margin-bottom: 1rem;
+
+
+          .progress-fill {
+               height: 100%;
+
+               background-color: #2E7D32;
+
+               border-radius: 20px;
+          }
+     }
+
+
+     /* Rodapé */
+     .need-footer {
+          display: flex;
+          justify-content: space-between;
+
+          font-family: 'Inter', sans-serif;
+          color: #666666;
+          font-size: 0.9rem;
+     }
+
+}
+
+
+/* ========================================================= */
+/* ATIVIDADES RECENTES                                       */
+/* ========================================================= */
+
+.recent-activities-section {
+     background-color: #ffffff;
+
+     padding: 1.5rem;
+
+     border-radius: 12px;
+
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+     height: fit-content;
+}
+
+
+/* Lista */
+.activities-list {
+     display: flex;
+     flex-direction: column;
+
+     gap: 1.5rem;
+}
+
+
+/* Item */
+.activity-item {
+     display: flex;
+     align-items: flex-start;
+
+     gap: 1rem;
+
+
+     /* Ícone */
+     .activity-icon {
+          width: 45px;
+          height: 45px;
+
+          border-radius: 50%;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          color: #ffffff;
+
+          flex-shrink: 0;
+
+
+          &.donation {
+               background-color: #388E3C;
+          }
+
+          &.alert {
+               background-color: #c62828;
+          }
+
+          &.success {
+               background-color: #1B5E20;
+          }
+     }
+
+
+     /* Texto */
+     .activity-content {
+
+          p {
+               font-family: 'Inter', sans-serif;
+               color: #444444;
+
+               margin-bottom: 0.3rem;
+
+               line-height: 1.4;
+          }
+
+          span {
+               font-family: 'Inter', sans-serif;
+               font-size: 0.85rem;
+               color: #888888;
+          }
+
+     }
+
+}
+
+
+/* ========================================================= */
+/* ÁREA FUTURA                                               */
+/* ========================================================= */
+
+.future-card {
+     background-color: #ffffff;
+
+     padding: 2rem;
+
+     border-radius: 12px;
+
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+     h2 {
+          display: flex;
+          align-items: center;
+          gap: 0.7rem;
+
+          font-family: 'Inter', sans-serif;
+          color: #2E7D32;
+
+          margin-bottom: 1rem;
+     }
+
+     p {
+          font-family: 'Inter', sans-serif;
+          color: #666666;
+     }
+}
+
+
+/* ========================================================= */
+/* RESPONSIVIDADE                                            */
+/* ========================================================= */
+
+@media (max-width: 1024px) {
+
+     .dashboard-content {
+          grid-template-columns: 1fr;
+     }
+
+}
+
+
+@media (max-width: 768px) {
+
+     .dashboard-container {
+          padding: 1rem;
+     }
+
+     .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+
+          gap: 1rem;
+     }
+
+     .need-footer {
+          flex-direction: column;
+
+          gap: 0.5rem;
+     }
+
+}
+
+
+@media (max-width: 480px) {
+
+     .stat-card {
+          flex-direction: column;
+          align-items: flex-start;
+     }
+
+     .need-card-header {
+          flex-direction: column;
+          align-items: flex-start;
+
+          gap: 0.8rem;
+     }
+
 }

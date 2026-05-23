@@ -4,10 +4,11 @@
 
 // pra rodar o sass, digite no terminal: sass frontend/scss/style.scss frontend/css/style.css --watch
 // tem que ter o sass instalado no terminal: npm install -g sass
+
 @use 'reset';
 @use 'pages/login';
 @use 'pages/register';
 @use 'pages/cadastroCentro';
-@use 'pages/dashboard';
+@use './pages/dashboard';
 @use 'pages/mapa';
 @use 'components/header';
