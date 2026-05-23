@@ -5,6 +5,7 @@
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/regular.min.css" />
      <link rel="stylesheet" href="../css/style.css">
      <title>Dashboard</title>
 </head>
@@ -13,9 +14,85 @@
      <div id="header"></div>
      <button onclick="fazerDoacao(50)">Doar R$50</button>
 
+     <main class="dashboard">
+          <section class="dashboard__welcome">
+               <div>
+                    <h1 id="welcome-title">Olá 👋</h1>
+                    <p>Veja como você pode ajudar centros de apoio e pessoas em situação de emergência.</p>
+               </div>
+          </section>
 
-<script src="../js/header.js"></script>
-<script src="../js/doacoes.js"></script>
+          <!-- AÇÕES PRINCIPAIS -->
+          <section class="dashboard__actions">
+               <!-- aqui coloca as ações principais -->
+               <a href="doacoes.html" class="action-card">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <h2>Fazer doação</h2>
+                    <p>Veja os itens que os centros mais precisam e escolha como ajudar.</p>
+               </a>
+
+               <a href="voluntario.html" class="action-card">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <h2>Ser voluntário</h2>
+                    <p>Cadastre-se para ajudar em ações, entregas, triagem ou atendimento.</p>
+               </a>
+
+               <a href="mapa.html" class="action-card">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <h2>Encontrar apoio</h2>
+                    <p>Consulte pontos de apoio, abrigos e locais de coleta próximos.</p>
+               </a>
+
+          </section>
+
+
+          <!-- MAPA + NECESSIDADES -->
+          <!-- AQUI VAI COLOCAR O MAPA SE TIVER, COM AS ULTIMAS NECESSIDADES URGENTES CADASTRADAS -->
+          <section class="dashboard__content">
+
+          </section>
+
+          <!-- CARDS DE RESUMO -->
+          <!-- TRANSFORMA ISSO DINAMICO COM O BANCO DE DADOS -->
+          <section class="dashboard__stats">
+
+               <!-- <div class="stat-card">
+                    <div class="stat-card__top">
+                         <i class="fa-solid fa-location-dot"></i>
+                         <span>+0 novos </span>
+                    </div>
+
+                    <h2>0</h2>
+                    <h3>Coloque card de informações do sistema</h3>
+                    <p>como por exemplo, quantas doações, quantos voluntários, quantos centros</p>
+               </div> -->
+
+
+
+          </section>
+
+
+          <!-- CADASTRO DE CENTRO - SECUNDÁRIO -->
+          <section class="dashboard__secondary">
+               <div>
+                    <h2>Você representa um centro de apoio?</h2>
+                    <p>
+                         Cadastre seu centro para solicitar doações, abrir pedidos de voluntários
+                         e divulgar informações para a comunidade.
+                    </p>
+               </div>
+
+               <a href="cadastro-centro.html">
+                    Cadastrar Centro de Apoio
+               </a>
+          </section>
+
+     </main>
+
+
+     <script src="../js/header.js"></script>
+     <script src="../js/doacoes.js"></script>
+     <script src="../js/dashboard.js"></script>
 </body>
 
 </html>

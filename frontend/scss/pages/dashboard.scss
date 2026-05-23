@@ -1,3 +1,306 @@
 .dashboard-page {
      background-color: #F5F5DC;
 }
+
+.dashboard {
+  background: #f3f5df;
+  min-height: 100vh;
+  padding: 30px 20px;
+
+   &__welcome {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    
+    border-radius: 12px;
+    padding: 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    h1 {
+      font-size: 32px;
+      color: #2e7d32;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #555;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  }
+
+  
+
+  // =========================
+  // CARDS DE RESUMO
+  // =========================
+  &__stats {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  // =========================
+  // MAPA + NECESSIDADES
+  // =========================
+  &__content {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+  }
+
+  // =========================
+  // AÇÕES PRINCIPAIS
+  // =========================
+  &__actions {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  // =========================
+  // CADASTRO CENTRO
+  // =========================
+  &__secondary {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    background: #ffffff;
+    border: 1px solid #d9dfc9;
+    border-radius: 12px;
+    padding: 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    h2 {
+      font-size: 20px;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #4b5563;
+      line-height: 1.5;
+      max-width: 720px;
+    }
+
+    a {
+      background: #2e7d32;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      white-space: nowrap;
+
+      &:hover {
+        background: #256628;
+      }
+    }
+  }
+}
+
+
+// =========================
+// STAT CARD
+// =========================
+.stat-card {
+  background: #ffffff;
+  border: 1px solid #d9dfc9;
+  border-radius: 12px;
+  padding: 24px;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 42px;
+
+    i {
+      font-size: 28px;
+      color: #2e7d32;
+    }
+
+    span {
+      background: #b9ddb9;
+      color: #163f18;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+  }
+
+  h2 {
+    font-size: 30px;
+    color: #1f2937;
+    margin-bottom: 4px;
+  }
+
+  h3 {
+    font-size: 15px;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  p {
+    font-size: 13px;
+    color: #4b5563;
+  }
+}
+
+
+// =========================
+// TÍTULOS DAS SEÇÕES
+// =========================
+.section-title {
+  margin-bottom: 26px;
+
+  h2 {
+    font-size: 17px;
+    color: #111827;
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  p {
+    color: #4b5563;
+    font-size: 15px;
+  }
+}
+
+
+
+
+
+// =========================
+// AÇÕES PRINCIPAIS
+// =========================
+.action-card {
+  background: #ffffff;
+  border: 1px solid #d9dfc9;
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none;
+  color: #111827;
+  transition: 0.2s;
+
+  i {
+    font-size: 30px;
+    color: #2e7d32;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 19px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+}
+
+
+// =========================
+// RESPONSIVO
+// =========================
+@media (max-width: 1000px) {
+  .dashboard {
+    &__stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__content {
+      grid-template-columns: 1fr;
+    }
+
+    &__actions {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  .dashboard {
+    padding: 20px 14px;
+
+    &__welcome {
+      flex-direction: column;
+      align-items: flex-start;
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+
+    &__login-link {
+      width: 100%;
+      text-align: center;
+    }
+
+    &__stats {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    &__secondary {
+      flex-direction: column;
+      align-items: flex-start;
+
+      a {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  .stat-card {
+    padding: 20px;
+
+    &__top {
+      margin-bottom: 28px;
+    }
+  }
+
+  .map-placeholder {
+    min-height: 280px;
+
+    i {
+      font-size: 48px;
+    }
+
+    p {
+      text-align: center;
+    }
+  }
+
+  .need-card {
+    &__top {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+}

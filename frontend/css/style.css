@@ -294,6 +294,225 @@
   background-color: #F5F5DC;
 }
 
+.dashboard {
+  background: #f3f5df;
+  min-height: 100vh;
+  padding: 30px 20px;
+}
+.dashboard__welcome {
+  max-width: 1200px;
+  margin: 0 auto 32px auto;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.dashboard__welcome h1 {
+  font-size: 32px;
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+.dashboard__welcome p {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.dashboard__stats {
+  max-width: 1200px;
+  margin: 0 auto 32px auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.dashboard__content {
+  max-width: 1200px;
+  margin: 0 auto 32px auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+.dashboard__actions {
+  max-width: 1200px;
+  margin: 0 auto 32px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.dashboard__secondary {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #d9dfc9;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.dashboard__secondary h2 {
+  font-size: 20px;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+.dashboard__secondary p {
+  color: #4b5563;
+  line-height: 1.5;
+  max-width: 720px;
+}
+.dashboard__secondary a {
+  background: #2e7d32;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.dashboard__secondary a:hover {
+  background: #256628;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid #d9dfc9;
+  border-radius: 12px;
+  padding: 24px;
+}
+.stat-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 42px;
+}
+.stat-card__top i {
+  font-size: 28px;
+  color: #2e7d32;
+}
+.stat-card__top span {
+  background: #b9ddb9;
+  color: #163f18;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+.stat-card h2 {
+  font-size: 30px;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+.stat-card h3 {
+  font-size: 15px;
+  color: #111827;
+  margin-bottom: 4px;
+}
+.stat-card p {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.section-title {
+  margin-bottom: 26px;
+}
+.section-title h2 {
+  font-size: 17px;
+  color: #111827;
+  margin-bottom: 6px;
+  font-weight: 400;
+}
+.section-title p {
+  color: #4b5563;
+  font-size: 15px;
+}
+
+.action-card {
+  background: #ffffff;
+  border: 1px solid #d9dfc9;
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none;
+  color: #111827;
+  transition: 0.2s;
+}
+.action-card i {
+  font-size: 30px;
+  color: #2e7d32;
+  margin-bottom: 16px;
+}
+.action-card h2 {
+  font-size: 19px;
+  margin-bottom: 8px;
+}
+.action-card p {
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 1000px) {
+  .dashboard__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard__content {
+    grid-template-columns: 1fr;
+  }
+  .dashboard__actions {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 650px) {
+  .dashboard {
+    padding: 20px 14px;
+  }
+  .dashboard__welcome {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dashboard__welcome h1 {
+    font-size: 26px;
+  }
+  .dashboard__login-link {
+    width: 100%;
+    text-align: center;
+  }
+  .dashboard__stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .dashboard__secondary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dashboard__secondary a {
+    width: 100%;
+    text-align: center;
+  }
+  .stat-card {
+    padding: 20px;
+  }
+  .stat-card__top {
+    margin-bottom: 28px;
+  }
+  .map-placeholder {
+    min-height: 280px;
+  }
+  .map-placeholder i {
+    font-size: 48px;
+  }
+  .map-placeholder p {
+    text-align: center;
+  }
+  .need-card__top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 .mapa-page {
   background-color: #f5f5dc;
 }
