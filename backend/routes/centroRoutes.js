@@ -2,12 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 const centroController = require('../controllers/centroController');
+const autenticar = require('../middlewares/authMiddlewares');
 
 router.get('/centros', centroController.listarCentros);
-router.post('/centros', centroController.criarCentro);
-router.put('/centros/:id', centroController.atualizarCentro);
-router.delete('/centros/:id', centroController.deletarCentro);
 
-router.patch('/:id/aprovar', centroController.aprovarCentro);
+
+router.post('/centros', autenticar,centroController.criarCentro);
+router.put('/centros/:id', autenticar,centroController.atualizarCentro);
+router.delete('/centros/:id', autenticar,centroController.deletarCentro);
+
+router.patch('/:id/aprovar', autenticar,centroController.aprovarCentro);
 
 module.exports = router;

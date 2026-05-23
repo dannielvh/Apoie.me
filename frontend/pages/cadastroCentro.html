@@ -29,14 +29,7 @@
         <label for="cidade-input">Cidade *</label>
 
         <div class="cidade__select-wrapper">
-          <input 
-            type="text" 
-            id="cidade-input" 
-            name="cidade"
-            placeholder="Digite a cidade"
-            autocomplete="off"
-            required
-          >
+          <input type="text" id="cidade-input" name="cidade" placeholder="Digite a cidade" autocomplete="off" required>
 
           <ul id="sugestoes" class="sugestoes-lista"></ul>
         </div>
@@ -66,6 +59,18 @@
       <div class="form-group">
         <label for="cnpj">CNPJ</label>
         <input type="text" id="cnpj" placeholder="00.000.000/0000-00">
+      </div>
+
+      <!-- RESPONSÁVEL -->
+      <div class="form-group">
+        <label for="responsavel_nome">Nome do responsável *</label>
+        <input type="text" id="responsavel_nome" placeholder="Nome do responsável pelo centro" required>
+      </div>
+
+      <!-- EMAIL DE CONTATO -->
+      <div class="form-group">
+        <label for="email_contato">Email de contato *</label>
+        <input type="email" id="email_contato" placeholder="email@exemplo.com" required>
       </div>
 
       <!-- TELEFONE -->

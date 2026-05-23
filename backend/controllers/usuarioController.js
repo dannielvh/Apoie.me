@@ -8,9 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 
-// ==========================
 // CADASTRO DE USUÁRIO
-// ==========================
 exports.cadastrarUsuario = async (req, res) => {
 
   // pega dados enviados pelo frontend (JSON)
@@ -67,9 +65,7 @@ exports.cadastrarUsuario = async (req, res) => {
 };
 
 
-// ==========================
 // LOGIN DE USUÁRIO
-// ==========================
 exports.loginUsuario = async (req, res) => {
 
   // pega email e senha enviados

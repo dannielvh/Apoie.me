@@ -1,17 +1,19 @@
 .header {
-  background: #FFFFFF;
+  background: #ffffff;
   color: #333333;
   width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 100;
 
   &__container {
     display: flex;
-     justify-content: space-between;
-     align-items: center;
+    justify-content: space-between;
+    align-items: center;
 
-     max-width: 1200px;   // controla largura do conteúdo
-     margin: 0 auto;      // centraliza na tela
-     padding: 15px 20px;  // espaço lateral
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
   }
 
   &__logo {
@@ -20,58 +22,199 @@
     gap: 10px;
 
     i {
-      color: #2E7D32;
+      color: #2e7d32;
       font-size: 32px;
     }
 
     span {
       font-size: 28px;
       font-weight: bold;
-      color: #2E7D32;
+      color: #2e7d32;
     }
   }
 
   &__nav {
     ul {
       display: flex;
+      align-items: center;
       list-style: none;
       gap: 5px;
+      margin: 0;
+      padding: 0;
 
-      li a {
-        color: #333333;
-        text-decoration: none;
-        transition: 0.3s;
-        padding: 10px 15px;
-        cursor: pointer;
-        font-size: 16px;
+      li {
+        display: flex;
+        align-items: center;
 
-        &:hover {
-          background-color: #9ed19e;
-          color: #2E7D32;
+        a {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+
+          color: #333333;
+          text-decoration: none;
+          transition: 0.3s;
+          padding: 10px 15px;
+          cursor: pointer;
+          font-size: 16px;
           border-radius: 5px;
-        }
-      }
 
-      // INDICADOR DE PÁGINA ATIVA
-      li a.active {
-        background-color: #2E7D32;
-        color: #ffffff;
-        border-radius: 5px;
+          &:hover {
+            background-color: #9ed19e;
+            color: #2e7d32;
+          }
+
+          &.active {
+            background-color: #2e7d32;
+            color: #ffffff;
+          }
+        }
       }
     }
   }
 
-   &__toggle {
+  &__toggle {
     display: none;
     background: none;
     border: none;
     font-size: 24px;
     cursor: pointer;
+    color: #2e7d32;
+  }
+
+  .login-link {
+    position: relative;
+    margin-left: 18px;
+    padding-left: 18px;
+    border-left: 1px solid #e0e0e0;
+    color: #2e7d32;
+  }
+
+  // ÁREA DO USUÁRIO
+  &__user {
+    position: relative;
+    margin-left: 18px;
+    padding-left: 18px;
+    border-left: 1px solid #e0e0e0;
+  }
+
+  &__user-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    border: none;
+    background: #f3f8f3;
+    color: #2e7d32;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.2s;
+
+    &:hover {
+      background: #dcefdc;
+    }
+
+    i {
+      font-size: 14px;
+    }
+
+    span {
+      white-space: nowrap;
+    }
+  }
+
+  &__dropdown {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+
+    width: 190px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    z-index: 200;
+
+    &.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    a,
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      width: 100%;
+      padding: 12px 14px;
+
+      border: none;
+      background: transparent;
+      color: #333333;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 14px;
+      text-align: left;
+      font-family: inherit;
+
+      &:hover {
+        background: #f0f7f0;
+        color: #2e7d32;
+      }
+
+      i {
+        width: 16px;
+      }
+    }
+
+    button {
+      color: #e53935;
+
+      &:hover {
+        background: #fdeaea;
+        color: #c62828;
+      }
+    }
+  }
+
+  // TELAS MÉDIAS
+  @media (max-width: 950px) {
+    &__logo {
+      span {
+        font-size: 24px;
+      }
+    }
+
+    &__nav {
+      ul {
+        gap: 2px;
+
+        li a {
+          font-size: 14px;
+          padding: 8px 10px;
+        }
+      }
+    }
+
+    &__user {
+      margin-left: 10px;
+      padding-left: 10px;
+    }
+
+    &__user-button {
+      font-size: 14px;
+      padding: 8px 10px;
+    }
   }
 
   // MOBILE
   @media (max-width: 768px) {
-
     &__toggle {
       display: block;
     }
@@ -80,26 +223,85 @@
       position: absolute;
       top: 70px;
       right: 0;
-      background: #fff;
+
+      background: #ffffff;
       width: 100%;
       display: none;
       flex-direction: column;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
       ul {
         flex-direction: column;
+        align-items: stretch;
         gap: 0;
+        width: 100%;
 
-        li a {
-          display: block;
-          padding: 15px;
-          border-bottom: 1px solid #eee;
+        li {
+          width: 100%;
+
+          a {
+            display: flex;
+            width: 100%;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eeeeee;
+            border-radius: 0;
+          }
         }
+      }
+
+      &.active {
+        display: flex;
       }
     }
 
-    &__nav.active {
-      display: flex;
+    &__user {
+      width: 100%;
+      margin-left: 0;
+      padding: 15px 20px;
+      border-left: none;
+      border-top: 1px solid #eeeeee;
+    }
+
+    &__user-button {
+      width: 100%;
+      justify-content: space-between;
+      padding: 12px;
+      font-size: 15px;
+    }
+
+    &__dropdown {
+      position: static;
+      width: 100%;
+      margin-top: 10px;
+      box-shadow: none;
+      border: 1px solid #eeeeee;
+      border-radius: 6px;
+
+      a,
+      button {
+        padding: 13px;
+      }
+    }
+  }
+
+  // MOBILE PEQUENO
+  @media (max-width: 420px) {
+    &__container {
+      padding: 12px 15px;
+    }
+
+    &__logo {
+      i {
+        font-size: 28px;
+      }
+
+      span {
+        font-size: 22px;
+      }
+    }
+
+    &__nav {
+      top: 62px;
     }
   }
 }

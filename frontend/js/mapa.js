@@ -9,11 +9,13 @@ let cidades = [];
 function normalizar(texto) {
   return texto
     .toLowerCase()
+    .trim()
+    .replace(/\s+/g, " ")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-// CARREGAR CIDADES
+// CARREGAR CIDADES (IBGE)
 async function carregarCidades() {
   try {
     const res = await fetch(
@@ -25,16 +27,16 @@ async function carregarCidades() {
   }
 }
 
-// AUTOCOMPLETE (SÓ MOSTRA, NÃO BUSCA)
+// AUTOCOMPLETE (SUGESTÃO)
 input.addEventListener("input", () => {
-  const valor = input.value;
+  const valor = normalizar(input.value);
 
   sugestoes.innerHTML = "";
 
   if (!valor) return;
 
   const filtradas = cidades.filter((c) =>
-    normalizar(c.nome).includes(normalizar(valor))
+    normalizar(c.nome).includes(valor)
   );
 
   filtradas.slice(0, 10).forEach((cidade) => {
@@ -45,20 +47,47 @@ input.addEventListener("input", () => {
       input.value = cidade.nome;
       sugestoes.innerHTML = "";
 
-      buscarPontos(cidade.nome); // 🔥 só aqui chama API
+      buscarPontos(cidade.nome);
     });
 
     sugestoes.appendChild(li);
   });
 });
 
-// BUSCAR PONTOS
+// ENTER (BUSCA REAL)
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+
+    const valor = input.value.trim();
+
+    if (!valor) return;
+
+    // 🔥 valida cidade real
+    const cidadeEncontrada = cidades.find((c) =>
+      normalizar(c.nome) === normalizar(valor)
+    );
+
+    sugestoes.innerHTML = "";
+
+    if (!cidadeEncontrada) {
+      lista.innerHTML = "<p>Selecione uma cidade válida.</p>";
+      return;
+    }
+
+    input.value = cidadeEncontrada.nome;
+
+    buscarPontos(cidadeEncontrada.nome);
+  }
+});
+
+// BUSCAR PONTOS (BACKEND)
 async function buscarPontos(cidade) {
   try {
     lista.innerHTML = "<p>Carregando...</p>";
 
     const res = await fetch(
-      `http://localhost:3000/api/centros?cidade=${encodeURIComponent(cidade)}`
+      `http://localhost:3000/api/centros?cidade=${encodeURIComponent(cidade.trim())}`
     );
 
     const dados = await res.json();
@@ -106,4 +135,3 @@ function renderPontos(pontos) {
 
 // INIT
 window.addEventListener("load", carregarCidades);
-

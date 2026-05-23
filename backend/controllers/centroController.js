@@ -1,15 +1,18 @@
 const pool = require('../config/db');
 
-// util
+// NORMALIZAR
 function normalizar(texto) {
   return texto
     ?.toLowerCase()
+    .trim()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
 }
 
+// CNPJ (básico)
 function validarCNPJ(cnpj) {
-  if (!cnpj) return true; // opcional
+  if (!cnpj) return true;
+
   cnpj = cnpj.replace(/\D/g, '');
 
   if (cnpj.length !== 14) return false;
@@ -18,27 +21,28 @@ function validarCNPJ(cnpj) {
   return true;
 }
 
+// CRIAR
 exports.criarCentro = async (req, res) => {
-  let { nome, cidade, tipo, rua, horario, cnpj, descricao, telefone } = req.body;
+  let { nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, responsavel_nome, email_contato } = req.body;
+
+  const usuarioId = req.usuario.id; // AQUI
+
+  let cnpjTratado = cnpj ? cnpj : null;
 
   try {
-    // 🔥 OBRIGATÓRIOS
-    if (!nome || !cidade || !tipo || !rua) {
+    if (!nome || !cidade || !tipo || !rua || !responsavel_nome || !email_contato) {
       return res.status(400).json({ erro: "Campos obrigatórios" });
     }
 
-    // 🔥 TRIM
     nome = nome.trim();
     cidade = cidade.trim();
 
-    // 🔥 CNPJ
     if (!validarCNPJ(cnpj)) {
       return res.status(400).json({ erro: "CNPJ inválido" });
     }
 
-    // 🔥 DUPLICATA
     const existe = await pool.query(
-      `SELECT * FROM centros 
+      `SELECT 1 FROM centros 
        WHERE unaccent(lower(nome)) = unaccent(lower($1))
        AND unaccent(lower(cidade)) = unaccent(lower($2))`,
       [nome, cidade]
@@ -50,10 +54,10 @@ exports.criarCentro = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO centros 
-      (nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, status)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente')
+      (nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, status, responsavel_nome, email_contato, usuario_id)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente',$9,$10,$11)
       RETURNING *`,
-      [nome, cidade, tipo, rua, horario, cnpj, descricao, telefone]
+      [nome, cidade, tipo, rua, horario, cnpjTratado, descricao, telefone, responsavel_nome, email_contato, usuarioId]
     );
 
     res.status(201).json(result.rows[0]);
@@ -64,9 +68,9 @@ exports.criarCentro = async (req, res) => {
   }
 };
 
-
+// LISTAR
 exports.listarCentros = async (req, res) => {
-  const { cidade } = req.query;
+  let { cidade } = req.query;
 
   try {
     let query = `
@@ -76,6 +80,8 @@ exports.listarCentros = async (req, res) => {
     let values = [];
 
     if (cidade) {
+      cidade = cidade.trim();
+
       query += `
         AND unaccent(lower(cidade)) 
         LIKE unaccent(lower($1))
@@ -88,21 +94,27 @@ exports.listarCentros = async (req, res) => {
     res.json(result.rows);
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ erro: 'Erro ao buscar centros' });
   }
 };
 
+// ATUALIZAR
 exports.atualizarCentro = async (req, res) => {
   const { id } = req.params;
-  const { nome, cidade, tipo, rua, horario } = req.body;
+  let { nome, cidade, tipo, rua, horario } = req.body;
 
   if (!id || isNaN(id)) {
     return res.status(400).json({ erro: "ID inválido" });
   }
 
+  if (!nome || !cidade || !tipo || !rua) {
+    return res.status(400).json({ erro: "Campos obrigatórios" });
+  }
+
   try {
     const existe = await pool.query(
-      "SELECT * FROM centros WHERE id=$1",
+      "SELECT 1 FROM centros WHERE id=$1",
       [id]
     );
 
@@ -115,48 +127,57 @@ exports.atualizarCentro = async (req, res) => {
        SET nome=$1, cidade=$2, tipo=$3, rua=$4, horario=$5
        WHERE id=$6
        RETURNING *`,
-      [nome, cidade, tipo, rua, horario, id]
+      [nome.trim(), cidade.trim(), tipo, rua, horario, id]
     );
 
     res.json(result.rows[0]);
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ erro: "Erro ao atualizar" });
   }
 };
 
+// DELETE
 exports.deletarCentro = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        const result = await pool.query('DELETE FROM centros WHERE id = $1 RETURNING *', [id]);
+  try {
+    const result = await pool.query(
+      'DELETE FROM centros WHERE id = $1 RETURNING *',
+      [id]
+    );
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({ erro: 'Centro nao encontrado' });
-        }
-
-        res.json(result.rows[0]);
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ erro: 'Erro ao deletar centro' });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ erro: 'Centro nao encontrado' });
     }
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: 'Erro ao deletar centro' });
+  }
 };
 
-
+// APROVAR
 exports.aprovarCentro = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await pool.query(
-      `UPDATE centros SET status='aprovado' WHERE id=$1`,
+    const result = await pool.query(
+      `UPDATE centros SET status='aprovado' WHERE id=$1 RETURNING *`,
       [id]
     );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ erro: "Centro não encontrado" });
+    }
 
     res.json({ msg: "Centro aprovado" });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ erro: "Erro ao aprovar" });
   }
 };
-

@@ -1,3 +1,10 @@
+const token = localStorage.getItem("token");
+
+if (!token) {
+  alert("Você precisa estar logado para cadastrar um centro de apoio.");
+  window.location.href = "login.html";
+}
+
 const form = document.getElementById("form-centro");
 const msg = document.getElementById("msg");
 const selectTipo = document.getElementById("tipo");
@@ -20,10 +27,10 @@ const tipos = [
   "Acolhimento",
   "Jurídico",
   "Voluntariado",
-  "Emergência"
+  "Emergência",
 ];
 
-tipos.forEach(t => {
+tipos.forEach((t) => {
   const option = document.createElement("option");
   option.value = t;
   option.textContent = t;
@@ -46,7 +53,7 @@ function normalizar(texto) {
 async function carregarCidades() {
   try {
     const res = await fetch(
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios"
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios",
     );
     cidades = await res.json();
   } catch (err) {
@@ -64,11 +71,11 @@ inputCidade.addEventListener("input", () => {
 
   if (valor.length < 2) return;
 
-  const filtradas = cidades.filter(c =>
-    normalizar(c.nome).includes(normalizar(valor))
+  const filtradas = cidades.filter((c) =>
+    normalizar(c.nome).includes(normalizar(valor)),
   );
 
-  filtradas.slice(0, 8).forEach(cidade => {
+  filtradas.slice(0, 8).forEach((cidade) => {
     const li = document.createElement("li");
     li.textContent = cidade.nome;
 
@@ -84,38 +91,38 @@ inputCidade.addEventListener("input", () => {
 // =======================
 // MÁSCARA CNPJ
 // =======================
-const inputCNPJ = document.getElementById("cnpj");
+// const inputCNPJ = document.getElementById("cnpj");
 
-inputCNPJ.addEventListener("input", (e) => {
-  let v = e.target.value.replace(/\D/g, "");
+// inputCNPJ.addEventListener("input", (e) => {
+//   let v = e.target.value.replace(/\D/g, "");
 
-  v = v
-    .replace(/^(\d{2})(\d)/, "$1.$2")
-    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-    .replace(/\.(\d{3})(\d)/, ".$1/$2")
-    .replace(/(\d{4})(\d)/, "$1-$2");
+//   v = v
+//     .replace(/^(\d{2})(\d)/, "$1.$2")
+//     .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+//     .replace(/\.(\d{3})(\d)/, ".$1/$2")
+//     .replace(/(\d{4})(\d)/, "$1-$2");
 
-  e.target.value = v.slice(0, 18);
-});
+//   e.target.value = v.slice(0, 18);
+// });
 
 // =======================
 // MÁSCARA TELEFONE
 // =======================
-const inputTel = document.getElementById("telefone");
+// const inputTel = document.getElementById("telefone");
 
-inputTel.addEventListener("input", (e) => {
-  let v = e.target.value.replace(/\D/g, "");
+// inputTel.addEventListener("input", (e) => {
+//   let v = e.target.value.replace(/\D/g, "");
 
-  if (v.length <= 10) {
-    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-    v = v.replace(/(\d{4})(\d)/, "$1-$2");
-  } else {
-    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-    v = v.replace(/(\d{5})(\d)/, "$1-$2");
-  }
+//   if (v.length <= 10) {
+//     v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+//     v = v.replace(/(\d{4})(\d)/, "$1-$2");
+//   } else {
+//     v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+//     v = v.replace(/(\d{5})(\d)/, "$1-$2");
+//   }
 
-  e.target.value = v.slice(0, 15);
-});
+//   e.target.value = v.slice(0, 15);
+// });
 
 // =======================
 // SUBMIT
@@ -129,12 +136,14 @@ form.addEventListener("submit", async (e) => {
     tipo: selectTipo.value,
     rua: document.getElementById("rua").value.trim(),
     horario: document.getElementById("horario").value.trim(),
-    cnpj: inputCNPJ.value.replace(/\D/g, ""), // limpa máscara
+    cnpj: inputCNPJ.value ? inputCNPJ.value.replace(/\D/g, "") : null,
     telefone: inputTel.value.trim(),
-    descricao: document.getElementById("descricao").value.trim()
+    descricao: document.getElementById("descricao").value.trim(),
+    responsavel_nome: document.getElementById("responsavel_nome").value.trim(),
+    email_contato: document.getElementById("email_contato").value.trim(),
   };
 
-  if (!dados.nome || !dados.cidade || !dados.tipo || !dados.rua) {
+  if (!dados.nome || !dados.cidade || !dados.tipo || !dados.rua || !dados.responsavel_nome || !dados.email_contato) {
     msg.textContent = "Preencha os campos obrigatórios";
     msg.style.color = "red";
     return;
@@ -144,9 +153,10 @@ form.addEventListener("submit", async (e) => {
     const res = await fetch("http://localhost:3000/api/centros", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify(dados)
+      body: JSON.stringify(dados),
     });
 
     const data = await res.json();
@@ -162,7 +172,6 @@ form.addEventListener("submit", async (e) => {
 
     form.reset();
     sugestoes.innerHTML = "";
-
   } catch (err) {
     msg.textContent = "Erro na requisição";
     msg.style.color = "red";

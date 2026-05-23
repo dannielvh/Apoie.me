@@ -5,17 +5,93 @@
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/regular.min.css" />
      <link rel="stylesheet" href="../css/style.css">
-     <title>Dashboard</title>
+     <title>Dashboard | Apoie.me</title>
 </head>
 
 <body class="dashboard-page">
      <div id="header"></div>
      <button onclick="fazerDoacao(50)">Doar R$50</button>
 
+     <main class="dashboard-container">
+          <section class="dashboard-welcome">
+               <div>
+                    <h1 id="welcome-title">Painel Geral</h1>
+                    <p>Visualize campanhas ativas, necessidades urgentes,
+                    arrecadações e movimentações recentes da plataforma Apoie.me.</p>
+               </div>
+          </section>
 
-<script src="../js/header.js"></script>
-<script src="../js/doacao.js"></script>
+          <!-- AÇÕES PRINCIPAIS -->
+          <section class="dashboard-actions">
+               <!-- aqui coloca as ações principais -->
+
+
+          </section>
+
+
+          <!-- MAPA + NECESSIDADES -->
+          <!-- AQUI VAI COLOCAR O MAPA SE TIVER, COM AS ULTIMAS NECESSIDADES URGENTES CADASTRADAS -->
+          <section class="dashboard-content">
+
+          </section>
+
+          <!-- CARDS DE RESUMO -->
+          <!-- TRANSFORMA ISSO DINAMICO COM O BANCO DE DADOS -->
+          <section class="dashboard-stats">
+
+               <!-- <div class="stat-card">
+                    <div class="stat-card__top">
+                         <i class="fa-solid fa-location-dot"></i>
+                         <span>+0 novos </span>
+                    </div>
+
+                    <h2>0</h2>
+                    <h3>Coloque card de informações do sistema</h3>
+                    <p>como por exemplo, quantas doações, quantos voluntários, quantos centros</p>
+               </div> -->
+
+
+
+          </section>
+
+
+          <!-- CADASTRO DE CENTRO - SECUNDÁRIO -->
+          <section class="dashboard-secondary">
+               <div>
+                    <h2>Você representa um centro de apoio?</h2>
+                    <p>
+                         Cadastre seu centro para solicitar doações, abrir pedidos de voluntários
+                         e divulgar informações para a comunidade.
+                    </p>
+               </div>
+
+               <button id="btnCadastrarCentro" type="button" class="btn-centro">
+                    Cadastrar centro de apoio
+               </button>
+          </section>
+
+
+
+     </main>
+
+     <div id="modalLogin" class="modal hidden">
+          <div class="modal__content">
+               <h2>Login necessário</h2>
+               <p>Para cadastrar um centro de apoio, você precisa ter uma conta ativa.</p>
+
+               <div class="modal__actions">
+                    <button id="btnIrLogin">Ir para login</button>
+                    <button id="btnFecharModal">Cancelar</button>
+               </div>
+          </div>
+     </div>
+
+
+     <script src="../js/header.js"></script>
+     <script src="../js/doacoes.js"></script>
+     <script src="../js/dashboard.js"></script>
 </body>
 
 </html>
