@@ -2,12 +2,12 @@
      background-color: #F5F5DC;
 }
 
-.dashboard {
+.dashboard-container {
   background: #f3f5df;
   min-height: 100vh;
   padding: 30px 20px;
 
-   &__welcome {
+   .dashboard-welcome {
     max-width: 1200px;
     margin: 0 auto 32px auto;
 
@@ -24,6 +24,7 @@
       font-size: 32px;
       color: #2e7d32;
       margin-bottom: 8px;
+
     }
 
     p {
@@ -38,7 +39,7 @@
   // =========================
   // CARDS DE RESUMO
   // =========================
-  &__stats {
+  .dashboard-stats {
     max-width: 1200px;
     margin: 0 auto 32px auto;
 
@@ -50,7 +51,7 @@
   // =========================
   // MAPA + NECESSIDADES
   // =========================
-  &__content {
+  .dashboard-content {
     max-width: 1200px;
     margin: 0 auto 32px auto;
 
@@ -62,7 +63,7 @@
   // =========================
   // AÇÕES PRINCIPAIS
   // =========================
-  &__actions {
+  .dashboard-actions {
     max-width: 1200px;
     margin: 0 auto 32px auto;
 
@@ -74,7 +75,7 @@
   // =========================
   // CADASTRO CENTRO
   // =========================
-  &__secondary {
+  .dashboard-secondary {
     max-width: 1200px;
     margin: 0 auto;
 
@@ -100,7 +101,7 @@
       max-width: 720px;
     }
 
-    a {
+    button {
       background: #2e7d32;
       color: #ffffff;
       padding: 12px 18px;
@@ -108,9 +109,15 @@
       text-decoration: none;
       font-weight: 600;
       white-space: nowrap;
+      border: none;
+      cursor: pointer;
+      box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+      transition: 0.2s;
 
       &:hover {
         background: #256628;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+        scale: 1.02;
       }
     }
   }
@@ -126,7 +133,7 @@
   border-radius: 12px;
   padding: 24px;
 
-  &__top {
+  .dashboard-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -228,16 +235,16 @@
 // RESPONSIVO
 // =========================
 @media (max-width: 1000px) {
-  .dashboard {
-    &__stats {
+  .dashboard-container {
+    .dashboard-stats {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    &__content {
+    .dashboard-content {
       grid-template-columns: 1fr;
     }
 
-    &__actions {
+    .dashboard-actions {
       grid-template-columns: 1fr;
     }
   }
@@ -247,7 +254,7 @@
   .dashboard {
     padding: 20px 14px;
 
-    &__welcome {
+    .dashboard-welcome {
       flex-direction: column;
       align-items: flex-start;
 
@@ -256,17 +263,17 @@
       }
     }
 
-    &__login-link {
+    .dashboard-login-link {
       width: 100%;
       text-align: center;
     }
 
-    &__stats {
+    .dashboard-stats {
       grid-template-columns: 1fr;
       gap: 16px;
     }
 
-    &__secondary {
+    .dashboard-secondary {
       flex-direction: column;
       align-items: flex-start;
 
@@ -280,7 +287,7 @@
   .stat-card {
     padding: 20px;
 
-    &__top {
+    .dashboard-top {
       margin-bottom: 28px;
     }
   }
@@ -298,9 +305,70 @@
   }
 
   .need-card {
-    &__top {
+    .dashboard-top {
       align-items: flex-start;
       flex-direction: column;
+    }
+  }
+}
+
+
+// MODAL
+.modal.hidden {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+
+  .dashboard-content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+
+    h2 {
+      color: #2E7D32;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+  }
+
+  .dashboard-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #btnIrLogin {
+      background: #2E7D32;
+      color: #fff;
+    }
+
+    #btnFecharModal {
+      background: #eee;
+      color: #333;
     }
   }
 }

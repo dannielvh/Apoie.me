@@ -23,11 +23,14 @@ function validarCNPJ(cnpj) {
 
 // CRIAR
 exports.criarCentro = async (req, res) => {
-  let { nome, cidade, tipo, rua, horario, cnpj, descricao, telefone } = req.body;
+  let { nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, responsavel_nome, email_contato } = req.body;
+
+  const usuarioId = req.usuario.id; // AQUI
+
   let cnpjTratado = cnpj ? cnpj : null;
 
   try {
-    if (!nome || !cidade || !tipo || !rua) {
+    if (!nome || !cidade || !tipo || !rua || !responsavel_nome || !email_contato) {
       return res.status(400).json({ erro: "Campos obrigatórios" });
     }
 
@@ -38,7 +41,6 @@ exports.criarCentro = async (req, res) => {
       return res.status(400).json({ erro: "CNPJ inválido" });
     }
 
-    // DUPLICATA
     const existe = await pool.query(
       `SELECT 1 FROM centros 
        WHERE unaccent(lower(nome)) = unaccent(lower($1))
@@ -52,10 +54,10 @@ exports.criarCentro = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO centros 
-      (nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, status)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente')
+      (nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, status, responsavel_nome, email_contato, usuario_id)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente',$9,$10,$11)
       RETURNING *`,
-      [nome, cidade, tipo, rua, horario, cnpjTratado, descricao, telefone]
+      [nome, cidade, tipo, rua, horario, cnpjTratado, descricao, telefone, responsavel_nome, email_contato, usuarioId]
     );
 
     res.status(201).json(result.rows[0]);

@@ -7,54 +7,39 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/regular.min.css" />
      <link rel="stylesheet" href="../css/style.css">
-     <title>Dashboard</title>
+     <title>Dashboard | Apoie.me</title>
 </head>
 
 <body class="dashboard-page">
      <div id="header"></div>
      <button onclick="fazerDoacao(50)">Doar R$50</button>
 
-     <main class="dashboard">
-          <section class="dashboard__welcome">
+     <main class="dashboard-container">
+          <section class="dashboard-welcome">
                <div>
-                    <h1 id="welcome-title">Olá 👋</h1>
-                    <p>Veja como você pode ajudar centros de apoio e pessoas em situação de emergência.</p>
+                    <h1 id="welcome-title">Painel Geral</h1>
+                    <p>Visualize campanhas ativas, necessidades urgentes,
+                    arrecadações e movimentações recentes da plataforma Apoie.me.</p>
                </div>
           </section>
 
           <!-- AÇÕES PRINCIPAIS -->
-          <section class="dashboard__actions">
+          <section class="dashboard-actions">
                <!-- aqui coloca as ações principais -->
-               <a href="doacoes.html" class="action-card">
-                    <i class="fa-solid fa-hand-holding-heart"></i>
-                    <h2>Fazer doação</h2>
-                    <p>Veja os itens que os centros mais precisam e escolha como ajudar.</p>
-               </a>
 
-               <a href="voluntario.html" class="action-card">
-                    <i class="fa-solid fa-user-plus"></i>
-                    <h2>Ser voluntário</h2>
-                    <p>Cadastre-se para ajudar em ações, entregas, triagem ou atendimento.</p>
-               </a>
-
-               <a href="mapa.html" class="action-card">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <h2>Encontrar apoio</h2>
-                    <p>Consulte pontos de apoio, abrigos e locais de coleta próximos.</p>
-               </a>
 
           </section>
 
 
           <!-- MAPA + NECESSIDADES -->
           <!-- AQUI VAI COLOCAR O MAPA SE TIVER, COM AS ULTIMAS NECESSIDADES URGENTES CADASTRADAS -->
-          <section class="dashboard__content">
+          <section class="dashboard-content">
 
           </section>
 
           <!-- CARDS DE RESUMO -->
           <!-- TRANSFORMA ISSO DINAMICO COM O BANCO DE DADOS -->
-          <section class="dashboard__stats">
+          <section class="dashboard-stats">
 
                <!-- <div class="stat-card">
                     <div class="stat-card__top">
@@ -73,7 +58,7 @@
 
 
           <!-- CADASTRO DE CENTRO - SECUNDÁRIO -->
-          <section class="dashboard__secondary">
+          <section class="dashboard-secondary">
                <div>
                     <h2>Você representa um centro de apoio?</h2>
                     <p>
@@ -82,12 +67,26 @@
                     </p>
                </div>
 
-               <a href="cadastro-centro.html">
-                    Cadastrar Centro de Apoio
-               </a>
+               <button id="btnCadastrarCentro" type="button" class="btn-centro">
+                    Cadastrar centro de apoio
+               </button>
           </section>
 
+
+
      </main>
+
+     <div id="modalLogin" class="modal hidden">
+          <div class="modal__content">
+               <h2>Login necessário</h2>
+               <p>Para cadastrar um centro de apoio, você precisa ter uma conta ativa.</p>
+
+               <div class="modal__actions">
+                    <button id="btnIrLogin">Ir para login</button>
+                    <button id="btnFecharModal">Cancelar</button>
+               </div>
+          </div>
+     </div>
 
 
      <script src="../js/header.js"></script>

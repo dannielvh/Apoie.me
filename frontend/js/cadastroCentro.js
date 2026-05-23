@@ -1,3 +1,10 @@
+const token = localStorage.getItem("token");
+
+if (!token) {
+  alert("Você precisa estar logado para cadastrar um centro de apoio.");
+  window.location.href = "login.html";
+}
+
 const form = document.getElementById("form-centro");
 const msg = document.getElementById("msg");
 const selectTipo = document.getElementById("tipo");
@@ -84,38 +91,38 @@ inputCidade.addEventListener("input", () => {
 // =======================
 // MÁSCARA CNPJ
 // =======================
-const inputCNPJ = document.getElementById("cnpj");
+// const inputCNPJ = document.getElementById("cnpj");
 
-inputCNPJ.addEventListener("input", (e) => {
-  let v = e.target.value.replace(/\D/g, "");
+// inputCNPJ.addEventListener("input", (e) => {
+//   let v = e.target.value.replace(/\D/g, "");
 
-  v = v
-    .replace(/^(\d{2})(\d)/, "$1.$2")
-    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-    .replace(/\.(\d{3})(\d)/, ".$1/$2")
-    .replace(/(\d{4})(\d)/, "$1-$2");
+//   v = v
+//     .replace(/^(\d{2})(\d)/, "$1.$2")
+//     .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+//     .replace(/\.(\d{3})(\d)/, ".$1/$2")
+//     .replace(/(\d{4})(\d)/, "$1-$2");
 
-  e.target.value = v.slice(0, 18);
-});
+//   e.target.value = v.slice(0, 18);
+// });
 
 // =======================
 // MÁSCARA TELEFONE
 // =======================
-const inputTel = document.getElementById("telefone");
+// const inputTel = document.getElementById("telefone");
 
-inputTel.addEventListener("input", (e) => {
-  let v = e.target.value.replace(/\D/g, "");
+// inputTel.addEventListener("input", (e) => {
+//   let v = e.target.value.replace(/\D/g, "");
 
-  if (v.length <= 10) {
-    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-    v = v.replace(/(\d{4})(\d)/, "$1-$2");
-  } else {
-    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-    v = v.replace(/(\d{5})(\d)/, "$1-$2");
-  }
+//   if (v.length <= 10) {
+//     v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+//     v = v.replace(/(\d{4})(\d)/, "$1-$2");
+//   } else {
+//     v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+//     v = v.replace(/(\d{5})(\d)/, "$1-$2");
+//   }
 
-  e.target.value = v.slice(0, 15);
-});
+//   e.target.value = v.slice(0, 15);
+// });
 
 // =======================
 // SUBMIT
@@ -132,9 +139,11 @@ form.addEventListener("submit", async (e) => {
     cnpj: inputCNPJ.value ? inputCNPJ.value.replace(/\D/g, "") : null,
     telefone: inputTel.value.trim(),
     descricao: document.getElementById("descricao").value.trim(),
+    responsavel_nome: document.getElementById("responsavel_nome").value.trim(),
+    email_contato: document.getElementById("email_contato").value.trim(),
   };
 
-  if (!dados.nome || !dados.cidade || !dados.tipo || !dados.rua) {
+  if (!dados.nome || !dados.cidade || !dados.tipo || !dados.rua || !dados.responsavel_nome || !dados.email_contato) {
     msg.textContent = "Preencha os campos obrigatórios";
     msg.style.color = "red";
     return;
@@ -145,6 +154,7 @@ form.addEventListener("submit", async (e) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(dados),
     });
