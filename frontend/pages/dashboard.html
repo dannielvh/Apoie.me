@@ -2,310 +2,127 @@
 <html lang="pt-br">
 
 <head>
-    <!-- Configurações básicas da página -->
+
+    <!-- ===================================================== -->
+    <!-- CONFIGURAÇÕES BÁSICAS                                 -->
+    <!-- ===================================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Biblioteca de ícones -->
+    <!-- Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- CSS principal compilado -->
+    <!-- CSS principal -->
     <link rel="stylesheet" href="../css/style.css">
 
-    <title>Dashboard | Apoie.me</title>
+    <title>Apoie.me</title>
+
 </head>
 
 <body class="dashboard-page">
 
+
     <!-- ===================================================== -->
     <!-- HEADER DINÂMICO                                       -->
-    <!-- Esse conteúdo vem do header.html via JavaScript       -->
     <!-- ===================================================== -->
     <div id="header"></div>
 
 
+
     <!-- ===================================================== -->
-    <!-- CONTAINER PRINCIPAL DO DASHBOARD                      -->
-    <!-- Tudo do dashboard ficará dentro desse main            -->
+    <!-- CONTAINER PRINCIPAL                                   -->
     <!-- ===================================================== -->
     <main class="dashboard-container">
 
 
         <!-- ===================================================== -->
-        <!-- TÍTULO / BOAS-VINDAS                                  -->
-        <!-- Área inicial da página                                -->
+        <!-- HERO / APRESENTAÇÃO PRINCIPAL                         -->
         <!-- ===================================================== -->
-        <section class="dashboard-welcome">
-
-            <div class="welcome-text">
-
-                <h1>Painel Geral</h1>
-
-                <p>
-                    Visualize campanhas ativas, necessidades urgentes,
-                    arrecadações e movimentações recentes da plataforma Apoie.me.
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- ===================================================== -->
-        <!-- CARDS SUPERIORES (KPIs)                               -->
-        <!-- Mostram os indicadores principais do sistema           -->
-        <!-- ===================================================== -->
-        <section class="stats-section">
-
-            <div class="stats-grid">
-
-                <!-- Card: Centros ativos -->
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-building"></i>
-                    </div>
-
-                    <div class="stat-info">
-                        <h2 id="total-centros">0</h2>
-                        <p>Centros ativos</p>
-                    </div>
-                </div>
-
-
-                <!-- Card: Necessidades urgentes -->
-                <div class="stat-card">
-                    <div class="stat-icon urgent">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-
-                    <div class="stat-info">
-                        <h2 id="necessidades-urgentes">0</h2>
-                        <p>Necessidades urgentes</p>
-                    </div>
-                </div>
-
-
-                <!-- Card: Itens arrecadados -->
-                <div class="stat-card">
-                    <div class="stat-icon donation">
-                        <i class="fa-solid fa-box-open"></i>
-                    </div>
-
-                    <div class="stat-info">
-                        <h2 id="itens-arrecadados">0</h2>
-                        <p>Itens arrecadados</p>
-                    </div>
-                </div>
-
-
-                <!-- Card: Campanhas atendidas -->
-                <div class="stat-card">
-                    <div class="stat-icon success">
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>
-
-                    <div class="stat-info">
-                        <h2 id="campanhas-atendidas">0</h2>
-                        <p>Campanhas atendidas</p>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ===================================================== -->
-        <!-- CONTEÚDO PRINCIPAL                                    -->
-        <!-- Grid com necessidades urgentes e atividades recentes  -->
-        <!-- ===================================================== -->
-        <section class="dashboard-content">
+        <section class="hero-section">
 
 
             <!-- ===================================================== -->
-            <!-- NECESSIDADES MAIS URGENTES                            -->
-            <!-- Cards com pedidos prioritários                         -->
+            <!-- APRESENTAÇÃO DA APOIE.ME                              -->
             <!-- ===================================================== -->
-            <section class="urgent-needs-section">
+            <div class="hero-content">
 
-                <!-- Cabeçalho da seção -->
-                <div class="section-header">
 
-                    <h2>
-                        <i class="fa-solid fa-fire"></i>
-                        Necessidades mais urgentes
-                    </h2>
+                <!-- Título -->
+                <div class="hero-text">
 
-                    <button class="see-all-btn">
-                        Ver todas
+                    <h1>
+                        Conectando pessoas dispostas a ajudar
+                        com centros que realmente precisam.
+                    </h1>
+
+                    <p>
+                        A Apoie.me é uma plataforma social criada para facilitar
+                        doações e aproximar a comunidade de projetos, centros e
+                        instituições que necessitam de apoio.
+                    </p>
+
+                    <p>
+                        Nosso objetivo é tornar a solidariedade mais acessível,
+                        organizada e acolhedora para todos.
+                    </p>
+
+                </div>
+
+
+                <!-- Botões -->
+                <div class="hero-buttons">
+
+                    <button class="primary-btn">
+                        Quero ajudar
+                    </button>
+
+                    <button class="secondary-btn">
+                        Saiba mais
                     </button>
 
                 </div>
 
+            </div>
 
-                <!-- ===================================================== -->
-                <!-- LISTA DE NECESSIDADES                                 -->
-                <!-- Os cards poderão ser adicionados dinamicamente via JS  -->
-                <!-- ===================================================== -->
-                <div class="urgent-needs-list">
-
-
-                    <!-- ============================================ -->
-                    <!-- EXEMPLO DE CARD DE NECESSIDADE               -->
-                    <!-- Depois isso será gerado dinamicamente        -->
-                    <!-- ============================================ -->
-                    <div class="need-card">
-
-                        <!-- Topo do card -->
-                        <div class="need-card-header">
-
-                            <!-- Nome do centro -->
-                            <h3>Centro Esperança</h3>
-
-                            <!-- Badge de urgência -->
-                            <span class="urgency-badge critical">
-                                Crítica
-                            </span>
-
-                        </div>
-
-
-                        <!-- Item solicitado -->
-                        <p class="need-item">
-                            Item solicitado:
-                            <strong>Cobertores</strong>
-                        </p>
-
-
-                        <!-- Quantidades -->
-                        <div class="need-quantity">
-
-                            <span>45 arrecadados</span>
-                            <span>100 necessários</span>
-
-                        </div>
-
-
-                        <!-- Barra de progresso -->
-                        <div class="progress-bar">
-
-                            <!-- Parte preenchida -->
-                            <div class="progress-fill" style="width: 45%;"></div>
-
-                        </div>
-
-
-                        <!-- Rodapé -->
-                        <div class="need-footer">
-
-                            <span class="progress-text">
-                                45% concluído
-                            </span>
-
-                            <span class="deadline">
-                                Prazo: 25/05
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ================================================= -->
-                    <!-- Outros cards serão adicionados aqui via JS        -->
-                    <!-- ================================================= -->
-
-
-                </div>
-
-            </section>
 
 
             <!-- ===================================================== -->
-            <!-- ATIVIDADES RECENTES                                   -->
-            <!-- Mostra movimentações recentes do sistema               -->
+            <!-- CARD LOGIN / CADASTRO                                 -->
             <!-- ===================================================== -->
-            <aside class="recent-activities-section">
+            <aside class="access-card">
 
 
-                <!-- Cabeçalho -->
-                <div class="section-header">
+                <!-- Ícone -->
+                <div class="access-icon">
 
-                    <h2>
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                        Atividades recentes
-                    </h2>
+                    <i class="fa-solid fa-heart"></i>
 
                 </div>
 
 
-                <!-- ===================================================== -->
-                <!-- LISTA DE ATIVIDADES                                   -->
-                <!-- Futuramente será preenchida dinamicamente via JS      -->
-                <!-- ===================================================== -->
-                <div class="activities-list">
+                <!-- Texto -->
+                <div class="access-text">
+
+                    <h2>Faça parte da Apoie.me</h2>
+
+                    <p>
+                        Entre na plataforma para acompanhar necessidades,
+                        realizar doações e participar das ações sociais.
+                    </p>
+
+                </div>
 
 
-                    <!-- Atividade -->
-                    <div class="activity-item">
+                <!-- Botões -->
+                <div class="access-buttons">
 
-                        <div class="activity-icon donation">
-                            <i class="fa-solid fa-hand-holding-heart"></i>
-                        </div>
+                    <a href="../pages/login.html" class="login-btn">
+                        Entrar
+                    </a>
 
-                        <div class="activity-content">
-
-                            <p>
-                                Nova doação recebida para
-                                <strong>cestas básicas</strong>.
-                            </p>
-
-                            <span>Há 10 minutos</span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Atividade -->
-                    <div class="activity-item">
-
-                        <div class="activity-icon alert">
-                            <i class="fa-solid fa-circle-exclamation"></i>
-                        </div>
-
-                        <div class="activity-content">
-
-                            <p>
-                                Nova necessidade urgente cadastrada.
-                            </p>
-
-                            <span>Há 30 minutos</span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Atividade -->
-                    <div class="activity-item">
-
-                        <div class="activity-icon success">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-
-                        <div class="activity-content">
-
-                            <p>
-                                Campanha de agasalhos concluída.
-                            </p>
-
-                            <span>Hoje</span>
-
-                        </div>
-
-                    </div>
-
+                    <a href="../pages/cadastro.html" class="register-btn">
+                        Criar conta
+                    </a>
 
                 </div>
 
@@ -314,20 +131,256 @@
         </section>
 
 
+
+        <!-- ===================================================== -->
+        <!-- COMO DOAR                                             -->
+        <!-- ===================================================== -->
+        <section class="donation-guide-section">
+
+
+            <!-- Cabeçalho -->
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    Como doar corretamente
+                </h2>
+
+                <p>
+                    Veja orientações importantes sobre cada tipo de doação.
+                </p>
+
+            </div>
+
+
+
+            <!-- ===================================================== -->
+            <!-- DROPDOWNS                                             -->
+            <!-- ===================================================== -->
+            <div class="guide-dropdowns">
+
+
+                <!-- ================================================ -->
+                <!-- COMIDA                                            -->
+                <!-- ================================================ -->
+                <div class="guide-item">
+
+                    <button class="guide-toggle">
+
+                        <span>
+                            <i class="fa-solid fa-utensils"></i>
+                            Comida
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down"></i>
+
+                    </button>
+
+
+                    <div class="guide-content">
+
+                        <h4>O que doar:</h4>
+
+                        <ul>
+
+                            <li>Arroz</li>
+                            <li>Feijão</li>
+                            <li>Macarrão</li>
+                            <li>Leite</li>
+                            <li>Enlatados</li>
+
+                        </ul>
+
+
+                        <h4>Importante:</h4>
+
+                        <ul>
+
+                            <li>Verifique sempre a validade.</li>
+                            <li>Prefira alimentos não perecíveis.</li>
+                            <li>Mantenha as embalagens lacradas.</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================ -->
+                <!-- ROUPAS                                            -->
+                <!-- ================================================ -->
+                <div class="guide-item">
+
+                    <button class="guide-toggle">
+
+                        <span>
+                            <i class="fa-solid fa-shirt"></i>
+                            Roupas
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down"></i>
+
+                    </button>
+
+
+                    <div class="guide-content">
+
+                        <h4>O que doar:</h4>
+
+                        <ul>
+
+                            <li>Casacos</li>
+                            <li>Calças</li>
+                            <li>Roupas infantis</li>
+                            <li>Meias</li>
+                            <li>Cobertores</li>
+
+                        </ul>
+
+
+                        <h4>Importante:</h4>
+
+                        <ul>
+
+                            <li>Doe roupas limpas.</li>
+                            <li>Evite peças rasgadas.</li>
+                            <li>Separe por tamanho se possível.</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================ -->
+                <!-- HIGIENE                                           -->
+                <!-- ================================================ -->
+                <div class="guide-item">
+
+                    <button class="guide-toggle">
+
+                        <span>
+                            <i class="fa-solid fa-pump-soap"></i>
+                            Produtos de higiene
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down"></i>
+
+                    </button>
+
+
+                    <div class="guide-content">
+
+                        <h4>O que doar:</h4>
+
+                        <ul>
+
+                            <li>Sabonete</li>
+                            <li>Escova de dente</li>
+                            <li>Pasta dental</li>
+                            <li>Papel higiênico</li>
+                            <li>Absorventes</li>
+
+                        </ul>
+
+
+                        <h4>Importante:</h4>
+
+                        <ul>
+
+                            <li>Doe produtos fechados.</li>
+                            <li>Verifique validade e conservação.</li>
+                            <li>Evite produtos danificados.</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================== -->
+        <!-- NECESSIDADES URGENTES                                 -->
+        <!-- ===================================================== -->
+        <section class="urgent-needs-section">
+
+
+            <!-- Cabeçalho -->
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-fire"></i>
+                    Necessidades mais urgentes
+                </h2>
+
+                <button class="see-all-btn">
+                    Ver todas
+                </button>
+
+            </div>
+
+
+
+            <!-- ===================================================== -->
+            <!-- LISTA DE NECESSIDADES                                 -->
+            <!-- Será preenchida dinamicamente via JS                  -->
+            <!-- ===================================================== -->
+            <div class="urgent-needs-list"></div>
+
+        </section>
+
+
+
+        <!-- ===================================================== -->
+        <!-- ATIVIDADES RECENTES                                    -->
+        <!-- ===================================================== -->
+        <section class="recent-activities-section">
+
+
+            <!-- Cabeçalho -->
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Atividades recentes
+                </h2>
+
+            </div>
+
+
+
+            <!-- ===================================================== -->
+            <!-- LISTA DE ATIVIDADES                                   -->
+            <!-- Será preenchida dinamicamente via JS                  -->
+            <!-- ===================================================== -->
+            <div class="activities-list"></div>
+
+        </section>
+
     </main>
+
 
 
     <!-- ===================================================== -->
     <!-- SCRIPTS                                               -->
     <!-- ===================================================== -->
 
-    <!-- Header dinâmico -->
+    <!-- Header -->
     <script src="../js/header.js"></script>
 
-    <!-- Funções de doação -->
+    <!-- Doações -->
     <script src="../js/doacoes.js"></script>
 
-    <!-- Script principal do dashboard -->
+    <!-- Dashboard -->
     <script src="../js/dashboard.js"></script>
 
 </body>

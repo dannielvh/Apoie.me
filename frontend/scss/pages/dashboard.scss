@@ -1,7 +1,13 @@
 /* ========================================================= */
 /* DASHBOARD - APOIE.ME                                      */
-/* Baseado nas cores da tela de login                        */
 /* ========================================================= */
+
+.dashboard-page {
+     background-color: #F5F7F4;
+     min-height: 100vh;
+     font-family: 'Inter', sans-serif;
+}
+
 
 
 /* ========================================================= */
@@ -9,336 +15,559 @@
 /* ========================================================= */
 
 .dashboard-container {
+     width: 100%;
+     max-width: 1400px;
+     margin: 0 auto;
+     padding: 40px 20px 60px;
+}
+
+
+
+/* ========================================================= */
+/* HERO SECTION                                              */
+/* ========================================================= */
+
+.hero-section {
+     display: flex;
+     gap: 30px;
+     align-items: stretch;
+     margin-bottom: 50px;
+}
+
+
+
+/* ========================================================= */
+/* APRESENTAÇÃO                                               */
+/* ========================================================= */
+
+.hero-content {
+     flex: 2;
+     background-color: #FFFFFF;
+     padding: 40px;
+     border-radius: 18px;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
      display: flex;
      flex-direction: column;
-     gap: 2rem;
-
-     padding: 2rem;
-
-     min-height: 100vh;
-
-     background-color: #f5f7f6;
+     justify-content: center;
 }
 
 
-/* ========================================================= */
-/* ÁREA DE BOAS-VINDAS                                       */
-/* ========================================================= */
 
-.dashboard-welcome {
+.hero-text {
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
 
-     .welcome-text {
-
-          h1 {
-               font-family: 'Inter', sans-serif;
-               font-size: 2rem;
-               color: #2E7D32;
-
-               margin-bottom: 0.5rem;
-          }
-
-          p {
-               font-family: 'Inter', sans-serif;
-               font-size: 1rem;
-               color: #666666;
-
-               line-height: 1.5;
-          }
-
+     h1 {
+          font-size: 42px;
+          line-height: 1.2;
+          color: #2E7D32;
+          font-weight: 700;
      }
 
+     p {
+          font-size: 18px;
+          line-height: 1.7;
+          color: #666666;
+     }
 }
 
 
-/* ========================================================= */
-/* GRID DOS CARDS SUPERIORES                                 */
-/* ========================================================= */
-
-.stats-grid {
-     display: grid;
-
-     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-
-     gap: 1.5rem;
-}
-
 
 /* ========================================================= */
-/* CARD SUPERIOR                                             */
+/* BOTÕES HERO                                               */
 /* ========================================================= */
 
-.stat-card {
+.hero-buttons {
      display: flex;
-     align-items: center;
-     gap: 1rem;
+     gap: 15px;
+     margin-top: 35px;
+}
 
-     background-color: #ffffff;
 
-     padding: 1.5rem;
 
-     border-radius: 12px;
-
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-
+.primary-btn,
+.secondary-btn {
+     padding: 14px 24px;
+     border-radius: 10px;
+     border: none;
+     font-size: 16px;
+     font-weight: 600;
+     cursor: pointer;
      transition: 0.3s ease;
+}
+
+
+
+.primary-btn {
+     background-color: #2E7D32;
+     color: #FFFFFF;
 
      &:hover {
-          transform: translateY(-4px);
-
-          box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+          background-color: #1B5E20;
      }
+}
 
 
-     /* Ícone do card */
-     .stat-icon {
-          width: 60px;
-          height: 60px;
 
-          display: flex;
-          align-items: center;
-          justify-content: center;
+.secondary-btn {
+     background-color: transparent;
+     border: 2px solid #2E7D32;
+     color: #2E7D32;
 
-          border-radius: 50%;
-
+     &:hover {
           background-color: #2E7D32;
-
-          color: #ffffff;
-
-          font-size: 1.4rem;
-
-
-          /* Variações */
-          &.urgent {
-               background-color: #c62828;
-          }
-
-          &.donation {
-               background-color: #388E3C;
-          }
-
-          &.success {
-               background-color: #1B5E20;
-          }
+          color: #FFFFFF;
      }
-
-
-     /* Informações */
-     .stat-info {
-
-          h2 {
-               font-family: 'Inter', sans-serif;
-               font-size: 1.8rem;
-               color: #2E7D32;
-          }
-
-          p {
-               font-family: 'Inter', sans-serif;
-               color: #666666;
-               margin-top: 0.3rem;
-          }
-
-     }
-
 }
 
 
+
 /* ========================================================= */
-/* CONTEÚDO PRINCIPAL                                        */
+/* CARD LOGIN / CADASTRO                                     */
 /* ========================================================= */
 
-.dashboard-content {
-     display: grid;
+.access-card {
+     flex: 1;
+     background-color: #FFFFFF;
+     border-radius: 18px;
+     padding: 35px 30px;
 
-     grid-template-columns: 2fr 1fr;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 
-     gap: 2rem;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     gap: 30px;
 }
 
 
+
+.access-icon {
+     width: 80px;
+     height: 80px;
+     background-color: #2E7D32;
+     border-radius: 50%;
+
+     display: flex;
+     align-items: center;
+     justify-content: center;
+
+     i {
+          color: #FFFFFF;
+          font-size: 32px;
+     }
+}
+
+
+
+.access-text {
+     display: flex;
+     flex-direction: column;
+     gap: 15px;
+
+     h2 {
+          color: #2E7D32;
+          font-size: 28px;
+     }
+
+     p {
+          color: #666666;
+          line-height: 1.7;
+          font-size: 16px;
+     }
+}
+
+
+
 /* ========================================================= */
-/* CABEÇALHO DAS SEÇÕES                                      */
+/* BOTÕES LOGIN / CADASTRO                                   */
+/* ========================================================= */
+
+.access-buttons {
+     display: flex;
+     flex-direction: column;
+     gap: 15px;
+}
+
+
+
+.login-btn,
+.register-btn {
+     width: 100%;
+     text-align: center;
+     text-decoration: none;
+
+     padding: 14px;
+     border-radius: 10px;
+
+     font-size: 16px;
+     font-weight: 600;
+
+     transition: 0.3s ease;
+}
+
+
+
+.login-btn {
+     background-color: #2E7D32;
+     color: #FFFFFF;
+
+     &:hover {
+          background-color: #1B5E20;
+     }
+}
+
+
+
+.register-btn {
+     border: 2px solid #2E7D32;
+     color: #2E7D32;
+
+     &:hover {
+          background-color: #2E7D32;
+          color: #FFFFFF;
+     }
+}
+
+
+
+/* ========================================================= */
+/* COMO DOAR                                                 */
+/* ========================================================= */
+
+.donation-guide-section {
+     background-color: #FFFFFF;
+     padding: 40px;
+     border-radius: 18px;
+     margin-bottom: 50px;
+
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+
+/* ========================================================= */
+/* CABEÇALHOS DAS SEÇÕES                                     */
 /* ========================================================= */
 
 .section-header {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
+     margin-bottom: 30px;
 
-     margin-bottom: 1.5rem;
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     gap: 20px;
 
      h2 {
           display: flex;
           align-items: center;
-          gap: 0.6rem;
-
-          font-family: 'Inter', sans-serif;
-          font-size: 1.4rem;
+          gap: 10px;
 
           color: #2E7D32;
+          font-size: 28px;
      }
 
+     p {
+          color: #666666;
+          margin-top: 10px;
+     }
+}
 
-     .see-all-btn {
-          background-color: #2E7D32;
 
-          color: #ffffff;
 
-          border: none;
+/* ========================================================= */
+/* DROPDOWNS                                                 */
+/* ========================================================= */
 
-          padding: 0.7rem 1rem;
+.guide-dropdowns {
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+}
 
-          border-radius: 6px;
 
-          font-family: 'Inter', sans-serif;
 
-          cursor: pointer;
+.guide-item {
+     border: 1px solid #E0E0E0;
+     border-radius: 12px;
+     overflow: hidden;
+}
 
-          transition: 0.3s ease;
 
-          &:hover {
-               background-color: #1B5E20;
+
+/* ========================================================= */
+/* BOTÃO DROPDOWN                                            */
+/* ========================================================= */
+
+.guide-toggle {
+     width: 100%;
+     background-color: #F9F9F9;
+     border: none;
+
+     padding: 20px;
+
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+
+     cursor: pointer;
+     transition: 0.3s ease;
+
+     font-size: 18px;
+     font-weight: 600;
+     color: #2E7D32;
+
+     span {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+     }
+
+     &:hover {
+          background-color: #F1F5F1;
+     }
+}
+
+
+
+/* ========================================================= */
+/* CONTEÚDO EXPANSÍVEL                                       */
+/* ========================================================= */
+
+.guide-content {
+     display: none;
+
+     padding: 25px;
+     background-color: #FFFFFF;
+
+     h4 {
+          color: #2E7D32;
+          margin-bottom: 10px;
+          margin-top: 20px;
+
+          &:first-child {
+               margin-top: 0;
           }
+     }
+
+     ul {
+          padding-left: 20px;
+
+          li {
+               margin-bottom: 8px;
+               color: #666666;
+               line-height: 1.6;
+          }
+     }
+}
+
+
+
+/* ========================================================= */
+/* DROPDOWN ATIVO                                            */
+/* ========================================================= */
+
+.guide-item.active {
+
+     .guide-content {
+          display: block;
+     }
+
+     .guide-toggle {
+
+          background-color: #EDF7EE;
+
+          i.fa-chevron-down {
+               transform: rotate(180deg);
+          }
+
      }
 
 }
 
 
+
 /* ========================================================= */
-/* LISTA DE NECESSIDADES                                     */
+/* NECESSIDADES URGENTES                                     */
+/* ========================================================= */
+
+.urgent-needs-section {
+     margin-bottom: 50px;
+}
+
+
+
+/* ========================================================= */
+/* GRID DE NECESSIDADES                                      */
 /* ========================================================= */
 
 .urgent-needs-list {
-     display: flex;
-     flex-direction: column;
-
-     gap: 1.5rem;
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+     gap: 25px;
 }
 
 
+
 /* ========================================================= */
-/* CARD DE NECESSIDADE                                       */
+/* CARD NECESSIDADE                                          */
 /* ========================================================= */
 
 .need-card {
-     background-color: #ffffff;
+     background-color: #FFFFFF;
+     border-radius: 18px;
+     padding: 25px;
 
-     padding: 1.5rem;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 
-     border-radius: 12px;
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+}
 
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 
+
+/* ========================================================= */
+/* TOPO CARD                                                 */
+/* ========================================================= */
+
+.need-card-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 15px;
+
+     h3 {
+          color: #2E7D32;
+          font-size: 22px;
+     }
+}
+
+
+
+/* ========================================================= */
+/* BADGES                                                    */
+/* ========================================================= */
+
+.urgency-badge {
+     padding: 8px 14px;
+     border-radius: 30px;
+
+     font-size: 14px;
+     font-weight: 600;
+}
+
+
+
+.critical {
+     background-color: #FDECEC;
+     color: #D32F2F;
+}
+
+
+
+.high {
+     background-color: #FFF4E5;
+     color: #EF6C00;
+}
+
+
+
+.medium {
+     background-color: #FFF8E1;
+     color: #F9A825;
+}
+
+
+
+/* ========================================================= */
+/* TEXTO CARD                                                */
+/* ========================================================= */
+
+.need-item {
+     color: #666666;
+     line-height: 1.6;
+}
+
+
+
+/* ========================================================= */
+/* QUANTIDADES                                               */
+/* ========================================================= */
+
+.need-quantity {
+     display: flex;
+     justify-content: space-between;
+
+     span {
+          color: #666666;
+          font-size: 15px;
+     }
+}
+
+
+
+/* ========================================================= */
+/* BARRA DE PROGRESSO                                        */
+/* ========================================================= */
+
+.progress-bar {
+     width: 100%;
+     height: 10px;
+     background-color: #E0E0E0;
+     border-radius: 20px;
+     overflow: hidden;
+}
+
+
+
+.progress-fill {
+     height: 100%;
+     background-color: #2E7D32;
+     border-radius: 20px;
+}
+
+
+
+/* ========================================================= */
+/* RODAPÉ CARD                                               */
+/* ========================================================= */
+
+.need-footer {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+
+     span {
+          font-size: 14px;
+          color: #666666;
+     }
+}
+
+
+
+/* ========================================================= */
+/* BOTÃO VER TODAS                                           */
+/* ========================================================= */
+
+.see-all-btn {
+     border: none;
+     background-color: #2E7D32;
+     color: #FFFFFF;
+
+     padding: 10px 18px;
+     border-radius: 10px;
+
+     cursor: pointer;
      transition: 0.3s ease;
 
      &:hover {
-          transform: translateY(-4px);
-
-          box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+          background-color: #1B5E20;
      }
-
-
-     /* Topo do card */
-     .need-card-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-
-          margin-bottom: 1rem;
-
-          h3 {
-               font-family: 'Inter', sans-serif;
-               color: #2E7D32;
-               font-size: 1.2rem;
-          }
-     }
-
-
-     /* Badge de urgência */
-     .urgency-badge {
-          padding: 0.4rem 0.8rem;
-
-          border-radius: 20px;
-
-          font-size: 0.85rem;
-          font-weight: bold;
-
-          font-family: 'Inter', sans-serif;
-
-
-          &.critical {
-               background-color: #ffebee;
-               color: #c62828;
-          }
-
-          &.high {
-               background-color: #fff3e0;
-               color: #ef6c00;
-          }
-
-          &.medium {
-               background-color: #fff8e1;
-               color: #f9a825;
-          }
-     }
-
-
-     /* Item solicitado */
-     .need-item {
-          font-family: 'Inter', sans-serif;
-          color: #666666;
-
-          margin-bottom: 1rem;
-     }
-
-
-     /* Quantidades */
-     .need-quantity {
-          display: flex;
-          justify-content: space-between;
-
-          margin-bottom: 0.7rem;
-
-          font-family: 'Inter', sans-serif;
-          color: #666666;
-          font-size: 0.95rem;
-     }
-
-
-     /* Barra de progresso */
-     .progress-bar {
-          width: 100%;
-          height: 10px;
-
-          background-color: #dcdcdc;
-
-          border-radius: 20px;
-
-          overflow: hidden;
-
-          margin-bottom: 1rem;
-
-
-          .progress-fill {
-               height: 100%;
-
-               background-color: #2E7D32;
-
-               border-radius: 20px;
-          }
-     }
-
-
-     /* Rodapé */
-     .need-footer {
-          display: flex;
-          justify-content: space-between;
-
-          font-family: 'Inter', sans-serif;
-          color: #666666;
-          font-size: 0.9rem;
-     }
-
 }
+
 
 
 /* ========================================================= */
@@ -346,166 +575,186 @@
 /* ========================================================= */
 
 .recent-activities-section {
-     background-color: #ffffff;
+     background-color: #FFFFFF;
+     border-radius: 18px;
+     padding: 35px;
 
-     padding: 1.5rem;
-
-     border-radius: 12px;
-
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-
-     height: fit-content;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 
-/* Lista */
+
+/* ========================================================= */
+/* LISTA DE ATIVIDADES                                       */
+/* ========================================================= */
+
 .activities-list {
      display: flex;
      flex-direction: column;
-
-     gap: 1.5rem;
+     gap: 25px;
 }
 
 
-/* Item */
+
+/* ========================================================= */
+/* ITEM ATIVIDADE                                            */
+/* ========================================================= */
+
 .activity-item {
      display: flex;
+     gap: 18px;
      align-items: flex-start;
-
-     gap: 1rem;
-
-
-     /* Ícone */
-     .activity-icon {
-          width: 45px;
-          height: 45px;
-
-          border-radius: 50%;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          color: #ffffff;
-
-          flex-shrink: 0;
-
-
-          &.donation {
-               background-color: #388E3C;
-          }
-
-          &.alert {
-               background-color: #c62828;
-          }
-
-          &.success {
-               background-color: #1B5E20;
-          }
-     }
-
-
-     /* Texto */
-     .activity-content {
-
-          p {
-               font-family: 'Inter', sans-serif;
-               color: #444444;
-
-               margin-bottom: 0.3rem;
-
-               line-height: 1.4;
-          }
-
-          span {
-               font-family: 'Inter', sans-serif;
-               font-size: 0.85rem;
-               color: #888888;
-          }
-
-     }
-
 }
 
 
+
 /* ========================================================= */
-/* ÁREA FUTURA                                               */
+/* ÍCONE ATIVIDADE                                           */
 /* ========================================================= */
 
-.future-card {
-     background-color: #ffffff;
+.activity-icon {
+     width: 50px;
+     height: 50px;
+     border-radius: 50%;
 
-     padding: 2rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
 
-     border-radius: 12px;
-
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-
-     h2 {
-          display: flex;
-          align-items: center;
-          gap: 0.7rem;
-
-          font-family: 'Inter', sans-serif;
-          color: #2E7D32;
-
-          margin-bottom: 1rem;
+     i {
+          color: #FFFFFF;
+          font-size: 18px;
      }
+}
+
+
+
+.activity-icon.donation {
+     background-color: #2E7D32;
+}
+
+
+
+.activity-icon.alert {
+     background-color: #EF6C00;
+}
+
+
+
+.activity-icon.success {
+     background-color: #43A047;
+}
+
+
+
+/* ========================================================= */
+/* TEXTO ATIVIDADE                                           */
+/* ========================================================= */
+
+.activity-content {
 
      p {
-          font-family: 'Inter', sans-serif;
-          color: #666666;
+          color: #444444;
+          line-height: 1.6;
+          margin-bottom: 5px;
      }
+
+     span {
+          color: #888888;
+          font-size: 14px;
+     }
+
 }
+
 
 
 /* ========================================================= */
 /* RESPONSIVIDADE                                            */
 /* ========================================================= */
 
-@media (max-width: 1024px) {
+@media (max-width: 992px) {
 
-     .dashboard-content {
-          grid-template-columns: 1fr;
+     .hero-section {
+          flex-direction: column;
      }
 
 }
+
 
 
 @media (max-width: 768px) {
 
      .dashboard-container {
-          padding: 1rem;
+          padding: 25px 15px 50px;
      }
+
+
+     .hero-content,
+     .access-card,
+     .donation-guide-section,
+     .recent-activities-section {
+          padding: 25px;
+     }
+
+
+     .hero-text {
+
+          h1 {
+               font-size: 32px;
+          }
+
+          p {
+               font-size: 16px;
+          }
+
+     }
+
+
+     .hero-buttons {
+          flex-direction: column;
+     }
+
 
      .section-header {
           flex-direction: column;
           align-items: flex-start;
 
-          gap: 1rem;
+          h2 {
+               font-size: 24px;
+          }
      }
 
-     .need-footer {
-          flex-direction: column;
 
-          gap: 0.5rem;
+     .need-card-header {
+          flex-direction: column;
+          align-items: flex-start;
      }
 
 }
 
 
+
 @media (max-width: 480px) {
 
-     .stat-card {
-          flex-direction: column;
-          align-items: flex-start;
+     .hero-text {
+
+          h1 {
+               font-size: 28px;
+          }
+
      }
 
-     .need-card-header {
+
+     .guide-toggle {
+          font-size: 16px;
+          padding: 18px;
+     }
+
+
+     .need-footer {
           flex-direction: column;
           align-items: flex-start;
-
-          gap: 0.8rem;
+          gap: 10px;
      }
 
 }
