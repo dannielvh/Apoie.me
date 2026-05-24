@@ -88,8 +88,10 @@ exports.listarCentros = async (req, res) => {
     res.json(result.rows);
 
   } catch (err) {
-    res.status(500).json({ erro: 'Erro ao buscar centros' });
-  }
+    //mostra erro no terminal
+  console.error(err);
+  res.status(500).json({ erro: 'Erro ao buscar centros' });
+}
 };
 
 exports.atualizarCentro = async (req, res) => {
