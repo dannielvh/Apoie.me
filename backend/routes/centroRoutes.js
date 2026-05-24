@@ -5,6 +5,7 @@ const centroController = require('../controllers/centroController');
 const autenticar = require('../middlewares/authMiddlewares');
 
 router.get('/centros', centroController.listarCentros);
+router.get('/centros/meu-centro', autenticar, centroController.buscarCentroUsuario);
 
 
 router.post('/centros', autenticar,centroController.criarCentro);
