@@ -1,0 +1,98 @@
+.centro-dashboard-page {
+  background: #f5f5dc;
+}
+
+.centro-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+
+  &__welcome {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+
+    h1 {
+      color: #2E7D32;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #666;
+    }
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+
+    a {
+      background: #2E7D32;
+      color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+
+      &:hover {
+        background: #1B5E20;
+      }
+    }
+  }
+}
+
+.centro-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+
+  h3 {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  strong {
+    color: #2E7D32;
+    font-size: 28px;
+  }
+}
+
+.aviso-status {
+  grid-column: 1 / -1;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+
+  h3 {
+    color: #2E7D32;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  a {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 768px) {
+  .centro-dashboard {
+    &__cards,
+    &__actions {
+      grid-template-columns: 1fr;
+    }
+  }
+}

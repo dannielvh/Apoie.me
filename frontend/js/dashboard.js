@@ -137,7 +137,7 @@ function renderGerenciarCentro(centro) {
 
   // Botão para acessar o painel específico do centro
   document.getElementById("btnGerenciarCentro").addEventListener("click", () => {
-    window.location.href = "centro/centroDashboard.html";
+    window.location.href = "painelCentro/dashboardCentro.html";
   });
 }
 

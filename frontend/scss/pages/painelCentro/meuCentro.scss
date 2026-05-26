@@ -1,0 +1,145 @@
+.meu-centro-page {
+  background: #f5f5dc;
+}
+
+.meu-centro {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+
+  &__header {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    h1 {
+      color: #2E7D32;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #666;
+    }
+
+    a {
+      background: #2E7D32;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+  }
+
+  &__card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      label {
+        color: #555;
+        font-size: 14px;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+
+        &:focus {
+          outline: none;
+          border-color: #2E7D32;
+        }
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: none;
+      }
+    }
+
+    .form-group:last-of-type {
+      grid-column: 1 / -1;
+    }
+
+    button {
+      grid-column: 1 / -1;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #2E7D32;
+      color: #fff;
+      cursor: pointer;
+
+      &:hover {
+        background: #1B5E20;
+      }
+    }
+
+    #msg {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  }
+}
+
+.cidade__select-wrapper {
+  position: relative;
+}
+
+.sugestoes-lista {
+  position: absolute;
+  z-index: 999;
+  background: #fff;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  list-style: none;
+  margin-top: 4px;
+  padding: 0;
+  max-height: 180px;
+  overflow-y: auto;
+
+  li {
+    padding: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: #eee;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .meu-centro {
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__card {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

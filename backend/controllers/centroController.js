@@ -21,35 +21,7 @@ function validarCNPJ(cnpj) {
   return true;
 }
 
-// LISTAR
-exports.listarCentros = async (req, res) => {
-  let { cidade } = req.query;
 
-  try {
-    let query = `
-      SELECT * FROM centros
-      WHERE status = 'aprovado'
-    `;
-    let values = [];
-
-    if (cidade) {
-      cidade = cidade.trim();
-
-      query += `
-        AND unaccent(lower(cidade)) 
-        LIKE unaccent(lower($1))
-      `;
-      values.push(`%${cidade}%`);
-    }
-
-    const result = await pool.query(query, values);
-
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: "Erro ao buscar centros" });
-  }
-};
 
 // BUSCAR CENTRO COM ID DO USUÁRIO LOGADO
 exports.buscarCentroUsuario = async (req, res) => {
@@ -57,12 +29,24 @@ exports.buscarCentroUsuario = async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT id, nome, status
+      `SELECT 
+        id,
+        nome,
+        cidade,
+        tipo,
+        rua,
+        horario,
+        telefone,
+        email_contato,
+        responsavel_nome,
+        cnpj,
+        descricao,
+        status
        FROM centros
        WHERE usuario_id = $1
        ORDER BY id DESC
        LIMIT 1`,
-      [usuarioId],
+      [usuarioId]
     );
 
     if (result.rows.length === 0) {
@@ -71,14 +55,129 @@ exports.buscarCentroUsuario = async (req, res) => {
 
     res.json({
       temCentro: true,
-      centro: result.rows[0],
+      centro: result.rows[0]
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: "Erro ao buscar centro do usuário" });
   }
 };
 
+// ATUALIZAR CENTRO DO USUÁRIO LOGADO
+exports.atualizarMeuCentro = async (req, res) => {
+  const usuarioId = req.usuario.id;
+
+  let {
+    nome,
+    cidade,
+    tipo,
+    rua,
+    horario,
+    cnpj,
+    descricao,
+    telefone,
+    responsavel_nome,
+    email_contato
+  } = req.body;
+
+  try {
+    // Busca o centro do usuário logado
+    const centroExiste = await pool.query(
+      `SELECT * FROM centros WHERE usuario_id = $1 LIMIT 1`,
+      [usuarioId]
+    );
+
+    if (centroExiste.rows.length === 0) {
+      return res.status(404).json({ erro: "Centro não encontrado" });
+    }
+
+    const centroAtual = centroExiste.rows[0];
+
+    // Se o campo veio vazio/undefined, mantém o valor antigo
+    nome = nome?.trim() || centroAtual.nome;
+    cidade = cidade?.trim() || centroAtual.cidade;
+    tipo = tipo?.trim() || centroAtual.tipo;
+    rua = rua?.trim() || centroAtual.rua;
+    horario = horario?.trim() || centroAtual.horario;
+    descricao = descricao?.trim() || centroAtual.descricao;
+    telefone = telefone?.trim() || centroAtual.telefone;
+    email_contato = email_contato?.trim() || centroAtual.email_contato;
+    responsavel_nome = responsavel_nome?.trim() || centroAtual.responsavel_nome;
+
+    // CNPJ: se vier null ou vazio, mantém o antigo
+    if (cnpj === undefined || cnpj === "" || cnpj === null) {
+      cnpj = centroAtual.cnpj;
+    } else {
+      cnpj = cnpj.replace(/\D/g, "");
+    }
+
+    // Campos que não podem ficar vazios no resultado final
+    if (!nome || !cidade || !tipo || !rua || !telefone || !responsavel_nome) {
+      return res.status(400).json({ erro: "Campos obrigatórios" });
+    }
+
+    if (!validarCNPJ(cnpj)) {
+      return res.status(400).json({ erro: "CNPJ inválido" });
+    }
+
+    // Verifica se o novo nome+cidade já existe em outro centro
+    const duplicado = await pool.query(
+      `SELECT 1 FROM centros
+       WHERE unaccent(lower(nome)) = unaccent(lower($1))
+       AND unaccent(lower(cidade)) = unaccent(lower($2))
+       AND id <> $3`,
+      [nome, cidade, centroAtual.id]
+    );
+
+    if (duplicado.rows.length > 0) {
+      return res.status(400).json({
+        erro: "Já existe outro centro com esse nome nessa cidade"
+      });
+    }
+
+    const result = await pool.query(
+      `UPDATE centros
+       SET nome = $1,
+           cidade = $2,
+           tipo = $3,
+           rua = $4,
+           horario = $5,
+           cnpj = $6,
+           descricao = $7,
+           telefone = $8,
+           email_contato = $9,
+           responsavel_nome = $10
+       WHERE id = $11
+       RETURNING *`,
+      [
+        nome,
+        cidade,
+        tipo,
+        rua,
+        horario,
+        cnpj,
+        descricao,
+        telefone,
+        email_contato,
+        responsavel_nome,
+        centroAtual.id
+      ]
+    );
+
+    res.json({
+      msg: "Centro atualizado com sucesso",
+      centro: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao atualizar centro" });
+  }
+};
+
+
+// CRUD ADMIN
 // CRIAR
 exports.criarCentro = async (req, res) => {
   let {
@@ -155,6 +254,36 @@ exports.criarCentro = async (req, res) => {
   }
 };
 
+// LISTAR
+exports.listarCentros = async (req, res) => {
+  let { cidade } = req.query;
+
+  try {
+    let query = `
+      SELECT * FROM centros
+      WHERE status = 'aprovado'
+    `;
+    let values = [];
+
+    if (cidade) {
+      cidade = cidade.trim();
+
+      query += `
+        AND unaccent(lower(cidade)) 
+        LIKE unaccent(lower($1))
+      `;
+      values.push(`%${cidade}%`);
+    }
+
+    const result = await pool.query(query, values);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao buscar centros" });
+  }
+};
+
 // ATUALIZAR
 exports.atualizarCentro = async (req, res) => {
   const { id } = req.params;
@@ -210,6 +339,7 @@ exports.deletarCentro = async (req, res) => {
     res.status(500).json({ erro: "Erro ao deletar centro" });
   }
 };
+
 
 // APROVAR
 exports.aprovarCentro = async (req, res) => {

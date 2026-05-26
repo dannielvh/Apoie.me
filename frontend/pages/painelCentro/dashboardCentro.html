@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+     <meta charset="UTF-8">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/regular.min.css" />
+     <link rel="stylesheet" href="../../css/style.css">
+     <title>Painel do Centro</title>
+
+</head>
+
+<body class="centro-dashboard-page">
+     <div id="header"></div>
+
+     <main class="centro-dashboard">
+
+          <section class="centro-dashboard__welcome">
+               <div>
+                    <h1 id="centroNome">Painel do Centro</h1>
+                    <p id="centroStatus">Carregando informações...</p>
+               </div>
+          </section>
+
+          <section class="centro-dashboard__cards">
+               <div class="centro-card">
+                    <h3>Pedidos ativos</h3>
+                    <strong id="totalPedidos">0</strong>
+               </div>
+
+               <div class="centro-card">
+                    <h3>Voluntários</h3>
+                    <strong id="totalVoluntarios">0</strong>
+               </div>
+
+               <div class="centro-card">
+                    <h3>Status</h3>
+                    <strong id="statusCard">-</strong>
+               </div>
+          </section>
+
+          <section class="centro-dashboard__actions">
+               <a href="../painelCentro/meuCentro.html">Meu Centro</a>
+               <a href="pedidosDoacao.html">Pedidos de Doação</a>
+               <a href="voluntarios.html">Voluntários</a>
+               <a href="../../pages/dashboard.html">Voltar ao Dashboard</a>
+          </section>
+
+     </main>
+
+     <script src="../../js/components/headerCentro.js"></script>
+     <script src="../../js/painelCentro/dashboardCentro.js"></script>
+</body>
+
+</html>
