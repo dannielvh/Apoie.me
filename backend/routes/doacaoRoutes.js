@@ -1,19 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-router.post('/doacao', (req, res) => {
-  const token = req.headers.authorization;
-  const { valor } = req.body;
+// Centralização da lógica de negócio nos controllers para manter a arquitetura limpa
+const doacaoController = require('../controllers/doacaoController'); 
 
-  if (!token) {
-    return res.status(401).json({ msg: "Usuário não está logado" });
-  }
+// Middleware unificado de autenticação (substitui as validações manuais de token nas rotas)
+const autenticar = require('../middlewares/authMiddleware'); 
 
-  if (!valor) {
-    return res.status(400).json({ msg: "Valor da doação é obrigatório" });
-  }
+/**
+ * ROTA: Registro de nova doação
+ * Método antigo do grupo migrado para o Controller com injeção do middleware de segurança.
+ */
+router.post('/doacao', autenticar, doacaoController.criarDoacao);
 
-  res.json({ msg: "Doação realizada com sucesso" });
-});
+/**
+ * ROTA: Histórico de doações por ID de usuário
+ * Nova funcionalidade adicionada atendendo os requisitos de integridade e privacidade de dados.
+ */
+router.get('/historico/:idUsuario', autenticar, doacaoController.obterHistorico);
 
 module.exports = router;
