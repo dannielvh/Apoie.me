@@ -280,9 +280,9 @@ exports.listarCentros = async (req, res) => {
     const result = await pool.query(query, values);
 
     res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: "Erro ao buscar centros" });
+  } catch (err)
+  {
+    res.status(500).json({ erro: 'Erro ao buscar centros' });
   }
 };
 
