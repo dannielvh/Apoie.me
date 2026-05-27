@@ -32,7 +32,11 @@ function autenticar(req, res, next) {
 
   // Se não veio o cabeçalho Authorization, o usuário não enviou token.
   if (!authHeader) {
-    return res.status(401).json({ erro: "Token não informado" });
+    return res.status(401).json({ 
+      sucesso: false,
+      mensagem: "Token não informado",
+      dados: null
+    });
   }
 
   /*
@@ -51,7 +55,11 @@ function autenticar(req, res, next) {
 
   // Se não existir token depois do Bearer, retorna erro.
   if (!token) {
-    return res.status(401).json({ erro: "Token inválido" });
+    return res.status(401).json({ 
+      sucesso: false,
+      mensagem: "Token inválido",
+      dados: null
+    });
   }
 
   try {
@@ -69,7 +77,7 @@ function autenticar(req, res, next) {
         email: "teste@gmail.com"
       }
     */
-    const decoded = jwt.verify(token, "segredo");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "segredo");
 
     /*
       Guarda os dados do usuário dentro da requisição.
@@ -98,7 +106,11 @@ function autenticar(req, res, next) {
       - token é falso
       - segredo está diferente
     */
-    return res.status(401).json({ erro: "Token expirado ou inválido" });
+    return res.status(401).json({ 
+      sucesso: false,
+      mensagem: "Token expirado ou inválido",
+      dados: null
+    });
   }
 }
 
