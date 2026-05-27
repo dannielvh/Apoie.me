@@ -1,5 +1,5 @@
 .dashboard-page {
-     background-color: #F5F5DC;
+  background-color: #f5f5dc;
 }
 
 .dashboard-container {
@@ -7,11 +7,10 @@
   min-height: 100vh;
   padding: 30px 20px;
 
-   .dashboard-welcome {
+  .dashboard-welcome {
     max-width: 1200px;
     margin: 0 auto 32px auto;
 
-    
     border-radius: 12px;
     padding: 24px;
 
@@ -24,7 +23,6 @@
       font-size: 32px;
       color: #2e7d32;
       margin-bottom: 8px;
-
     }
 
     p {
@@ -33,8 +31,6 @@
       line-height: 1.5;
     }
   }
-
-  
 
   // =========================
   // CARDS DE RESUMO
@@ -123,7 +119,6 @@
   }
 }
 
-
 // =========================
 // STAT CARD
 // =========================
@@ -133,7 +128,7 @@
   border-radius: 12px;
   padding: 24px;
 
-  .dashboard-top {
+  &__top {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -171,7 +166,6 @@
   }
 }
 
-
 // =========================
 // TÍTULOS DAS SEÇÕES
 // =========================
@@ -190,10 +184,6 @@
     font-size: 15px;
   }
 }
-
-
-
-
 
 // =========================
 // AÇÕES PRINCIPAIS
@@ -230,89 +220,6 @@
   }
 }
 
-
-// =========================
-// RESPONSIVO
-// =========================
-@media (max-width: 1000px) {
-  .dashboard-container {
-    .dashboard-stats {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .dashboard-content {
-      grid-template-columns: 1fr;
-    }
-
-    .dashboard-actions {
-      grid-template-columns: 1fr;
-    }
-  }
-}
-
-@media (max-width: 650px) {
-  .dashboard {
-    padding: 20px 14px;
-
-    .dashboard-welcome {
-      flex-direction: column;
-      align-items: flex-start;
-
-      h1 {
-        font-size: 26px;
-      }
-    }
-
-    .dashboard-login-link {
-      width: 100%;
-      text-align: center;
-    }
-
-    .dashboard-stats {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    .dashboard-secondary {
-      flex-direction: column;
-      align-items: flex-start;
-
-      a {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  }
-
-  .stat-card {
-    padding: 20px;
-
-    .dashboard-top {
-      margin-bottom: 28px;
-    }
-  }
-
-  .map-placeholder {
-    min-height: 280px;
-
-    i {
-      font-size: 48px;
-    }
-
-    p {
-      text-align: center;
-    }
-  }
-
-  .need-card {
-    .dashboard-top {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-  }
-}
-
-
 // MODAL
 .modal.hidden {
   display: none;
@@ -329,7 +236,7 @@
 
   z-index: 9999;
 
-  .dashboard-content {
+  &__content {
     background: #fff;
     padding: 25px;
     border-radius: 10px;
@@ -339,7 +246,7 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 
     h2 {
-      color: #2E7D32;
+      color: #2e7d32;
       margin-bottom: 10px;
     }
 
@@ -349,7 +256,7 @@
     }
   }
 
-  .dashboard-actions {
+  &__actions {
     display: flex;
     gap: 10px;
     justify-content: center;
@@ -362,13 +269,146 @@
     }
 
     #btnIrLogin {
-      background: #2E7D32;
+      background: #2e7d32;
       color: #fff;
     }
 
     #btnFecharModal {
       background: #eee;
       color: #333;
+    }
+  }
+}
+
+// =========================
+// RESPONSIVO
+// =========================
+
+// TABLET
+@media (max-width: 1000px) {
+  .dashboard-container {
+    padding: 24px 16px;
+
+    .dashboard-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .dashboard-content {
+      grid-template-columns: 1fr;
+    }
+
+    .dashboard-actions {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+}
+
+// CELULAR
+@media (max-width: 720px) {
+  .dashboard-container {
+    padding: 20px 14px;
+
+    .dashboard-welcome {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+
+      h1 {
+        font-size: 26px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+
+    .dashboard-stats {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dashboard-actions {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dashboard-content {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dashboard-secondary {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+
+      h2 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  .stat-card {
+    padding: 20px;
+
+    &__top {
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: 26px;
+    }
+  }
+
+  .action-card {
+    padding: 20px;
+
+    i {
+      font-size: 26px;
+    }
+
+    h2 {
+      font-size: 17px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .modal {
+    padding: 16px;
+
+    &__actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// CELULAR PEQUENO
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 16px 12px;
+
+    .dashboard-welcome {
+      h1 {
+        font-size: 24px;
+      }
     }
   }
 }

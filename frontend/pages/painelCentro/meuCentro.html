@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <title>Meu Centro | Apoie.me</title>
+</head>
+
+<body class="meu-centro-page">
+  <div id="header"></div>
+
+  <main class="meu-centro">
+
+    <section class="meu-centro__hero">
+      <div>
+        <span class="meu-centro__badge">
+          <i class="fa-solid fa-building-circle-check"></i>
+          Painel do Centro
+        </span>
+
+        <h1>Meu Centro</h1>
+        <p>
+          Gerencie as informações públicas do seu centro de apoio.
+          Esses dados serão exibidos para usuários que procuram ajuda.
+        </p>
+      </div>
+
+      <a href="../painelCentro/dashboardCentro.html" class="meu-centro__back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar ao painel
+      </a>
+    </section>
+
+    <section class="meu-centro__layout">
+
+      <aside class="meu-centro__sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-card__icon">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+          </div>
+
+          <h3 id="sidebarNome">Centro de apoio</h3>
+          <p id="sidebarCidade">Cidade</p>
+
+          <span class="status-pill" id="sidebarStatus">
+            Status
+          </span>
+        </div>
+
+        <div class="sidebar-info">
+          <h4>Informações importantes</h4>
+          <p>
+            Mantenha os dados atualizados para facilitar o contato da comunidade,
+            voluntários e doadores.
+          </p>
+        </div>
+      </aside>
+
+      <section class="meu-centro__card">
+        <div class="form-title">
+          <div>
+            <h2>Informações do centro</h2>
+            <p>Atualize apenas os campos necessários.</p>
+          </div>
+        </div>
+
+        <form id="formMeuCentro">
+
+          <div class="form-group">
+            <label for="nome">Nome do centro *</label>
+            <input type="text" id="nome" placeholder="Ex: Igreja Central">
+          </div>
+
+          <div class="form-group">
+            <label for="cidade-input">Cidade *</label>
+
+            <div class="cidade__select-wrapper">
+              <input type="text" id="cidade-input" autocomplete="off" placeholder="Digite a cidade">
+              <ul id="sugestoes" class="sugestoes-lista"></ul>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="tipo">Tipo *</label>
+            <select id="tipo">
+              <option value="">Selecione o tipo</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="rua">Endereço *</label>
+            <input type="text" id="rua" placeholder="Rua, número, bairro">
+          </div>
+
+          <div class="form-group">
+            <label for="horario">Horário de funcionamento</label>
+            <input type="text" id="horario" placeholder="Ex: 08h - 18h">
+          </div>
+
+          <div class="form-group">
+            <label for="telefone">Telefone *</label>
+            <input type="text" id="telefone" placeholder="(00) 00000-0000">
+          </div>
+
+          <div class="form-group">
+            <label for="email_contato">Email de contato</label>
+            <input type="email" id="email_contato" placeholder="contato@email.com">
+          </div>
+
+          <div class="form-group">
+            <label for="responsavel_nome">Responsável *</label>
+            <input type="text" id="responsavel_nome" placeholder="Nome do responsável">
+          </div>
+
+          <div class="form-group">
+            <label for="cnpj">CNPJ</label>
+            <input type="text" id="cnpj" placeholder="00.000.000/0000-00">
+          </div>
+
+          <div class="form-group form-group--full">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" placeholder="Descreva brevemente o centro, serviços oferecidos e formas de atendimento."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit">
+              <i class="fa-solid fa-floppy-disk"></i>
+              Salvar alterações
+            </button>
+
+            <a href="centroDashboard.html">
+              Cancelar
+            </a>
+          </div>
+        </form>
+
+        <p id="msg"></p>
+      </section>
+
+    </section>
+  </main>
+
+  <script src="../../js/components/headerCentro.js"></script>
+  <script src="../../js/painelCentro/meuCentro.js"></script>
+</body>
+
+</html>
