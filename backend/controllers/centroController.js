@@ -1,3 +1,5 @@
+// Aqui ficam as funções relacionadas aos centros, tanto para o usuário comum quanto para o admin, como criar, listar, atualizar e deletar centros, além de buscar o centro do usuário logado e atualizar seus dados.
+// dep
 const pool = require("../config/db");
 
 // NORMALIZAR

@@ -1,3 +1,6 @@
+// ===============================
+// PROTEÇÃO DA PÁGINA
+// ===============================
 const token = localStorage.getItem("token");
 
 if (!token) {
@@ -5,18 +8,32 @@ if (!token) {
   window.location.href = "../login.html";
 }
 
+
+// ===============================
+// ELEMENTOS DO FORMULÁRIO
+// ===============================
 const form = document.getElementById("formMeuCentro");
 const msg = document.getElementById("msg");
 
+const inputNome = document.getElementById("nome");
 const inputCidade = document.getElementById("cidade-input");
 const sugestoes = document.getElementById("sugestoes");
 const selectTipo = document.getElementById("tipo");
 
-const inputCNPJ = document.getElementById("cnpj");
+const inputRua = document.getElementById("rua");
+const inputHorario = document.getElementById("horario");
 const inputTelefone = document.getElementById("telefone");
+const inputEmailContato = document.getElementById("email_contato");
+const inputResponsavel = document.getElementById("responsavel_nome");
+const inputCNPJ = document.getElementById("cnpj");
+const inputDescricao = document.getElementById("descricao");
 
 let cidades = [];
 
+
+// ===============================
+// TIPOS DE CENTRO
+// ===============================
 const tipos = [
   "Abrigo",
   "Saúde",
@@ -39,6 +56,10 @@ tipos.forEach((tipo) => {
   selectTipo.appendChild(option);
 });
 
+
+// ===============================
+// FUNÇÕES UTILITÁRIAS
+// ===============================
 function normalizar(texto) {
   return texto
     .toLowerCase()
@@ -46,17 +67,55 @@ function normalizar(texto) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
+function formatarStatus(status) {
+  const statusMap = {
+    pendente: "Aguardando aprovação",
+    aprovado: "Aprovado",
+    rejeitado: "Rejeitado",
+    suspenso: "Suspenso"
+  };
+
+  return statusMap[status] || status;
+}
+
+function formatarCNPJ(cnpj) {
+  if (!cnpj) return "";
+
+  let v = cnpj.replace(/\D/g, "");
+
+  v = v
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d)/, "$1-$2");
+
+  return v.slice(0, 18);
+}
+
+function cidadeExiste(nomeCidade) {
+  return cidades.some((c) => normalizar(c.nome) === normalizar(nomeCidade));
+}
+
+
+// ===============================
+// CARREGAR CIDADES DO IBGE
+// ===============================
 async function carregarCidades() {
   try {
     const res = await fetch(
       "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios"
     );
+
     cidades = await res.json();
   } catch (err) {
     console.error("Erro ao carregar cidades:", err);
   }
 }
 
+
+// ===============================
+// AUTOCOMPLETE DE CIDADE
+// ===============================
 inputCidade.addEventListener("input", () => {
   const valor = inputCidade.value;
 
@@ -81,6 +140,10 @@ inputCidade.addEventListener("input", () => {
   });
 });
 
+
+// ===============================
+// MÁSCARA CNPJ
+// ===============================
 inputCNPJ.addEventListener("input", (e) => {
   let v = e.target.value.replace(/\D/g, "");
 
@@ -93,6 +156,10 @@ inputCNPJ.addEventListener("input", (e) => {
   e.target.value = v.slice(0, 18);
 });
 
+
+// ===============================
+// MÁSCARA TELEFONE
+// ===============================
 inputTelefone.addEventListener("input", (e) => {
   let v = e.target.value.replace(/\D/g, "");
 
@@ -107,20 +174,10 @@ inputTelefone.addEventListener("input", (e) => {
   e.target.value = v.slice(0, 15);
 });
 
-function formatarCNPJ(cnpj) {
-  if (!cnpj) return "";
 
-  let v = cnpj.replace(/\D/g, "");
-
-  v = v
-    .replace(/^(\d{2})(\d)/, "$1.$2")
-    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-    .replace(/\.(\d{3})(\d)/, ".$1/$2")
-    .replace(/(\d{4})(\d)/, "$1-$2");
-
-  return v.slice(0, 18);
-}
-
+// ===============================
+// CARREGAR DADOS DO CENTRO
+// ===============================
 async function carregarMeuCentro() {
   try {
     const res = await fetch("http://localhost:3000/api/centros/meu-centro", {
@@ -139,16 +196,35 @@ async function carregarMeuCentro() {
 
     const centro = data.centro;
 
-    document.getElementById("nome").value = centro.nome || "";
+    // Preenche formulário com dados atuais
+    inputNome.value = centro.nome || "";
     inputCidade.value = centro.cidade || "";
     selectTipo.value = centro.tipo || "";
-    document.getElementById("rua").value = centro.rua || "";
-    document.getElementById("horario").value = centro.horario || "";
+    inputRua.value = centro.rua || "";
+    inputHorario.value = centro.horario || "";
     inputTelefone.value = centro.telefone || "";
-    document.getElementById("email_contato").value = centro.email_contato || "";
-    document.getElementById("responsavel_nome").value = centro.responsavel_nome || "";
+    inputEmailContato.value = centro.email_contato || "";
+    inputResponsavel.value = centro.responsavel_nome || "";
     inputCNPJ.value = formatarCNPJ(centro.cnpj || "");
-    document.getElementById("descricao").value = centro.descricao || "";
+    inputDescricao.value = centro.descricao || "";
+
+    // Preenche card lateral, se existir no HTML
+    const sidebarNome = document.getElementById("sidebarNome");
+    const sidebarCidade = document.getElementById("sidebarCidade");
+    const sidebarStatus = document.getElementById("sidebarStatus");
+
+    if (sidebarNome) {
+      sidebarNome.textContent = centro.nome || "Centro de apoio";
+    }
+
+    if (sidebarCidade) {
+      sidebarCidade.textContent = centro.cidade || "";
+    }
+
+    if (sidebarStatus) {
+      sidebarStatus.textContent = formatarStatus(centro.status);
+      sidebarStatus.className = `status-pill ${centro.status}`;
+    }
 
   } catch (err) {
     console.error(err);
@@ -156,10 +232,10 @@ async function carregarMeuCentro() {
   }
 }
 
-function cidadeExiste(nomeCidade) {
-  return cidades.some((c) => normalizar(c.nome) === normalizar(nomeCidade));
-}
 
+// ===============================
+// SALVAR ALTERAÇÕES
+// ===============================
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -172,16 +248,18 @@ form.addEventListener("submit", async (e) => {
   }
 
   const dados = {
-    nome: document.getElementById("nome").value.trim(),
+    nome: inputNome.value.trim(),
     cidade,
     tipo: selectTipo.value,
-    rua: document.getElementById("rua").value.trim(),
-    horario: document.getElementById("horario").value.trim(),
+    rua: inputRua.value.trim(),
+    horario: inputHorario.value.trim(),
     telefone: inputTelefone.value.trim(),
-    email_contato: document.getElementById("email_contato").value.trim(),
-    responsavel_nome: document.getElementById("responsavel_nome").value.trim(),
-    cnpj: inputCNPJ.value ? inputCNPJ.value.replace(/\D/g, "") : null,
-    descricao: document.getElementById("descricao").value.trim()
+    email_contato: inputEmailContato.value.trim(),
+    responsavel_nome: inputResponsavel.value.trim(),
+    cnpj: inputCNPJ.value.trim()
+      ? inputCNPJ.value.replace(/\D/g, "")
+      : undefined,
+    descricao: inputDescricao.value.trim()
   };
 
   try {
@@ -205,6 +283,32 @@ form.addEventListener("submit", async (e) => {
     msg.textContent = "Informações atualizadas com sucesso.";
     msg.style.color = "green";
 
+    // Atualiza o formulário e a sidebar com os dados retornados do backend
+    if (data.centro) {
+      inputNome.value = data.centro.nome || "";
+      inputCidade.value = data.centro.cidade || "";
+      selectTipo.value = data.centro.tipo || "";
+      inputRua.value = data.centro.rua || "";
+      inputHorario.value = data.centro.horario || "";
+      inputTelefone.value = data.centro.telefone || "";
+      inputEmailContato.value = data.centro.email_contato || "";
+      inputResponsavel.value = data.centro.responsavel_nome || "";
+      inputCNPJ.value = formatarCNPJ(data.centro.cnpj || "");
+      inputDescricao.value = data.centro.descricao || "";
+
+      const sidebarNome = document.getElementById("sidebarNome");
+      const sidebarCidade = document.getElementById("sidebarCidade");
+      const sidebarStatus = document.getElementById("sidebarStatus");
+
+      if (sidebarNome) sidebarNome.textContent = data.centro.nome || "Centro de apoio";
+      if (sidebarCidade) sidebarCidade.textContent = data.centro.cidade || "";
+
+      if (sidebarStatus) {
+        sidebarStatus.textContent = formatarStatus(data.centro.status);
+        sidebarStatus.className = `status-pill ${data.centro.status}`;
+      }
+    }
+
   } catch (err) {
     console.error(err);
     msg.textContent = "Erro na requisição.";
@@ -212,6 +316,10 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+
+// ===============================
+// INICIALIZAÇÃO
+// ===============================
 window.addEventListener("load", async () => {
   await carregarCidades();
   await carregarMeuCentro();

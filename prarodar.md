@@ -1,147 +1,386 @@
-# 🚀 SETUP DO PROJETO
+Claro. Essa versão é mais direta, focada em **fazer outra pessoa baixar o projeto e rodar**.
 
+````md
+# 🚀 Como rodar o projeto Apoie.me
 
-## 1. INSTALAR DEPENDÊNCIAS
+Este guia mostra o passo a passo para rodar o projeto localmente.
+
+---
+
+## 1. Programas necessários
+
+Antes de começar, instale:
+
+- Node.js
+- PostgreSQL
+- pgAdmin
+- VS Code
+- Extensão Live Server no VS Code
+
+---
+
+## 2. Baixar o projeto
+
+Clone o repositório:
+
+```bash
+git clone LINK_DO_REPOSITORIO
+````
+
+Entre na pasta do projeto:
+
+```bash
+cd NOME_DA_PASTA_DO_PROJETO
+```
+
+---
+
+## 3. Instalar dependências do backend
+
+Entre na pasta do backend:
 
 ```bash
 cd backend
+```
+
+Instale as dependências:
+
+```bash
 npm install
 ```
 
 ---
 
-## 2. CONFIGURAR POSTGRESQL
+## 4. Criar o banco de dados
 
-👉 abre o PostgreSQL (pgAdmin ou terminal)
+Abra o pgAdmin.
 
-### criar banco (se não tiver)
+Crie um banco com o nome:
 
 ```sql
 CREATE DATABASE mapa_apoio;
 ```
 
+Depois selecione esse banco e abra o **Query Tool**.
+
 ---
 
-## 3. CRIAR TABELAS
+## 5. Criar as tabelas
 
-### 🔹 tabela de usuários
+Execute este SQL no banco `mapa_apoio`:
 
 ```sql
+CREATE EXTENSION IF NOT EXISTS unaccent;
+
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
-    senha VARCHAR(100),
-    cidade VARCHAR(100)
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100),
+    role VARCHAR(20) DEFAULT 'usuario'
 );
-```
 
----
-
-### 🔹 tabela de centros (NOVO)
-
-```sql
 CREATE TABLE centros (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(100),
-    cidade VARCHAR(100),
-    tipo VARCHAR(100),
-    rua VARCHAR(150),
-    horario VARCHAR(50)
+
+    nome VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    tipo VARCHAR(100) NOT NULL,
+    rua VARCHAR(150) NOT NULL,
+    horario VARCHAR(50),
+
+    cnpj VARCHAR(14),
+    descricao TEXT,
+    telefone VARCHAR(30),
+    responsavel_nome VARCHAR(100),
+    email_contato VARCHAR(100),
+
+    status VARCHAR(20) DEFAULT 'pendente',
+
+    usuario_id INT REFERENCES usuarios(id),
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 ---
 
-### 🔹 inserir dados fake (IMPORTANTE pra testar)
+## 6. Criar índices do banco
+
+Execute também:
 
 ```sql
-INSERT INTO centros (nome, cidade, tipo, rua, horario) VALUES
-('Centro Apoio Divinópolis', 'Divinópolis', 'Abrigo', 'Rua A, 123', '08h-18h'),
-('Posto Saúde BH', 'Belo Horizonte', 'Saúde', 'Av Brasil, 456', '24h'),
-('Centro Itaúna', 'Itaúna', 'Doações', 'Rua Central, 101', '09h-17h');
+CREATE UNIQUE INDEX unique_centro_nome_cidade
+ON centros (
+  unaccent(lower(nome)),
+  unaccent(lower(cidade))
+);
+
+CREATE UNIQUE INDEX unique_cnpj
+ON centros (cnpj)
+WHERE cnpj IS NOT NULL;
+
+CREATE UNIQUE INDEX unique_centro_por_usuario
+ON centros (usuario_id)
+WHERE usuario_id IS NOT NULL;
 ```
 
 ---
 
-## 5. CONFIGURAR CONEXÃO COM BANCO
+## 7. Configurar conexão com o banco
 
-📁 `backend/config/db.js`
+Abra o arquivo:
 
-👉 troca usuário e senha:
+```txt
+backend/config/db.js
+```
+
+Deixe parecido com isso:
 
 ```js
+const { Pool } = require('pg');
+
 const pool = new Pool({
-  user: 'seu_usuario',
+  user: 'postgres',
   host: 'localhost',
   database: 'mapa_apoio',
-  password: 'sua_senha',
+  password: 'SUA_SENHA_DO_POSTGRES',
   port: 5432,
 });
+
+module.exports = pool;
 ```
+
+Troque:
+
+```txt
+SUA_SENHA_DO_POSTGRES
+```
+
+pela senha do seu PostgreSQL.
 
 ---
 
-## 6. RODAR BACKEND
+## 8. Rodar o backend
+
+Dentro da pasta `backend`, rode:
 
 ```bash
-cd backend
 node server.js
 ```
 
-👉 servidor rodando em:
+Se tiver script configurado, também pode usar:
 
+```bash
+npm start
 ```
+
+O backend deve rodar em:
+
+```txt
 http://localhost:3000
 ```
 
----
+Se aparecer algo como:
 
-## 7. FRONTEND
+```txt
+Servidor iniciado na porta 3000
+```
 
-👉 abre a pasta `frontend`
-
-👉 roda com **Live Server**
-
----
-
-## 8. COMO FUNCIONA AGORA
-
-### 🔹 cidades
-
-* vêm da API do IBGE automaticamente
-* não precisa salvar no banco
+deu certo.
 
 ---
 
-### 🔹 centros
+## 9. Rodar o frontend
 
-* vêm do seu banco PostgreSQL
-* filtrados por cidade
+Abra o projeto no VS Code.
+
+Entre na pasta:
+
+```txt
+frontend
+```
+
+Abra uma página, por exemplo:
+
+```txt
+frontend/pages/dashboard.html
+```
+
+Clique com o botão direito e escolha:
+
+```txt
+Open with Live Server
+```
+
+O frontend normalmente vai abrir em:
+
+```txt
+http://127.0.0.1:5500
+```
 
 ---
 
-### 🔹 busca inteligente
+## 10. Criar usuário pelo sistema
 
-* funciona sem acento
-* funciona digitando
-* funciona clicando
+No frontend:
 
----
-
-# ⚠️ ERROS COMUNS (FOCA AQUI)
-
-* ❌ esquecer de ligar o PostgreSQL
-* ❌ senha errada no `db.js`
-* ❌ backend não rodando
-* ❌ porta errada no fetch
+1. Abra a página de cadastro
+2. Crie uma conta
+3. Faça login
+4. O token será salvo no navegador
 
 ---
 
-# 🎯 RESUMO
+## 11. Cadastrar centro de apoio
 
-👉 IBGE → lista de cidades
-👉 PostgreSQL → centros
-👉 Backend → filtra
-👉 Front → busca + renderiza
+Depois de logar:
 
+1. Vá para o dashboard
+2. Clique em “Cadastrar centro de apoio”
+3. Preencha o formulário
+4. O centro será salvo com status:
+
+```txt
+pendente
+```
+
+---
+
+## 12. Aprovar centro manualmente no banco
+
+Enquanto ainda não existe painel admin, aprove manualmente pelo pgAdmin:
+
+```sql
+UPDATE centros
+SET status = 'aprovado'
+WHERE id = 1;
+```
+
+Troque o `id = 1` pelo id do centro criado.
+
+Para ver os centros:
+
+```sql
+SELECT * FROM centros;
+```
+
+---
+
+## 13. Testar painel do centro
+
+Depois de aprovar o centro:
+
+1. Volte para o dashboard
+2. O botão deve mudar para gerenciar o centro
+3. Acesse o painel do centro
+4. Edite os dados em “Meu Centro”
+
+---
+
+## 14. Comandos úteis
+
+Ver usuários:
+
+```sql
+SELECT * FROM usuarios;
+```
+
+Ver centros:
+
+```sql
+SELECT * FROM centros;
+```
+
+Ver centro de um usuário:
+
+```sql
+SELECT *
+FROM centros
+WHERE usuario_id = 1;
+```
+
+Limpar CNPJ vazio, se necessário:
+
+```sql
+UPDATE centros
+SET cnpj = NULL
+WHERE cnpj = '';
+```
+
+---
+
+## 15. Erros comuns
+
+### Backend não conecta no banco
+
+Verifique o arquivo:
+
+```txt
+backend/config/db.js
+```
+
+Confira:
+
+* nome do banco
+* usuário
+* senha
+* PostgreSQL aberto
+
+---
+
+### Token não informado
+
+Faça login novamente no sistema.
+
+---
+
+### Centro não aparece no mapa
+
+Verifique se o centro está aprovado:
+
+```sql
+SELECT id, nome, status
+FROM centros;
+```
+
+Se estiver `pendente`, aprove:
+
+```sql
+UPDATE centros
+SET status = 'aprovado'
+WHERE id = ID_DO_CENTRO;
+```
+
+---
+
+### CNPJ duplicado
+
+Se o CNPJ estiver vazio, ele precisa ser `NULL`, não string vazia.
+
+Rode:
+
+```sql
+UPDATE centros
+SET cnpj = NULL
+WHERE cnpj = '';
+```
+
+---
+
+## 16. Resumo rápido
+
+```txt
+1. cd backend
+2. npm install
+3. criar banco mapa_apoio
+4. criar tabelas no pgAdmin
+5. configurar backend/config/db.js
+6. rodar node server.js
+7. abrir frontend com Live Server
+8. criar usuário
+9. cadastrar centro
+10. aprovar centro no banco
+11. acessar painel do centro
+```

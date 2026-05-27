@@ -73,7 +73,7 @@ fetch("../components/header.html")
             ${
               temCentro
                 ? `
-                  <a href="../pages/centro/centroDashboard.html">
+                  <a href="../pages/painelCentro/dashboardCentro.html">
                     <i class="fa-solid fa-hand-holding-heart"></i>
                     Centro de apoio
                   </a>
