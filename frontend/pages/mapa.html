@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="../css/style.css">
+     <title>Mapa de Apoio</title>
+</head>
+
+<body class="mapa-page">
+     <div id="header"></div>
+
+     <section class="mapa">
+          <div class="text-mapa">
+               <h1>Mapa de Apoio</h1>
+               <p>Encontre pontos de apoio mais próximos de você</p>
+          </div>
+
+          <div class="mapa__container">
+
+               <!-- LADO ESQUERDO (MAPA FUTURO) -->
+               <div class="mapa__visual">
+                    <!-- aqui depois entra mapa (Google Maps / Leaflet etc) -->
+                    <p>Mapa em breve</p>
+               </div>
+
+               <!-- LADO DIREITO (CIDADES + PONTOS) -->
+               <div class="mapa__info">
+
+                    <div class="cidade">
+
+                         <label for="cidade-select">Escolha a cidade</label>
+
+                         <div class="cidade__select-wrapper">
+                              <i class="fa-solid fa-city"></i>
+
+                              <input type="text" id="cidade-input" placeholder="Digite a cidade">
+                              <ul id="sugestoes"></ul>
+                         </div>
+
+                    </div>
+
+                    <div id="pontos-lista">
+                         <!-- JS vai preencher aqui -->
+                    </div>
+
+               </div>
+
+          </div>
+     </section>
+
+     <section class="info-mapa">
+          <div class="container-infos">
+               <div class="infos">
+                    <h3><i class="fa-solid fa-location-dot"></i> Localização</h3>
+                    <p>Visualize pontos de apoio próximos, como abrigos, unidades de saúde e organizações de ajuda na
+                         sua região.</p>
+               </div>
+
+               <div class="infos">
+                    <h3><i class="fa-solid fa-clock"></i> Horários</h3>
+                    <p>Consulte os horários de funcionamento de cada ponto para saber quando o atendimento está
+                         disponível.</p>
+               </div>
+
+               <div class="infos">
+                    <h3><i class="fa-solid fa-hand-holding-heart"></i> Doações</h3>
+                    <p>Acesse os detalhes de cada ponto para ver quais doações são mais necessárias no momento.</p>
+               </div>
+          </div>
+     </section>
+
+
+     <script src="../js/mapa.js"></script>
+     <script src="../js/components/header.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,414 @@
+.dashboard-page {
+  background-color: #f5f5dc;
+}
+
+.dashboard-container {
+  background: #f3f5df;
+  min-height: 100vh;
+  padding: 30px 20px;
+
+  .dashboard-welcome {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    border-radius: 12px;
+    padding: 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    h1 {
+      font-size: 32px;
+      color: #2e7d32;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #555;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  }
+
+  // =========================
+  // CARDS DE RESUMO
+  // =========================
+  .dashboard-stats {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  // =========================
+  // MAPA + NECESSIDADES
+  // =========================
+  .dashboard-content {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+  }
+
+  // =========================
+  // AÇÕES PRINCIPAIS
+  // =========================
+  .dashboard-actions {
+    max-width: 1200px;
+    margin: 0 auto 32px auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  // =========================
+  // CADASTRO CENTRO
+  // =========================
+  .dashboard-secondary {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    background: #ffffff;
+    border: 1px solid #d9dfc9;
+    border-radius: 12px;
+    padding: 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    h2 {
+      font-size: 20px;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #4b5563;
+      line-height: 1.5;
+      max-width: 720px;
+    }
+
+    button {
+      background: #2e7d32;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+      box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+      transition: 0.2s;
+
+      &:hover {
+        background: #256628;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+        scale: 1.02;
+      }
+    }
+  }
+}
+
+// =========================
+// STAT CARD
+// =========================
+.stat-card {
+  background: #ffffff;
+  border: 1px solid #d9dfc9;
+  border-radius: 12px;
+  padding: 24px;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 42px;
+
+    i {
+      font-size: 28px;
+      color: #2e7d32;
+    }
+
+    span {
+      background: #b9ddb9;
+      color: #163f18;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+  }
+
+  h2 {
+    font-size: 30px;
+    color: #1f2937;
+    margin-bottom: 4px;
+  }
+
+  h3 {
+    font-size: 15px;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  p {
+    font-size: 13px;
+    color: #4b5563;
+  }
+}
+
+// =========================
+// TÍTULOS DAS SEÇÕES
+// =========================
+.section-title {
+  margin-bottom: 26px;
+
+  h2 {
+    font-size: 17px;
+    color: #111827;
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  p {
+    color: #4b5563;
+    font-size: 15px;
+  }
+}
+
+// =========================
+// AÇÕES PRINCIPAIS
+// =========================
+.action-card {
+  background: #ffffff;
+  border: 1px solid #d9dfc9;
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none;
+  color: #111827;
+  transition: 0.2s;
+
+  i {
+    font-size: 30px;
+    color: #2e7d32;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 19px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+}
+
+// MODAL
+.modal.hidden {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+
+  &__content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #btnIrLogin {
+      background: #2e7d32;
+      color: #fff;
+    }
+
+    #btnFecharModal {
+      background: #eee;
+      color: #333;
+    }
+  }
+}
+
+// =========================
+// RESPONSIVO
+// =========================
+
+// TABLET
+@media (max-width: 1000px) {
+  .dashboard-container {
+    padding: 24px 16px;
+
+    .dashboard-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .dashboard-content {
+      grid-template-columns: 1fr;
+    }
+
+    .dashboard-actions {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+}
+
+// CELULAR
+@media (max-width: 720px) {
+  .dashboard-container {
+    padding: 20px 14px;
+
+    .dashboard-welcome {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+
+      h1 {
+        font-size: 26px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+
+    .dashboard-stats {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dashboard-actions {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dashboard-content {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dashboard-secondary {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+
+      h2 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  .stat-card {
+    padding: 20px;
+
+    &__top {
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: 26px;
+    }
+  }
+
+  .action-card {
+    padding: 20px;
+
+    i {
+      font-size: 26px;
+    }
+
+    h2 {
+      font-size: 17px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .modal {
+    padding: 16px;
+
+    &__actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// CELULAR PEQUENO
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 16px 12px;
+
+    .dashboard-welcome {
+      h1 {
+        font-size: 24px;
+      }
+    }
+  }
+}

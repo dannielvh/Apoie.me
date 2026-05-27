@@ -1,3 +1,17 @@
+// Aqui onde fica os parte principais do projeto, toda vez que houver uma alteração em algum componente, ele vai ser importado aqui efeito cascata
+// exemplo vai criar uma nova pagina, voce vai em pages cria o arquivo .scss e importa aqui
+// use 'pages/nomeArquivo';
+// use 'components/nomeArquivo';
+// depois é só usar css normalmente, exemplo: .nomeClasse { background: #fff; } no arquivo .scss da pagina ou componente criado, e ele vai ser aplicado normalmente no html da pagina correspondente
+
+// pra rodar o sass, digite no terminal: sass frontend/scss/style.scss frontend/css/style.css --watch
+// tem que ter o sass instalado no terminal: npm install -g sass
 @use 'reset';
 @use 'pages/login';
 @use 'pages/register';
+@use 'pages/cadastroCentro';
+@use 'pages/dashboard';
+@use 'pages/mapa';
+@use 'components/header';
+@use 'pages/painelCentro/dashboardCentro';
+@use 'pages/painelCentro/meuCentro';

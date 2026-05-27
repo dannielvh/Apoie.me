@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar Centro</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body class="cadastro-page">
+
+  <div class="container-form">
+
+    <div class="text-form">
+      <h1>Cadastrar Centro</h1>
+      <p>Adicione um novo ponto de apoio</p>
+    </div>
+
+    <form id="form-centro">
+
+      <!-- NOME -->
+      <div class="form-group">
+        <label for="nome">Nome *</label>
+        <input type="text" id="nome" placeholder="Nome do centro" required>
+      </div>
+
+      <!-- CIDADE -->
+      <div class="form-group">
+        <label for="cidade-input">Cidade *</label>
+
+        <div class="cidade__select-wrapper">
+          <input type="text" id="cidade-input" name="cidade" placeholder="Digite a cidade" autocomplete="off" required>
+
+          <ul id="sugestoes" class="sugestoes-lista"></ul>
+        </div>
+      </div>
+
+      <!-- TIPO -->
+      <div class="form-group">
+        <label for="tipo">Tipo *</label>
+        <select id="tipo" required>
+          <option value="">Selecione o tipo</option>
+        </select>
+      </div>
+
+      <!-- ENDEREÇO -->
+      <div class="form-group">
+        <label for="rua">Endereço *</label>
+        <input type="text" id="rua" placeholder="Rua, número..." required>
+      </div>
+
+      <!-- HORÁRIO -->
+      <div class="form-group">
+        <label for="horario">Horário</label>
+        <input type="text" id="horario" placeholder="08h - 18h">
+      </div>
+
+      <!-- CNPJ -->
+      <div class="form-group">
+        <label for="cnpj">CNPJ</label>
+        <input type="text" id="cnpj" placeholder="00.000.000/0000-00">
+      </div>
+
+      <!-- RESPONSÁVEL -->
+      <div class="form-group">
+        <label for="responsavel_nome">Nome do responsável *</label>
+        <input type="text" id="responsavel_nome" placeholder="Nome do responsável pelo centro" required>
+      </div>
+
+      <!-- EMAIL DE CONTATO -->
+      <div class="form-group">
+        <label for="email_contato">Email de contato *</label>
+        <input type="email" id="email_contato" placeholder="email@exemplo.com" required>
+      </div>
+
+      <!-- TELEFONE -->
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" placeholder="(00) 00000-0000">
+      </div>
+
+      <!-- DESCRIÇÃO -->
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" placeholder="Detalhes do centro"></textarea>
+      </div>
+
+      <button type="submit">Cadastrar</button>
+
+    </form>
+
+    <p id="msg"></p>
+
+  </div>
+
+  <script src="../js/cadastroCentro.js"></script>
+</body>
+
+</html>
