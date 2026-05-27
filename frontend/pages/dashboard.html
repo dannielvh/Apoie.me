@@ -22,6 +22,7 @@
 <body class="dashboard-page">
 
 
+
     <!-- ===================================================== -->
     <!-- HEADER DINÂMICO                                       -->
     <!-- ===================================================== -->
@@ -366,7 +367,34 @@
 
         </section>
 
+        <!-- CADASTRO DE CENTRO - SECUNDÁRIO -->
+          <section class="dashboard-secondary" id="sectionCentro">
+               <div>
+                    <h2 id="centroTitulo">Você representa um centro de apoio?</h2>
+                    <p id="centroDescricao">
+                         Cadastre seu centro para solicitar doações, abrir pedidos de voluntários
+                         e divulgar informações para a comunidade.
+                    </p>
+               </div>
+
+               <button id="btnCadastrarCentro" type="button" class="btn-centro">
+                    Cadastrar centro de apoio
+               </button>
+          </section>
+
     </main>
+
+     <div id="modalLogin" class="modal hidden">
+          <div class="modal__content">
+               <h2>Login necessário</h2>
+               <p>Para cadastrar um centro de apoio, você precisa ter uma conta ativa.</p>
+
+               <div class="modal__actions">
+                    <button id="btnIrLogin">Ir para login</button>
+                    <button id="btnFecharModal">Cancelar</button>
+               </div>
+          </div>
+     </div>
 
 
 
