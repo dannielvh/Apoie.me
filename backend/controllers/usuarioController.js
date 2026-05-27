@@ -8,7 +8,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 
+// ===============================
 // CADASTRO DE USUÁRIO
+// ===============================
 exports.cadastrarUsuario = async (req, res) => {
 
   // pega dados enviados pelo frontend (JSON)
@@ -18,111 +20,169 @@ exports.cadastrarUsuario = async (req, res) => {
 
     // validação: campos obrigatórios
     if (!nome || !email || !senha || !cidade) {
-      return res.status(400).json({ msg: "Preencha todos os campos" });
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Preencha todos os campos",
+        dados: null
+      });
+    }
+
+    // validação: tipo dos dados
+    if (
+      typeof nome !== "string" ||
+      typeof email !== "string" ||
+      typeof senha !== "string" ||
+      typeof cidade !== "string"
+    ) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Dados inválidos",
+        dados: null
+      });
     }
 
     // validação: tamanho mínimo da senha
     if (senha.length < 6) {
-      return res
-        .status(400)
-        .json({ msg: "Senha deve ter no mínimo 6 caracteres" });
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Senha deve ter no mínimo 6 caracteres",
+        dados: null
+      });
     }
+
+    // OBS: A tabela "usuarios" ainda não existe no banco atual.
+    // Futuramente:
+    // - Criar tabela usuarios
+    // OU
+    // - Usar tabela "voluntario" adicionando coluna "senha"
 
     // verifica se já existe usuário com esse email
     const existe = await pool.query(
-      "SELECT id FROM usuarios WHERE email = $1", // $1 evita SQL injection
+      "SELECT id FROM usuarios WHERE email = $1",
       [email]
     );
 
-    // se já existe, retorna erro
     if (existe.rows.length > 0) {
-      return res.status(400).json({ msg: "Email já cadastrado" });
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Email já cadastrado",
+        dados: null
+      });
     }
 
-    // criptografa a senha antes de salvar
-    const senhaHash = await bcrypt.hash(senha, 10); // 10 = nível de segurança
+    // criptografa a senha
+    const senhaHash = await bcrypt.hash(senha, 10);
 
     // insere usuário no banco
     const result = await pool.query(
       `INSERT INTO usuarios (nome, email, senha, cidade)
        VALUES ($1, $2, $3, $4)
-       RETURNING id, nome, email, cidade`, // retorna dados sem a senha
+       RETURNING id, nome, email, cidade`,
       [nome, email, senhaHash, cidade]
     );
 
-    // resposta de sucesso
-    res.status(201).json({
-      msg: "Usuário cadastrado com sucesso",
-      usuario: result.rows[0], // dados do usuário criado
+    return res.status(201).json({
+      sucesso: true,
+      mensagem: "Usuário cadastrado com sucesso",
+      dados: result.rows[0]
     });
 
   } catch (erro) {
 
-    // erro interno do servidor
-    console.error(erro);
-    res.status(500).json({ erro: "Erro no servidor" });
+    console.error("Erro no cadastro:", erro);
+
+    return res.status(500).json({
+      sucesso: false,
+      mensagem: "Erro no servidor",
+      dados: null
+    });
   }
 };
 
 
+// ===============================
 // LOGIN DE USUÁRIO
+// ===============================
 exports.loginUsuario = async (req, res) => {
 
-  // pega email e senha enviados
   const { email, senha } = req.body;
 
   try {
 
     // validação básica
     if (!email || !senha) {
-      return res.status(400).json({ msg: "Preencha email e senha" });
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Preencha email e senha",
+        dados: null
+      });
     }
 
-    // busca usuário no banco pelo email
+    // validação de tipo
+    if (typeof email !== "string" || typeof senha !== "string") {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Dados inválidos",
+        dados: null
+      });
+    }
+
+    // OBS: Depende da existência da tabela "usuarios"
     const result = await pool.query(
       "SELECT * FROM usuarios WHERE email = $1",
       [email]
     );
 
-    // se não encontrar usuário
     if (result.rows.length === 0) {
-      return res.status(400).json({ msg: "Usuário não encontrado" });
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Usuário não encontrado",
+        dados: null
+      });
     }
 
-    // pega o usuário encontrado
     const usuario = result.rows[0];
 
-    // compara senha digitada com senha criptografada
+    // valida senha
     const senhaValida = await bcrypt.compare(senha, usuario.senha);
 
-    // se senha estiver errada
     if (!senhaValida) {
-      return res.status(400).json({ msg: "Senha inválida" });
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Senha inválida",
+        dados: null
+      });
     }
 
-    // gera token JWT (login)
+    // OBS: O campo "id" pode mudar dependendo da estrutura final do banco
     const token = jwt.sign(
-      { id: usuario.id, email: usuario.email }, // dados dentro do token
-      "segredo", // chave secreta (depois vai pro .env)
-      { expiresIn: "1d" } // tempo de expiração
+      { id: usuario.id, email: usuario.email },
+      "segredo", // depois ideal mover para .env
+      { expiresIn: "1d" }
     );
 
-    // resposta de sucesso
-    res.json({
-      msg: "Login realizado com sucesso",
-      token, // token usado para autenticação
-      usuario: {
-        id: usuario.id,
-        nome: usuario.nome,
-        email: usuario.email,
-        cidade: usuario.cidade,
-      },
+    return res.json({
+      sucesso: true,
+      mensagem: "Login realizado com sucesso",
+      dados: {
+        token,
+        usuario: {
+          id: usuario.id,
+          nome: usuario.nome,
+          email: usuario.email,
+          cidade: usuario.cidade,
+        }
+      }
     });
 
   } catch (erro) {
 
-    // erro interno
-    console.error(erro);
-    res.status(500).json({ erro: "Erro no servidor" });
+    console.error("Erro no login:", erro);
+
+    return res.status(500).json({
+      sucesso: false,
+      mensagem: "Erro no servidor",
+      dados: null
+    });
   }
 };
