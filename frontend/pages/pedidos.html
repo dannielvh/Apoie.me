@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    viewport pra adaptar o tamanho da tela no celular
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- CSS principal do projeto o pedidos.css foi colado no final desse arquivo -->
+  <link rel="stylesheet" href="../css/style.css">
+
+  <title>Doações | Apoie.me</title>
+</head>
+
+<body class="pedidos-page">
+
+  <!--
+    Header dinamico
+    esse div começa vazio, o arq header.js (no final da pagina) busca o componente header.html e aplica aqui direto e o mesmo padrão usado no dashboard e no mapa
+  -->
+  <div id="header"></div>
+
+
+  <main class="pedidos-container">
+
+    <section class="pedidos-welcome">
+      <div class="welcome-text">
+        <h1>Necessidades disponíveis</h1>
+        <p>Veja o que os centros de apoio precisam e contribua com o que puder.</p>
+      </div>
+    </section>
+
+
+    <!--
+      Filtros de urgencia
+      cada botao tem um atributo data/filtro com o valor do filtro
+      O pedidos.js lê esse atributo pra saber qual filtro aplicar quando o usuario clica
+    -->
+    <section class="pedidos-filtros">
+      <!-- data/filtro="todos" -> mostra os cards -->
+      <button class="filtro-btn active" data-filtro="todos">Todos</button>
+
+      <!-- data/filtro -> critica -> mostra os cards com urgencia -> critica -->
+      <button class="filtro-btn" data-filtro="critica">
+        <i class="fa-solid fa-circle-exclamation"></i> Crítica
+      </button>
+
+      <button class="filtro-btn" data-filtro="alta">
+        <i class="fa-solid fa-triangle-exclamation"></i> Alta
+      </button>
+
+      <button class="filtro-btn" data-filtro="media">
+        <i class="fa-solid fa-circle-info"></i> Média
+      </button>
+    </section>
+
+
+    <!--
+      Lista de cards
+      Essa sessao começa com a mensagem de carregando e quando o pedidos.js terminar de buscar os dados da API, ele remove essa mensagem e insere os cards pelo JS
+      o id -> pedidos/lista e usado pelo JS pra achar o elemento desejado
+    -->
+    <section class="pedidos-lista" id="pedidos-lista">
+
+      <p class="pedidos-loading" id="pedidos-loading">
+        <i class="fa-solid fa-spinner fa-spin"></i> Carregando necessidades...
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <!--
+    confirmacao
+    quando o usuário clica em "quero ajudar" num card, o pedidos.js adiciona a classe .aberto nesse elemento -> modal aparece
+     esta fora do <main> de proposito —> o modal precisa cobrir a página inteira, então não e bom ficar preso dentro do container
+  -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box">
+
+      <div class="modal-header">
+        <h2>Confirmar doação</h2>
+        <button class="modal-fechar" id="modal-fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!--
+          esse paragrafo e preenchido pelo JS com o nome do item e do centro quando o modal abre
+         ex: "vc vai contribuir com cobertores para o centro esperança"
+        -->
+        <p id="modal-descricao">Você está prestes a confirmar uma doação.</p>
+
+        <div class="modal-input-grupo">
+          <label for="modal-quantidade">Quantidade que você vai doar:</label>
+    
+          <input type="number" id="modal-quantidade" min="1" placeholder="Ex: 5">
+        </div>
+      </div>
+
+      <!-- botoes de açao -->
+      <div class="modal-footer">
+        <button class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+        <button class="btn-confirmar" id="btn-confirmar">Confirmar doação</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!--
+    Scripts -> sempre no final do body, nao no <head>
+
+    header.js  -> injeta o header dinâmico
+    pedidos.js -> toda a logica dessa tela
+  -->
+  <script src="../js/header.js"></script>
+  <script src="../js/pedidos.js"></script>
+
+</body>
+</html>
