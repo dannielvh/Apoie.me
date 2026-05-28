@@ -314,32 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
     iniciarDashboard();
 
 });
-// Espera o HTML carregar completamente antes de executar o código
-document.addEventListener("DOMContentLoaded", () => {
-  // Busca no localStorage os dados do usuário salvo após o login
-  // OBS: precisa conferir se no login vocês salvaram como "user" ou "usuario"
-  const usuarioSalvo = localStorage.getItem("user");
 
-  // Pega o elemento do título de boas-vindas no HTML
-  const welcomeTitle = document.getElementById("welcome-title");
 
-  // Se não existir usuário salvo, significa que ninguém está logado
-  if (!usuarioSalvo) {
-    // Mostra um título genérico
-    welcomeTitle.textContent = "Painel Geral";
-    return;
-  }
 
-  // Converte o usuário de texto JSON para objeto JavaScript
-  const usuario = JSON.parse(usuarioSalvo);
-
-  // Pega apenas o primeiro nome do usuário
-  // Exemplo: "Jean Pedro" vira "Jean"
-  const primeiroNome = usuario.nome.split(" ")[0];
-
-  // Atualiza o título com o nome do usuário
-  welcomeTitle.textContent = `Olá, ${primeiroNome} 👋`;
-});
 
 
 // ===============================
@@ -406,7 +383,7 @@ async function carregarAreaCentro() {
 function renderCadastrarCentro() {
   sectionCentro.innerHTML = `
     <div>
-      <h2>Você representa um centro de apoio?</h2>
+      <h2><i class="fa-solid fa-building-user"></i> Você representa um centro de apoio?</h2>
       <p>
         Cadastre seu centro para solicitar doações, abrir pedidos de voluntários
         e divulgar informações para a comunidade.
@@ -439,7 +416,7 @@ function renderCadastrarCentro() {
 function renderGerenciarCentro(centro) {
   sectionCentro.innerHTML = `
     <div>
-      <h2>Gerencie seu centro de apoio</h2>
+      <h2><i class="fa-solid fa-building-user"></i> Gerencie seu centro de apoio</h2>
       <p>
         ${centro.nome} está com status: 
         <strong>${formatarStatus(centro.status)}</strong>.

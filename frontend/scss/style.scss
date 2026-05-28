@@ -10,9 +10,10 @@
 @use 'reset';
 @use 'pages/login';
 @use 'pages/register';
-@use 'pages/cadastroCentro';
-@use './pages/dashboard';
-@use 'pages/mapa';
 @use 'components/header';
+@use 'pages/cadastroCentro';
+@use 'pages/dashboard';
+@use 'pages/mapa';
+@use 'pages/pedidos';
 @use 'pages/painelCentro/dashboardCentro';
 @use 'pages/painelCentro/meuCentro';
