@@ -11,18 +11,16 @@ function mostrarMensagem(texto, tipo) {
 
 const token = localStorage.getItem('token');
 
-<<<<<<< HEAD
-=======
-// verifica se está logado
-if (!token) {
-  mostrarMensagem("Você precisa estar logado", "erro");//mensagem de erro
-  window.location.href = 'login.html';
-}
->>>>>>> origin/feature/mensagens-usuario
 
 // função de doação
 async function fazerDoacao(valor) {
   const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert('Faça login para realizar uma doação.');
+    window.location.href = 'login.html';
+    return;
+  }
 
   // mensagem de carregamento
   mostrarMensagem("Enviando doação...", "loading");

@@ -2,62 +2,375 @@
 <html lang="pt-br">
 
 <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/regular.min.css" />
-     <link rel="stylesheet" href="../css/style.css">
-     <title>Dashboard | Apoie.me</title>
+
+    <!-- ===================================================== -->
+    <!-- CONFIGURAÇÕES BÁSICAS                                 -->
+    <!-- ===================================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Apoie.me</title>
+
 </head>
 
 <body class="dashboard-page">
-     <div id="header"></div>
-     <button onclick="fazerDoacao(50)">Doar R$50</button>
-     <div id="mensagem" class="mensagem hidden"></div> //mensagem após doação
-
-     <main class="dashboard-container">
-          <section class="dashboard-welcome">
-               
-          </section>
-
-          <!-- AÇÕES PRINCIPAIS -->
-          <section class="dashboard-actions">
-               <!-- aqui coloca as ações principais -->
 
 
-          </section>
+
+    <!-- ===================================================== -->
+    <!-- HEADER DINÂMICO                                       -->
+    <!-- ===================================================== -->
+    <div id="header"></div>
 
 
-          <!-- MAPA + NECESSIDADES -->
-          <!-- AQUI VAI COLOCAR O MAPA SE TIVER, COM AS ULTIMAS NECESSIDADES URGENTES CADASTRADAS -->
-          <section class="dashboard-content">
 
-          </section>
+    <!-- ===================================================== -->
+    <!-- CONTAINER PRINCIPAL                                   -->
+    <!-- ===================================================== -->
+    <main class="dashboard-container">
 
-          <!-- CARDS DE RESUMO -->
-          <!-- TRANSFORMA ISSO DINAMICO COM O BANCO DE DADOS -->
-          <section class="dashboard-stats">
 
-               <!-- <div class="stat-card">
-                    <div class="stat-card__top">
-                         <i class="fa-solid fa-location-dot"></i>
-                         <span>+0 novos </span>
+        <!-- ===================================================== -->
+        <!-- HERO / APRESENTAÇÃO PRINCIPAL                         -->
+        <!-- ===================================================== -->
+        <section class="hero-section">
+
+
+            <!-- ===================================================== -->
+            <!-- APRESENTAÇÃO DA APOIE.ME                              -->
+            <!-- ===================================================== -->
+            <div class="hero-content">
+
+
+                <!-- Título -->
+                <div class="hero-text">
+
+                    <h1>
+                        Conectando pessoas dispostas a ajudar
+                        com centros que realmente precisam.
+                    </h1>
+
+                    <p>
+                        A Apoie.me é uma plataforma social criada para facilitar
+                        doações e aproximar a comunidade de projetos, centros e
+                        instituições que necessitam de apoio.
+                    </p>
+
+                    <p>
+                        Nosso objetivo é tornar a solidariedade mais acessível,
+                        organizada e acolhedora para todos.
+                    </p>
+
+                </div>
+
+
+                <!-- Botões -->
+                <div class="hero-buttons">
+
+                    <button class="primary-btn">
+                        Quero ajudar
+                    </button>
+
+                    <button class="secondary-btn">
+                        Saiba mais
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ===================================================== -->
+            <!-- CARD LOGIN / CADASTRO                                 -->
+            <!-- ===================================================== -->
+            <aside class="access-card">
+
+
+                <!-- Ícone -->
+                <div class="access-icon">
+
+                    <i class="fa-solid fa-heart"></i>
+
+                </div>
+
+
+                <!-- Texto -->
+                <div class="access-text">
+
+                    <h2>Faça parte da Apoie.me</h2>
+
+                    <p>
+                        Entre na plataforma para acompanhar necessidades,
+                        realizar doações e participar das ações sociais.
+                    </p>
+
+                </div>
+
+
+                <!-- Botões -->
+                <div class="access-buttons">
+
+                    <a href="../pages/login.html" class="login-btn">
+                        Entrar
+                    </a>
+
+                    <a href="../pages/cadastro.html" class="register-btn">
+                        Criar conta
+                    </a>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+
+        <!-- ===================================================== -->
+        <!-- COMO DOAR                                             -->
+        <!-- ===================================================== -->
+        <section class="donation-guide-section">
+
+
+            <!-- Cabeçalho -->
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    Como doar corretamente
+                </h2>
+
+                <p>
+                    Veja orientações importantes sobre cada tipo de doação.
+                </p>
+
+            </div>
+
+
+
+            <!-- ===================================================== -->
+            <!-- DROPDOWNS                                             -->
+            <!-- ===================================================== -->
+            <div class="guide-dropdowns">
+
+
+                <!-- ================================================ -->
+                <!-- COMIDA                                            -->
+                <!-- ================================================ -->
+                <div class="guide-item">
+
+                    <button class="guide-toggle">
+
+                        <span>
+                            <i class="fa-solid fa-utensils"></i>
+                            Comida
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down"></i>
+
+                    </button>
+
+
+                    <div class="guide-content">
+
+                        <h4>O que doar:</h4>
+
+                        <ul>
+
+                            <li>Arroz</li>
+                            <li>Feijão</li>
+                            <li>Macarrão</li>
+                            <li>Leite</li>
+                            <li>Enlatados</li>
+
+                        </ul>
+
+
+                        <h4>Importante:</h4>
+
+                        <ul>
+
+                            <li>Verifique sempre a validade.</li>
+                            <li>Prefira alimentos não perecíveis.</li>
+                            <li>Mantenha as embalagens lacradas.</li>
+
+                        </ul>
+
                     </div>
 
-                    <h2>0</h2>
-                    <h3>Coloque card de informações do sistema</h3>
-                    <p>como por exemplo, quantas doações, quantos voluntários, quantos centros</p>
-               </div> -->
+                </div>
 
 
 
-          </section>
+                <!-- ================================================ -->
+                <!-- ROUPAS                                            -->
+                <!-- ================================================ -->
+                <div class="guide-item">
+
+                    <button class="guide-toggle">
+
+                        <span>
+                            <i class="fa-solid fa-shirt"></i>
+                            Roupas
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down"></i>
+
+                    </button>
 
 
-          <!-- CADASTRO DE CENTRO - SECUNDÁRIO -->
+                    <div class="guide-content">
+
+                        <h4>O que doar:</h4>
+
+                        <ul>
+
+                            <li>Casacos</li>
+                            <li>Calças</li>
+                            <li>Roupas infantis</li>
+                            <li>Meias</li>
+                            <li>Cobertores</li>
+
+                        </ul>
+
+
+                        <h4>Importante:</h4>
+
+                        <ul>
+
+                            <li>Doe roupas limpas.</li>
+                            <li>Evite peças rasgadas.</li>
+                            <li>Separe por tamanho se possível.</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================ -->
+                <!-- HIGIENE                                           -->
+                <!-- ================================================ -->
+                <div class="guide-item">
+
+                    <button class="guide-toggle">
+
+                        <span>
+                            <i class="fa-solid fa-pump-soap"></i>
+                            Produtos de higiene
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down"></i>
+
+                    </button>
+
+
+                    <div class="guide-content">
+
+                        <h4>O que doar:</h4>
+
+                        <ul>
+
+                            <li>Sabonete</li>
+                            <li>Escova de dente</li>
+                            <li>Pasta dental</li>
+                            <li>Papel higiênico</li>
+                            <li>Absorventes</li>
+
+                        </ul>
+
+
+                        <h4>Importante:</h4>
+
+                        <ul>
+
+                            <li>Doe produtos fechados.</li>
+                            <li>Verifique validade e conservação.</li>
+                            <li>Evite produtos danificados.</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ===================================================== -->
+        <!-- NECESSIDADES URGENTES                                 -->
+        <!-- ===================================================== -->
+        <section class="urgent-needs-section">
+
+
+            <!-- Cabeçalho -->
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-fire"></i>
+                    Necessidades mais urgentes
+                </h2>
+
+                <button class="see-all-btn">
+                    Ver todas
+                </button>
+
+            </div>
+
+
+
+            <!-- ===================================================== -->
+            <!-- LISTA DE NECESSIDADES                                 -->
+            <!-- Será preenchida dinamicamente via JS                  -->
+            <!-- ===================================================== -->
+            <div class="urgent-needs-list"></div>
+
+        </section>
+
+
+
+        <!-- ===================================================== -->
+        <!-- ATIVIDADES RECENTES                                    -->
+        <!-- ===================================================== -->
+        <section class="recent-activities-section">
+
+
+            <!-- Cabeçalho -->
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Atividades recentes
+                </h2>
+
+            </div>
+
+
+
+            <!-- ===================================================== -->
+            <!-- LISTA DE ATIVIDADES                                   -->
+            <!-- Será preenchida dinamicamente via JS                  -->
+            <!-- ===================================================== -->
+            <div class="activities-list"></div>
+
+        </section>
+
+        <!-- CADASTRO DE CENTRO - SECUNDÁRIO -->
           <section class="dashboard-secondary" id="sectionCentro">
                <div>
-                    <h2 id="centroTitulo">Você representa um centro de apoio?</h2>
+                    <h2 id="centroTitulo"><i class="fa-solid fa-building-user"></i> Você representa um centro de apoio?</h2>
                     <p id="centroDescricao">
                          Cadastre seu centro para solicitar doações, abrir pedidos de voluntários
                          e divulgar informações para a comunidade.
@@ -69,9 +382,7 @@
                </button>
           </section>
 
-
-
-     </main>
+    </main>
 
      <div id="modalLogin" class="modal hidden">
           <div class="modal__content">
@@ -86,9 +397,20 @@
      </div>
 
 
-     <script src="../js/components/header.js"></script>
-     <script src="../js/doacoes.js"></script>
-     <script src="../js/dashboard.js"></script>
+
+    <!-- ===================================================== -->
+    <!-- SCRIPTS                                               -->
+    <!-- ===================================================== -->
+
+    <!-- Header -->
+    <script src="../js/components/header.js"></script>
+
+    <!-- Doações -->
+    <script src="../js/doacoes.js"></script>
+
+    <!-- Dashboard -->
+    <script src="../js/dashboard.js"></script>
+
 </body>
 
 </html>
