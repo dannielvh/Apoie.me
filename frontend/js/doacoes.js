@@ -1,17 +1,27 @@
-// TESTE PARA PARAR DE DIRECIONAR AUTOMATICAMENTE PARA A TELA DE LOGIN
-// QUANDO TENTO OLHAR A DASHBOARD SEM ESTAR LOGADO
-/*const token = localStorage.getItem('token');
+// Função responsável por exibir mensagens na tela (sucesso, erro, loading)
+function mostrarMensagem(texto, tipo) {
+  const msg = document.getElementById("mensagem");
 
+  if (!msg) return; // evita erro se não existir no HTML
+
+  msg.className = "mensagem";
+  msg.classList.add(tipo);
+  msg.innerText = texto;
+}
+
+const token = localStorage.getItem('token');
+
+<<<<<<< HEAD
+=======
 // verifica se está logado
 if (!token) {
-  alert('Você precisa estar logado');
+  mostrarMensagem("Você precisa estar logado", "erro");//mensagem de erro
   window.location.href = 'login.html';
-}*/
+}
+>>>>>>> origin/feature/mensagens-usuario
 
 // função de doação
 async function fazerDoacao(valor) {
-
-  // verifica login SOMENTE ao doar
   const token = localStorage.getItem('token');
 
   if (!token) {
@@ -20,33 +30,31 @@ async function fazerDoacao(valor) {
     return;
   }
 
-  const res = await fetch('http://localhost:3000/api/doacao', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': token
-    },
-    body: JSON.stringify({ valor })
-  });
+  // mensagem de carregamento
+  mostrarMensagem("Enviando doação...", "loading");
 
-  const data = await res.json();
+  try {
+    const res = await fetch('http://localhost:3000/api/doacao', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify({ valor })
+    });
 
-  alert(data.msg);
+    const data = await res.json();
+
+    // verifica erro na resposta
+    if (!res.ok) {
+      throw new Error(data.msg);
+    }
+
+    // sucesso
+    mostrarMensagem(data.msg, "sucesso");
+
+  } catch (error) {
+    // erro
+    mostrarMensagem(error.message || "Erro ao realizar doação", "erro");
+  }
 }
-
-//  função de doação
-/*async function fazerDoacao(valor) {
-  const token = localStorage.getItem('token');
-
-  const res = await fetch('http://localhost:3000/api/doacao', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': token
-    },
-    body: JSON.stringify({ valor })
-  });
-
-  const data = await res.json();
-  alert(data.msg);
-}*/
