@@ -91,38 +91,38 @@ inputCidade.addEventListener("input", () => {
 // =======================
 // MÁSCARA CNPJ
 // =======================
-// const inputCNPJ = document.getElementById("cnpj");
+const inputCNPJ = document.getElementById("cnpj");
 
-// inputCNPJ.addEventListener("input", (e) => {
-//   let v = e.target.value.replace(/\D/g, "");
+inputCNPJ.addEventListener("input", (e) => {
+  let v = e.target.value.replace(/\D/g, "");
 
-//   v = v
-//     .replace(/^(\d{2})(\d)/, "$1.$2")
-//     .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-//     .replace(/\.(\d{3})(\d)/, ".$1/$2")
-//     .replace(/(\d{4})(\d)/, "$1-$2");
+  v = v
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d)/, "$1-$2");
 
-//   e.target.value = v.slice(0, 18);
-// });
+  e.target.value = v.slice(0, 18);
+});
 
 // =======================
 // MÁSCARA TELEFONE
 // =======================
-// const inputTel = document.getElementById("telefone");
+const inputTel = document.getElementById("telefone");
 
-// inputTel.addEventListener("input", (e) => {
-//   let v = e.target.value.replace(/\D/g, "");
+inputTel.addEventListener("input", (e) => {
+  let v = e.target.value.replace(/\D/g, "");
 
-//   if (v.length <= 10) {
-//     v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-//     v = v.replace(/(\d{4})(\d)/, "$1-$2");
-//   } else {
-//     v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-//     v = v.replace(/(\d{5})(\d)/, "$1-$2");
-//   }
+  if (v.length <= 10) {
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    v = v.replace(/(\d{4})(\d)/, "$1-$2");
+  } else {
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    v = v.replace(/(\d{5})(\d)/, "$1-$2");
+  }
 
-//   e.target.value = v.slice(0, 15);
-// });
+  e.target.value = v.slice(0, 15);
+});
 
 // =======================
 // SUBMIT
