@@ -1,12 +1,19 @@
-// ELEMENTOS
+// ===============================
+// ELEMENTOS PRINCIPAIS
+// ===============================
 const input = document.getElementById("cidade-input");
 const sugestoes = document.getElementById("sugestoes");
 const lista = document.getElementById("pontos-lista");
 
-let cidades = [];
-let centroSelecionado = null;
+const totalCentros = document.getElementById("total-centros");
+const cidadeAtual = document.getElementById("cidade-atual");
 
-// NORMALIZAR
+let cidades = [];
+
+
+// ===============================
+// NORMALIZAR TEXTO
+// ===============================
 function normalizar(texto) {
   return texto
     .toLowerCase()
@@ -16,19 +23,27 @@ function normalizar(texto) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-// CARREGAR CIDADES (IBGE)
+
+// ===============================
+// CARREGAR CIDADES DO IBGE
+// ===============================
 async function carregarCidades() {
   try {
     const res = await fetch(
       "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios"
     );
+
     cidades = await res.json();
+
   } catch (err) {
     console.error("Erro ao carregar cidades:", err);
   }
 }
 
-// AUTOCOMPLETE (SUGESTÃO)
+
+// ===============================
+// AUTOCOMPLETE DE CIDADE
+// ===============================
 input.addEventListener("input", () => {
   const valor = normalizar(input.value);
 
@@ -36,8 +51,8 @@ input.addEventListener("input", () => {
 
   if (!valor) return;
 
-  const filtradas = cidades.filter((c) =>
-    normalizar(c.nome).includes(valor)
+  const filtradas = cidades.filter((cidade) =>
+    normalizar(cidade.nome).includes(valor)
   );
 
   filtradas.slice(0, 10).forEach((cidade) => {
@@ -55,37 +70,54 @@ input.addEventListener("input", () => {
   });
 });
 
-// ENTER (BUSCA REAL)
+
+// ===============================
+// BUSCAR COM ENTER
+// ===============================
 input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
+  if (e.key !== "Enter") return;
 
-    const valor = input.value.trim();
+  e.preventDefault();
 
-    if (!valor) return;
+  const valor = input.value.trim();
 
-    // 🔥 valida cidade real
-    const cidadeEncontrada = cidades.find((c) =>
-      normalizar(c.nome) === normalizar(valor)
-    );
+  if (!valor) return;
 
-    sugestoes.innerHTML = "";
+  const cidadeEncontrada = cidades.find((cidade) =>
+    normalizar(cidade.nome) === normalizar(valor)
+  );
 
-    if (!cidadeEncontrada) {
-      lista.innerHTML = "<p>Selecione uma cidade válida.</p>";
-      return;
-    }
+  sugestoes.innerHTML = "";
 
-    input.value = cidadeEncontrada.nome;
+  if (!cidadeEncontrada) {
+    lista.innerHTML = `
+      <div class="empty-list">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>Selecione uma cidade válida da lista.</p>
+      </div>
+    `;
 
-    buscarPontos(cidadeEncontrada.nome);
+    atualizarResumo(0, "-");
+    return;
   }
+
+  input.value = cidadeEncontrada.nome;
+
+  buscarPontos(cidadeEncontrada.nome);
 });
 
-// BUSCAR PONTOS (BACKEND)
+
+// ===============================
+// BUSCAR CENTROS NO BACKEND
+// ===============================
 async function buscarPontos(cidade) {
   try {
-    lista.innerHTML = "<p>Carregando...</p>";
+    lista.innerHTML = `
+      <div class="empty-list">
+        <i class="fa-solid fa-spinner"></i>
+        <p>Carregando centros de apoio...</p>
+      </div>
+    `;
 
     const res = await fetch(
       `http://localhost:3000/api/centros?cidade=${encodeURIComponent(cidade.trim())}`
@@ -93,84 +125,194 @@ async function buscarPontos(cidade) {
 
     const dados = await res.json();
 
+    atualizarResumo(dados.length, cidade);
     renderPontos(dados);
+
   } catch (err) {
-    console.error("Erro:", err);
-    lista.innerHTML = "<p>Erro ao carregar dados.</p>";
+    console.error("Erro ao carregar centros:", err);
+
+    lista.innerHTML = `
+      <div class="empty-list">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p>Erro ao carregar centros de apoio.</p>
+      </div>
+    `;
+
+    atualizarResumo(0, "-");
   }
 }
 
-// RENDER
-function renderPontos(pontos) {
 
-  // limpa lista antes de renderizar novamente
+// ===============================
+// ATUALIZAR RESUMO DA BUSCA
+// ===============================
+function atualizarResumo(total, cidade) {
+  if (totalCentros) {
+    totalCentros.textContent = total;
+  }
+
+  if (cidadeAtual) {
+    cidadeAtual.textContent = cidade || "-";
+  }
+}
+
+
+// ===============================
+// RENDERIZAR CENTROS
+// ===============================
+function renderPontos(pontos) {
   lista.innerHTML = "";
 
-  // verifica se existem pontos
   if (!pontos || pontos.length === 0) {
-    lista.innerHTML = "<p>Nenhum ponto encontrado.</p>";
+    lista.innerHTML = `
+      <div class="empty-list">
+        <i class="fa-solid fa-location-dot"></i>
+        <p>Nenhum centro de apoio encontrado para essa cidade.</p>
+      </div>
+    `;
     return;
   }
 
-  // percorre todos os pontos recebidos da API
-  pontos.forEach((p) => {
-
-    // cria container do ponto
+  pontos.forEach((ponto) => {
     const div = document.createElement("div");
-
-    // adiciona classe padrão
     div.classList.add("ponto");
 
-    // estrutura HTML do card
     div.innerHTML = `
       <div class="ponto__header">
         <i class="fa-solid fa-location-dot"></i>
-        <strong>${p.nome}</strong>
+        <strong>${ponto.nome}</strong>
       </div>
 
       <div class="ponto__info">
-        <p>${p.tipo || ""}</p>
-        <small>${p.rua || ""}</small>
-        <small>${p.horario || ""}</small>
+        <p>${ponto.tipo || "Tipo não informado"}</p>
+
+        <small>
+          <i class="fa-solid fa-map-pin"></i>
+          ${ponto.rua || "Endereço não informado"}
+        </small>
+
+        <small>
+          <i class="fa-solid fa-clock"></i>
+          ${ponto.horario || "Horário não informado"}
+        </small>
+
+        <small>
+          <i class="fa-solid fa-phone"></i>
+          ${ponto.telefone || "Telefone não informado"}
+        </small>
       </div>
 
-      <button class="ponto__btn" data-id="${p.id}">
-        Selecionar
+      <button class="ponto__btn" type="button">
+        Ver detalhes
       </button>
     `;
 
-    // adiciona card na tela
-    lista.appendChild(div);
-
-    // pega botão do card criado
     const btn = div.querySelector(".ponto__btn");
 
-    // evento de clique para selecionar centro
     btn.addEventListener("click", () => {
-
-      // remove destaque de todos os cards
-      document.querySelectorAll(".ponto").forEach(el => {
-        el.classList.remove("selecionado");
-      });
-
-      // adiciona destaque no card atual
-      div.classList.add("selecionado");
-
-      // salva centro selecionado na variável global
-      centroSelecionado = p;
-
-      // salva no localStorage
-      // isso impede perder seleção ao recarregar página
-      localStorage.setItem(
-        "centroSelecionado",
-        JSON.stringify(p)
-      );
-
-      // feedback simples para usuário
-      alert(`Centro selecionado: ${p.nome}`);
+      abrirModalCentro(ponto);
     });
+
+    lista.appendChild(div);
   });
 }
 
-// INIT
+
+// ===============================
+// MODAL DE DETALHES DO CENTRO
+// ===============================
+function abrirModalCentro(centro) {
+  document.getElementById("modalCentroTipo").textContent =
+    centro.tipo || "Tipo não informado";
+
+  document.getElementById("modalCentroNome").textContent =
+    centro.nome || "Centro de apoio";
+
+  document.getElementById("modalCentroDescricao").textContent =
+    centro.descricao || "Este centro ainda não possui descrição cadastrada.";
+
+  document.getElementById("modalCentroCidade").textContent =
+    centro.cidade || "-";
+
+  document.getElementById("modalCentroRua").textContent =
+    centro.rua || "-";
+
+  document.getElementById("modalCentroHorario").textContent =
+    centro.horario || "-";
+
+  document.getElementById("modalCentroTelefone").textContent =
+    centro.telefone || "-";
+
+  renderPedidosCentro([]);
+
+  document.getElementById("modalCentro").classList.remove("hidden");
+}
+
+
+function fecharModalCentro() {
+  document.getElementById("modalCentro").classList.add("hidden");
+}
+
+
+// ===============================
+// PEDIDOS DO CENTRO
+// ===============================
+// Por enquanto fica vazio.
+// Depois, quando existir backend de pedidos, essa função recebe os pedidos reais.
+function renderPedidosCentro(pedidos) {
+  const container = document.getElementById("modalCentroPedidos");
+
+  if (!container) return;
+
+  if (!pedidos || pedidos.length === 0) {
+    container.innerHTML = `
+      <p>Nenhum pedido de doação cadastrado no momento.</p>
+    `;
+    return;
+  }
+
+  container.innerHTML = "";
+
+  pedidos.forEach((pedido) => {
+    const div = document.createElement("div");
+    div.classList.add("pedido-modal");
+
+    div.innerHTML = `
+      <strong>${pedido.titulo}</strong>
+      <span>${pedido.quantidade_atual || 0} / ${pedido.quantidade_necessaria || 0}</span>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+
+// ===============================
+// EVENTOS DO MODAL
+// ===============================
+const modalCentro = document.getElementById("modalCentro");
+const fecharModalBtn = document.getElementById("fecharModalCentro");
+
+if (fecharModalBtn) {
+  fecharModalBtn.addEventListener("click", fecharModalCentro);
+}
+
+if (modalCentro) {
+  modalCentro.addEventListener("click", (e) => {
+    if (e.target === modalCentro) {
+      fecharModalCentro();
+    }
+  });
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && modalCentro && !modalCentro.classList.contains("hidden")) {
+    fecharModalCentro();
+  }
+});
+
+
+// ===============================
+// INICIALIZAÇÃO
+// ===============================
 window.addEventListener("load", carregarCidades);

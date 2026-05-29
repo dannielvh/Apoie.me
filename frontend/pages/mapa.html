@@ -6,72 +6,211 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
      <link rel="stylesheet" href="../css/style.css">
-     <title>Mapa de Apoio</title>
+     <title>Centros de Apoio | Apoie.me</title>
 </head>
 
 <body class="mapa-page">
      <div id="header"></div>
 
-     <section class="mapa">
-          <div class="text-mapa">
-               <h1>Mapa de Apoio</h1>
-               <p>Encontre pontos de apoio mais próximos de você</p>
-          </div>
+     <main class="mapa">
 
-          <div class="mapa__container">
+          <!-- TOPO -->
+          <section class="mapa__hero">
+               <div>
+                    <span class="mapa__badge">
+                         <i class="fa-solid fa-hand-holding-heart"></i>
+                         Apoio próximo de você
+                    </span>
 
-               <!-- LADO ESQUERDO (MAPA FUTURO) -->
+                    <h1>Centros de Apoio</h1>
+
+                    <p>
+                         Encontre centros de apoio cadastrados por cidade, consulte horários,
+                         contatos e veja detalhes sobre cada ponto de atendimento.
+                    </p>
+               </div>
+          </section>
+
+          <!-- ÁREA PRINCIPAL -->
+          <section class="mapa__container">
+
+               <!-- LADO ESQUERDO -->
                <div class="mapa__visual">
-                    <!-- aqui depois entra mapa (Google Maps / Leaflet etc) -->
-                    <p>Mapa em breve</p>
+                    <div class="mapa__empty">
+                         <i class="fa-solid fa-location-dot"></i>
+
+                         <h2>Consulte pontos de apoio</h2>
+
+                         <p>
+                              Digite uma cidade para encontrar abrigos, pontos de doação,
+                              atendimento emergencial e outras organizações de apoio.
+                         </p>
+
+                         <div class="mapa__stats">
+                              <div>
+                                   <strong id="total-centros">0</strong>
+                                   <span>centros encontrados</span>
+                              </div>
+
+                              <div>
+                                   <strong id="cidade-atual">-</strong>
+                                   <span>cidade pesquisada</span>
+                              </div>
+                         </div>
+                    </div>
                </div>
 
-               <!-- LADO DIREITO (CIDADES + PONTOS) -->
+               <!-- LADO DIREITO -->
                <div class="mapa__info">
 
                     <div class="cidade">
-
-                         <label for="cidade-select">Escolha a cidade</label>
+                         <label for="cidade-input">Buscar por cidade</label>
 
                          <div class="cidade__select-wrapper">
                               <i class="fa-solid fa-city"></i>
 
-                              <input type="text" id="cidade-input" placeholder="Digite a cidade">
-                              <ul id="sugestoes"></ul>
+                              <input 
+                                   type="text" 
+                                   id="cidade-input" 
+                                   placeholder="Digite sua cidade"
+                                   autocomplete="off"
+                              >
+
+                              <ul id="sugestoes" class="sugestoes-lista"></ul>
                          </div>
 
+                         <small>
+                              Digite o nome da cidade e selecione uma sugestão ou pressione Enter.
+                         </small>
+                    </div>
+
+                    <div class="mapa__result-header">
+                         <h2>Centros encontrados</h2>
+                         <p>Os resultados aparecerão abaixo após a busca.</p>
                     </div>
 
                     <div id="pontos-lista">
-                         <!-- JS vai preencher aqui -->
+                         <div class="empty-list">
+                              <i class="fa-solid fa-magnifying-glass"></i>
+                              <p>Pesquise uma cidade para visualizar os centros de apoio.</p>
+                         </div>
+                    </div>
+
+               </div>
+
+          </section>
+
+          <!-- INFORMAÇÕES -->
+          <section class="info-mapa">
+               <div class="container-infos">
+
+                    <div class="infos">
+                         <h3>
+                              <i class="fa-solid fa-location-dot"></i>
+                              Localização
+                         </h3>
+
+                         <p>
+                              Visualize centros de apoio cadastrados por cidade, como abrigos,
+                              unidades de saúde e organizações de ajuda.
+                         </p>
+                    </div>
+
+                    <div class="infos">
+                         <h3>
+                              <i class="fa-solid fa-clock"></i>
+                              Horários
+                         </h3>
+
+                         <p>
+                              Consulte os horários de funcionamento de cada ponto para saber
+                              quando o atendimento está disponível.
+                         </p>
+                    </div>
+
+                    <div class="infos">
+                         <h3>
+                              <i class="fa-solid fa-hand-holding-heart"></i>
+                              Doações
+                         </h3>
+
+                         <p>
+                              Acesse os detalhes de cada centro para acompanhar informações
+                              e futuros pedidos de doação.
+                         </p>
+                    </div>
+
+               </div>
+          </section>
+
+     </main>
+
+     <!-- MODAL DE DETALHES DO CENTRO -->
+     <div id="modalCentro" class="modal-centro hidden">
+          <div class="modal-centro__content">
+
+               <button id="fecharModalCentro" class="modal-centro__close" type="button">
+                    <i class="fa-solid fa-xmark"></i>
+               </button>
+
+               <div class="modal-centro__header">
+                    <div>
+                         <span id="modalCentroTipo">Tipo do centro</span>
+                         <h2 id="modalCentroNome">Nome do centro</h2>
+                    </div>
+               </div>
+
+               <div class="modal-centro__body">
+
+                    <p id="modalCentroDescricao">
+                         Descrição do centro de apoio.
+                    </p>
+
+                    <div class="modal-centro__info">
+
+                         <p>
+                              <i class="fa-solid fa-city"></i>
+                              <strong>Cidade:</strong>
+                              <span id="modalCentroCidade">-</span>
+                         </p>
+
+                         <p>
+                              <i class="fa-solid fa-location-dot"></i>
+                              <strong>Endereço:</strong>
+                              <span id="modalCentroRua">-</span>
+                         </p>
+
+                         <p>
+                              <i class="fa-solid fa-clock"></i>
+                              <strong>Horário:</strong>
+                              <span id="modalCentroHorario">-</span>
+                         </p>
+
+                         <p>
+                              <i class="fa-solid fa-phone"></i>
+                              <strong>Telefone:</strong>
+                              <span id="modalCentroTelefone">-</span>
+                         </p>
+
+                    </div>
+
+                    <div class="modal-centro__pedidos">
+                         <div class="modal-centro__pedidos-header">
+                              <h3>Pedidos de doação</h3>
+                              <span>Em breve</span>
+                         </div>
+
+                         <div id="modalCentroPedidos">
+                              <p>
+                                   Nenhum pedido de doação cadastrado no momento.
+                              </p>
+                         </div>
                     </div>
 
                </div>
 
           </div>
-     </section>
-
-     <section class="info-mapa">
-          <div class="container-infos">
-               <div class="infos">
-                    <h3><i class="fa-solid fa-location-dot"></i> Localização</h3>
-                    <p>Visualize pontos de apoio próximos, como abrigos, unidades de saúde e organizações de ajuda na
-                         sua região.</p>
-               </div>
-
-               <div class="infos">
-                    <h3><i class="fa-solid fa-clock"></i> Horários</h3>
-                    <p>Consulte os horários de funcionamento de cada ponto para saber quando o atendimento está
-                         disponível.</p>
-               </div>
-
-               <div class="infos">
-                    <h3><i class="fa-solid fa-hand-holding-heart"></i> Doações</h3>
-                    <p>Acesse os detalhes de cada ponto para ver quais doações são mais necessárias no momento.</p>
-               </div>
-          </div>
-     </section>
-
+     </div>
 
      <script src="../js/mapa.js"></script>
      <script src="../js/components/header.js"></script>

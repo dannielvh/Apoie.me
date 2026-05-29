@@ -5,6 +5,28 @@ if (!token) {
   window.location.href = "login.html";
 }
 
+async function verificarSeJaTemCentro() {
+  try {
+    const res = await fetch("http://localhost:3000/api/centros/meu-centro", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.temCentro) {
+      alert("Você já possui um centro cadastrado.");
+      window.location.href = "../pages/painelCentro/dashboardCentro.html";
+    }
+
+  } catch (err) {
+    console.error("Erro ao verificar centro:", err);
+  }
+}
+
+verificarSeJaTemCentro();
+
 const form = document.getElementById("form-centro");
 const msg = document.getElementById("msg");
 const selectTipo = document.getElementById("tipo");
