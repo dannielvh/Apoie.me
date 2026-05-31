@@ -5,15 +5,73 @@ const centroController = require('../controllers/centroController');
 const autenticar = require('../middlewares/authMiddlewares');
 
 
-router.get('/centros/meu-centro', autenticar, centroController.buscarCentroUsuario);
-router.put('/centros/meu-centro', autenticar, centroController.atualizarMeuCentro);
+// ======================================
+// TESTE DA ROTA MEU CENTRO
+// ======================================
+router.get(
+  '/centros/meu-centro',
+  autenticar,
+  centroController.buscarCentroUsuario
+);
 
 
-router.post('/centros', autenticar,centroController.criarCentro);
-router.get('/centros', centroController.listarCentros);
-router.put('/centros/:id', autenticar,centroController.atualizarCentro);
-router.delete('/centros/:id', autenticar,centroController.deletarCentro);
+// ======================================
+// ATUALIZAR CENTRO DO USUÁRIO
+// ======================================
+router.put(
+  '/centros/meu-centro',
+  autenticar,
+  centroController.atualizarMeuCentro
+);
 
-router.patch('/:id/aprovar', autenticar,centroController.aprovarCentro);
+
+// ======================================
+// CRIAR CENTRO
+// ======================================
+router.post(
+  '/centros',
+  autenticar,
+  centroController.criarCentro
+);
+
+
+// ======================================
+// LISTAR CENTROS
+// ======================================
+router.get(
+  '/centros',
+  centroController.listarCentros
+);
+
+
+// ======================================
+// ATUALIZAR CENTRO
+// ======================================
+router.put(
+  '/centros/:id',
+  autenticar,
+  centroController.atualizarCentro
+);
+
+
+// ======================================
+// DELETAR CENTRO
+// ======================================
+router.delete(
+  '/centros/:id',
+  autenticar,
+  centroController.deletarCentro
+);
+
+
+// ======================================
+// APROVAR CENTRO
+// ======================================
+router.patch(
+  '/centros/:id/aprovar',
+  autenticar,
+  centroController.aprovarCentro
+);
+
 
 module.exports = router;
