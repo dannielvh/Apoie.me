@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <title>Voluntários | Apoie.me</title>
+</head>
+
+<body class="voluntarios-page">
+  <div id="header"></div>
+
+  <main class="voluntarios">
+
+    <!-- TOPO -->
+    <section class="voluntarios__hero">
+      <div>
+        <span class="voluntarios__badge">
+          <i class="fa-solid fa-users"></i>
+          Painel do Centro
+        </span>
+
+        <h1>Voluntários</h1>
+        <p>
+          Veja pessoas disponíveis para ajudar, filtre por habilidades
+          e selecione os voluntários mais adequados para o seu centro.
+        </p>
+      </div>
+
+      <a href="centroDashboard.html" class="voluntarios__back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar ao painel
+      </a>
+    </section>
+
+    <!-- AVISO -->
+    <section id="voluntariosAviso" class="voluntarios__aviso hidden">
+      <!-- JS preenche caso o centro não esteja aprovado -->
+    </section>
+
+    <!-- RESUMO -->
+    <section class="voluntarios__cards">
+
+      <div class="voluntario-card">
+        <div class="voluntario-card__icon">
+          <i class="fa-solid fa-user-check"></i>
+        </div>
+
+        <div>
+          <span>Voluntários encontrados</span>
+          <strong id="totalVoluntarios">0</strong>
+        </div>
+      </div>
+
+      <div class="voluntario-card">
+        <div class="voluntario-card__icon">
+          <i class="fa-solid fa-location-dot"></i>
+        </div>
+
+        <div>
+          <span>Cidade do centro</span>
+          <strong id="cidadeCentro">-</strong>
+        </div>
+      </div>
+
+      <div class="voluntario-card">
+        <div class="voluntario-card__icon">
+          <i class="fa-solid fa-handshake-angle"></i>
+        </div>
+
+        <div>
+          <span>Selecionados</span>
+          <strong id="totalSelecionados">0</strong>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CONTEÚDO -->
+    <section class="voluntarios__layout">
+
+      <!-- LISTA DE VOLUNTÁRIOS -->
+      <section class="voluntarios__panel">
+        <div class="panel-header">
+          <div>
+            <h2>Voluntários da sua cidade</h2>
+            <p>
+              Inicialmente são exibidos voluntários da mesma cidade do centro.
+            </p>
+          </div>
+
+          <span class="limit-info">
+            Mostrando até 10
+          </span>
+        </div>
+
+        <div id="listaVoluntarios" class="voluntarios-lista">
+          <!-- JS vai renderizar os cards aqui -->
+        </div>
+      </section>
+
+      <!-- FILTROS -->
+      <aside class="voluntarios__filters">
+        <div class="filter-card">
+          <h3>Filtrar voluntários</h3>
+          <p>Refine a busca por perfil, habilidade ou disponibilidade.</p>
+
+          <form id="formFiltrosVoluntarios">
+
+            <div class="form-group">
+              <label for="filtroHabilidade">Habilidade</label>
+              <input 
+                type="text" 
+                id="filtroHabilidade" 
+                placeholder="Ex: transporte, enfermagem..."
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="filtroDisponibilidade">Disponibilidade</label>
+              <select id="filtroDisponibilidade">
+                <option value="">Todas</option>
+                <option value="manha">Manhã</option>
+                <option value="tarde">Tarde</option>
+                <option value="noite">Noite</option>
+                <option value="finais de semana">Finais de semana</option>
+                <option value="qualquer horário">Qualquer horário</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="filtroCidade">Cidade</label>
+              <input 
+                type="text" 
+                id="filtroCidade" 
+                placeholder="Cidade"
+              >
+            </div>
+
+            <button type="submit">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              Aplicar filtros
+            </button>
+
+            <button type="button" id="btnLimparFiltros" class="btn-limpar">
+              Limpar filtros
+            </button>
+
+          </form>
+        </div>
+
+        <div class="filter-card filter-card--info">
+          <h3>Como funciona?</h3>
+
+          <ul>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Veja voluntários cadastrados.
+            </li>
+
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Abra os detalhes do candidato.
+            </li>
+
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Selecione quem se encaixa melhor.
+            </li>
+
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Depois entre em contato por fora.
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL DETALHES -->
+  <div id="modalVoluntario" class="modal-voluntario hidden">
+    <div class="modal-voluntario__content">
+
+      <button id="btnFecharModalVoluntario" class="modal-voluntario__close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="modal-voluntario__header">
+        <div class="modal-voluntario__icon">
+          <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div>
+          <h2 id="modalNome">Nome do voluntário</h2>
+          <p id="modalCidade">Cidade</p>
+        </div>
+      </div>
+
+      <div class="modal-voluntario__body">
+
+        <div class="detail-item">
+          <span>Telefone</span>
+          <strong id="modalTelefone">-</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Email</span>
+          <strong id="modalEmail">-</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Habilidades</span>
+          <strong id="modalHabilidades">-</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Disponibilidade</span>
+          <strong id="modalDisponibilidade">-</strong>
+        </div>
+
+        <div class="detail-item detail-item--full">
+          <span>Experiência</span>
+          <p id="modalExperiencia">-</p>
+        </div>
+
+        <div class="detail-item detail-item--full">
+          <span>Observação</span>
+          <p id="modalObservacao">-</p>
+        </div>
+
+      </div>
+
+      <div class="modal-voluntario__actions">
+        <button id="btnSelecionarVoluntario">
+          <i class="fa-solid fa-check"></i>
+          Selecionar voluntário
+        </button>
+
+        <button id="btnCancelarModalVoluntario" class="btn-cancelar">
+          Cancelar
+        </button>
+      </div>
+
+      <p id="msgModalVoluntario"></p>
+
+    </div>
+  </div>
+
+  <script src="../../js/components/headerCentro.js"></script>
+  <script src="../../js/painelCentro/voluntarios.js"></script>
+</body>
+
+</html>

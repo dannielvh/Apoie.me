@@ -293,3 +293,136 @@ exports.selecionarVoluntario = async (req, res) => {
     res.status(500).json({ erro: "Erro ao selecionar voluntário" });
   }
 };
+
+
+// ===============================
+// LISTAR VOLUNTÁRIOS SELECIONADOS PELO MEU CENTRO
+// ===============================
+exports.listarSelecionadosDoMeuCentro = async (req, res) => {
+  const usuarioId = req.usuario.id;
+
+  try {
+    // Busca o centro do usuário logado
+    const centroResult = await pool.query(
+      `SELECT id, status FROM centros
+       WHERE usuario_id = $1
+       LIMIT 1`,
+      [usuarioId]
+    );
+
+    if (centroResult.rows.length === 0) {
+      return res.status(403).json({
+        erro: "Você não possui um centro cadastrado"
+      });
+    }
+
+    const centro = centroResult.rows[0];
+
+    if (centro.status !== "aprovado") {
+      return res.status(403).json({
+        erro: "Seu centro precisa estar aprovado para ver voluntários selecionados"
+      });
+    }
+
+    const result = await pool.query(
+      `SELECT 
+        vs.id AS selecao_id,
+        vs.status AS status_selecao,
+        vs.mensagem,
+        vs.criado_em,
+
+        v.id AS voluntario_id,
+        v.nome,
+        v.telefone,
+        v.email,
+        v.cidade,
+        v.habilidades,
+        v.disponibilidade,
+        v.experiencia,
+        v.observacao
+       FROM voluntarios_selecionados vs
+       JOIN voluntarios v ON v.id = vs.voluntario_id
+       WHERE vs.centro_id = $1
+       ORDER BY vs.criado_em DESC`,
+      [centro.id]
+    );
+
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      erro: "Erro ao listar voluntários selecionados"
+    });
+  }
+};
+
+// ===============================
+// ATUALIZAR STATUS DA SELEÇÃO DO VOLUNTÁRIO
+// ===============================
+exports.atualizarStatusSelecionado = async (req, res) => {
+  const usuarioId = req.usuario.id;
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const statusPermitidos = ["selecionado", "contatado", "recusado", "cancelado"];
+
+  try {
+    if (!id || isNaN(id)) {
+      return res.status(400).json({ erro: "ID inválido" });
+    }
+
+    if (!statusPermitidos.includes(status)) {
+      return res.status(400).json({ erro: "Status inválido" });
+    }
+
+    // Busca o centro do usuário logado
+    const centroResult = await pool.query(
+      `SELECT id, status FROM centros
+       WHERE usuario_id = $1
+       LIMIT 1`,
+      [usuarioId]
+    );
+
+    if (centroResult.rows.length === 0) {
+      return res.status(403).json({
+        erro: "Você não possui um centro cadastrado"
+      });
+    }
+
+    const centro = centroResult.rows[0];
+
+    if (centro.status !== "aprovado") {
+      return res.status(403).json({
+        erro: "Seu centro precisa estar aprovado"
+      });
+    }
+
+    // Atualiza apenas seleção que pertence ao centro logado
+    const result = await pool.query(
+      `UPDATE voluntarios_selecionados
+       SET status = $1
+       WHERE id = $2
+       AND centro_id = $3
+       RETURNING *`,
+      [status, id, centro.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        erro: "Seleção não encontrada para este centro"
+      });
+    }
+
+    res.json({
+      msg: "Status atualizado com sucesso",
+      selecao: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      erro: "Erro ao atualizar status da seleção"
+    });
+  }
+};
