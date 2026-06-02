@@ -13,6 +13,7 @@ if (!token) {
 // ELEMENTOS DA PÁGINA
 // ===============================
 const listaVoluntarios = document.getElementById("listaVoluntarios");
+const listaSelecionados = document.getElementById("listaSelecionados");
 
 const totalVoluntarios = document.getElementById("totalVoluntarios");
 const cidadeCentro = document.getElementById("cidadeCentro");
@@ -26,7 +27,10 @@ const filtroDisponibilidade = document.getElementById("filtroDisponibilidade");
 const filtroCidade = document.getElementById("filtroCidade");
 const btnLimparFiltros = document.getElementById("btnLimparFiltros");
 
-// Modal
+
+// ===============================
+// ELEMENTOS DO MODAL
+// ===============================
 const modalVoluntario = document.getElementById("modalVoluntario");
 const btnFecharModalVoluntario = document.getElementById("btnFecharModalVoluntario");
 const btnCancelarModalVoluntario = document.getElementById("btnCancelarModalVoluntario");
@@ -77,6 +81,17 @@ function formatarStatus(status) {
   return statusMap[status] || status || "-";
 }
 
+function formatarStatusSelecao(status) {
+  const statusMap = {
+    selecionado: "Selecionado",
+    contatado: "Contatado",
+    recusado: "Recusado",
+    cancelado: "Cancelado"
+  };
+
+  return statusMap[status] || status || "-";
+}
+
 
 // ===============================
 // CARREGAR CENTRO DO USUÁRIO
@@ -115,7 +130,7 @@ async function carregarCentroLogado() {
 
 
 // ===============================
-// CONTROLAR ACESSO POR STATUS
+// CONTROLAR ACESSO PELO STATUS
 // ===============================
 function controlarAcessoCentro(centro) {
   if (!centro) return false;
@@ -147,6 +162,16 @@ function controlarAcessoCentro(centro) {
     </div>
   `;
 
+  if (listaSelecionados) {
+    listaSelecionados.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-lock"></i>
+        <h3>Acesso limitado</h3>
+        <p>Voluntários selecionados aparecerão após aprovação do centro.</p>
+      </div>
+    `;
+  }
+
   if (totalVoluntarios) totalVoluntarios.textContent = "0";
   if (totalSelecionados) totalSelecionados.textContent = "0";
 
@@ -155,7 +180,7 @@ function controlarAcessoCentro(centro) {
 
 
 // ===============================
-// CARREGAR VOLUNTÁRIOS
+// CARREGAR VOLUNTÁRIOS DISPONÍVEIS
 // ===============================
 async function carregarVoluntarios(filtros = {}) {
   try {
@@ -177,8 +202,6 @@ async function carregarVoluntarios(filtros = {}) {
       params.append("habilidade", filtros.habilidade.trim());
     }
 
-    // Disponibilidade ainda será filtrada no front,
-    // porque o backend inicial não tem query específica para isso.
     const url = `http://localhost:3000/api/voluntarios?${params.toString()}`;
 
     const res = await fetch(url, {
@@ -202,6 +225,7 @@ async function carregarVoluntarios(filtros = {}) {
 
     let voluntarios = Array.isArray(data) ? data : [];
 
+    // Filtro de disponibilidade no front por enquanto
     if (filtros.disponibilidade) {
       voluntarios = voluntarios.filter((v) =>
         normalizar(v.disponibilidade).includes(normalizar(filtros.disponibilidade))
@@ -210,6 +234,7 @@ async function carregarVoluntarios(filtros = {}) {
 
     voluntariosCarregados = voluntarios;
 
+    // Mostra no máximo 10 na tela
     renderizarVoluntarios(voluntarios.slice(0, 10));
 
     if (totalVoluntarios) {
@@ -231,36 +256,7 @@ async function carregarVoluntarios(filtros = {}) {
 
 
 // ===============================
-// CARREGAR SELECIONADOS
-// ===============================
-async function carregarSelecionados() {
-  try {
-    const res = await fetch("http://localhost:3000/api/voluntarios/selecionados/meu-centro", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      if (totalSelecionados) totalSelecionados.textContent = "0";
-      return;
-    }
-
-    if (totalSelecionados) {
-      totalSelecionados.textContent = Array.isArray(data) ? data.length : 0;
-    }
-
-  } catch (err) {
-    console.error("Erro ao carregar selecionados:", err);
-    if (totalSelecionados) totalSelecionados.textContent = "0";
-  }
-}
-
-
-// ===============================
-// RENDERIZAR VOLUNTÁRIOS
+// RENDERIZAR VOLUNTÁRIOS DISPONÍVEIS
 // ===============================
 function renderizarVoluntarios(voluntarios) {
   listaVoluntarios.innerHTML = "";
@@ -288,10 +284,12 @@ function renderizarVoluntarios(voluntarios) {
 
         <div>
           <h3>${textoOuPadrao(voluntario.nome, "Voluntário")}</h3>
+
           <p>
             <i class="fa-solid fa-location-dot"></i>
             ${textoOuPadrao(voluntario.cidade)}
           </p>
+
           <small>
             <strong>Habilidades:</strong>
             ${textoOuPadrao(voluntario.habilidades, "Não informado")}
@@ -316,7 +314,118 @@ function renderizarVoluntarios(voluntarios) {
 
 
 // ===============================
-// BUSCAR VOLUNTÁRIO LOCAL
+// CARREGAR VOLUNTÁRIOS SELECIONADOS
+// ===============================
+async function carregarSelecionados() {
+  try {
+    if (listaSelecionados) {
+      listaSelecionados.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-spinner"></i>
+          <h3>Carregando selecionados...</h3>
+          <p>Buscando voluntários já escolhidos pelo centro.</p>
+        </div>
+      `;
+    }
+
+    const res = await fetch("http://localhost:3000/api/voluntarios/selecionados/meu-centro", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (totalSelecionados) totalSelecionados.textContent = "0";
+
+      if (listaSelecionados) {
+        listaSelecionados.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <h3>Erro ao carregar selecionados</h3>
+            <p>${data.erro || "Tente novamente mais tarde."}</p>
+          </div>
+        `;
+      }
+
+      return;
+    }
+
+    const selecionados = Array.isArray(data) ? data : [];
+
+    if (totalSelecionados) {
+      totalSelecionados.textContent = selecionados.length;
+    }
+
+    renderizarSelecionados(selecionados);
+
+  } catch (err) {
+    console.error("Erro ao carregar selecionados:", err);
+
+    if (totalSelecionados) totalSelecionados.textContent = "0";
+
+    if (listaSelecionados) {
+      listaSelecionados.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <h3>Erro inesperado</h3>
+          <p>Não foi possível carregar os voluntários selecionados.</p>
+        </div>
+      `;
+    }
+  }
+}
+
+
+// ===============================
+// RENDERIZAR VOLUNTÁRIOS SELECIONADOS
+// ===============================
+function renderizarSelecionados(selecionados) {
+  if (!listaSelecionados) return;
+
+  listaSelecionados.innerHTML = "";
+
+  if (!selecionados || selecionados.length === 0) {
+    listaSelecionados.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-user-clock"></i>
+        <h3>Nenhum voluntário selecionado</h3>
+        <p>Quando você selecionar voluntários, eles aparecerão aqui.</p>
+      </div>
+    `;
+    return;
+  }
+
+  selecionados.forEach((item) => {
+    const div = document.createElement("div");
+    div.classList.add("selecionado-item");
+
+    div.innerHTML = `
+      <div class="selecionado-item__info">
+        <i class="fa-solid fa-user-check"></i>
+
+        <div>
+          <h3>${textoOuPadrao(item.nome, "Voluntário")}</h3>
+          <p>
+            ${textoOuPadrao(item.cidade)}
+            • ${textoOuPadrao(item.habilidades, "Sem habilidades informadas")}
+          </p>
+        </div>
+      </div>
+
+      <span class="selecionado-item__status ${item.status_selecao}">
+        ${formatarStatusSelecao(item.status_selecao)}
+      </span>
+    `;
+
+    listaSelecionados.appendChild(div);
+  });
+}
+
+
+// ===============================
+// ENCONTRAR VOLUNTÁRIO PELO ID
 // ===============================
 function encontrarVoluntarioPorId(id) {
   return voluntariosCarregados.find((v) => Number(v.id) === Number(id));
@@ -324,7 +433,7 @@ function encontrarVoluntarioPorId(id) {
 
 
 // ===============================
-// ABRIR MODAL
+// ABRIR MODAL DE DETALHES
 // ===============================
 function abrirModalVoluntario(voluntario) {
   if (!voluntario) return;
@@ -390,6 +499,10 @@ async function selecionarVoluntario(id) {
 
     await carregarSelecionados();
 
+    setTimeout(() => {
+      fecharModalVoluntario();
+    }, 800);
+
   } catch (err) {
     console.error("Erro ao selecionar voluntário:", err);
     msgModalVoluntario.textContent = "Erro na requisição.";
@@ -399,7 +512,7 @@ async function selecionarVoluntario(id) {
 
 
 // ===============================
-// EVENTOS DA LISTA
+// EVENTOS DA LISTA DE VOLUNTÁRIOS
 // ===============================
 listaVoluntarios.addEventListener("click", (e) => {
   const btnDetalhes = e.target.closest(".btn-detalhes");
@@ -445,7 +558,7 @@ formFiltros.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const filtros = {
-    cidade: filtroCidade.value.trim() || centroLogado.cidade,
+    cidade: filtroCidade.value.trim(), // se vazio, busca todos
     habilidade: filtroHabilidade.value.trim(),
     disponibilidade: filtroDisponibilidade.value.trim()
   };
@@ -456,11 +569,9 @@ formFiltros.addEventListener("submit", async (e) => {
 btnLimparFiltros.addEventListener("click", async () => {
   filtroHabilidade.value = "";
   filtroDisponibilidade.value = "";
-  filtroCidade.value = centroLogado.cidade || "";
+  filtroCidade.value = "";
 
-  await carregarVoluntarios({
-    cidade: centroLogado.cidade
-  });
+  await carregarVoluntarios({});
 });
 
 

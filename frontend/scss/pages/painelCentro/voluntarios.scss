@@ -9,7 +9,7 @@
   padding: 35px 20px;
 
   &__hero {
-    background: linear-gradient(135deg, #2E7D32, #1B5E20);
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
     color: #fff;
     padding: 30px;
     border-radius: 16px;
@@ -45,7 +45,7 @@
 
   &__back {
     background: #fff;
-    color: #1B5E20;
+    color: #1b5e20;
     text-decoration: none;
     padding: 10px 14px;
     border-radius: 8px;
@@ -91,9 +91,29 @@
     align-items: flex-start;
   }
 
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+  }
+
   &__panel,
   &__filters {
     min-width: 0;
+  }
+
+  &__panel {
+    background: #fff;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+  }
+
+  &__filters {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
 }
 
@@ -101,6 +121,7 @@
   display: none !important;
 }
 
+/* CARDS DE RESUMO */
 .voluntario-card {
   background: #fff;
   padding: 20px;
@@ -116,7 +137,7 @@
     height: 48px;
 
     background: #e8f5e9;
-    color: #2E7D32;
+    color: #2e7d32;
     border-radius: 12px;
 
     display: flex;
@@ -135,20 +156,13 @@
 
   strong {
     display: block;
-    color: #2E7D32;
+    color: #2e7d32;
     font-size: 22px;
     margin-top: 4px;
   }
 }
 
-.voluntarios__panel,
-.filter-card {
-  background: #fff;
-  padding: 22px;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
-}
-
+/* CABEÇALHO DOS PAINÉIS */
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -160,7 +174,7 @@
   border-bottom: 1px solid #eee;
 
   h2 {
-    color: #2E7D32;
+    color: #2e7d32;
     font-size: 21px;
     margin-bottom: 5px;
   }
@@ -172,7 +186,7 @@
 
   .limit-info {
     background: #f1f8f2;
-    color: #2E7D32;
+    color: #2e7d32;
     padding: 7px 10px;
     border-radius: 999px;
     font-size: 13px;
@@ -180,6 +194,7 @@
   }
 }
 
+/* LISTA VOLUNTÁRIOS */
 .voluntarios-lista {
   display: flex;
   flex-direction: column;
@@ -198,7 +213,7 @@
   gap: 15px;
 
   &:hover {
-    border-color: #2E7D32;
+    border-color: #2e7d32;
     transform: translateY(-2px);
   }
 
@@ -212,7 +227,7 @@
     height: 46px;
     border-radius: 50%;
     background: #e8f5e9;
-    color: #2E7D32;
+    color: #2e7d32;
 
     display: flex;
     align-items: center;
@@ -254,23 +269,104 @@
 
     .btn-detalhes {
       background: #f1f8f2;
-      color: #2E7D32;
+      color: #2e7d32;
     }
 
     .btn-selecionar {
-      background: #2E7D32;
+      background: #2e7d32;
       color: #fff;
     }
   }
 }
 
+/* LISTA SELECIONADOS */
+.selecionados-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.selecionado-item {
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 14px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+
+  transition: 0.2s;
+
+  &:hover {
+    border-color: #2e7d32;
+    transform: translateY(-2px);
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    i {
+      width: 42px;
+      height: 42px;
+
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.4;
+    }
+  }
+
+  &__status {
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+
+    background: #fff3cd;
+    color: #856404;
+    white-space: nowrap;
+
+    &.contatado {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    &.recusado,
+    &.cancelado {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  }
+}
+
+/* ESTADO VAZIO */
 .empty-state {
   text-align: center;
   padding: 35px 15px;
   color: #666;
 
   i {
-    color: #2E7D32;
+    color: #2e7d32;
     font-size: 34px;
     margin-bottom: 12px;
   }
@@ -285,15 +381,15 @@
   }
 }
 
-.voluntarios__filters {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
+/* FILTROS */
 .filter-card {
+  background: #fff;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+
   h3 {
-    color: #2E7D32;
+    color: #2e7d32;
     font-size: 20px;
     margin-bottom: 6px;
   }
@@ -332,7 +428,7 @@
 
       &:focus {
         outline: none;
-        border-color: #2E7D32;
+        border-color: #2e7d32;
         box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.12);
       }
     }
@@ -351,11 +447,11 @@
     justify-content: center;
     gap: 8px;
 
-    background: #2E7D32;
+    background: #2e7d32;
     color: #fff;
 
     &:hover {
-      background: #1B5E20;
+      background: #1b5e20;
     }
   }
 
@@ -388,7 +484,7 @@
       gap: 9px;
 
       i {
-        color: #2E7D32;
+        color: #2e7d32;
       }
     }
   }
@@ -446,7 +542,7 @@
     margin-bottom: 18px;
 
     h2 {
-      color: #2E7D32;
+      color: #2e7d32;
       margin-bottom: 4px;
     }
 
@@ -461,7 +557,7 @@
     height: 56px;
 
     background: #e8f5e9;
-    color: #2E7D32;
+    color: #2e7d32;
     border-radius: 50%;
 
     display: flex;
@@ -497,11 +593,11 @@
     }
 
     #btnSelecionarVoluntario {
-      background: #2E7D32;
+      background: #2e7d32;
       color: #fff;
 
       &:hover {
-        background: #1B5E20;
+        background: #1b5e20;
       }
     }
 
@@ -547,6 +643,7 @@
   }
 }
 
+/* RESPONSIVO */
 @media (max-width: 900px) {
   .voluntarios {
     &__hero {
@@ -573,6 +670,15 @@
       button {
         flex: 1;
       }
+    }
+  }
+
+  .selecionado-item {
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__status {
+      align-self: flex-start;
     }
   }
 

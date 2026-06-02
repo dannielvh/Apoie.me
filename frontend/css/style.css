@@ -2712,7 +2712,7 @@
   padding: 35px 20px;
 }
 .voluntarios__hero {
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
   color: #fff;
   padding: 30px;
   border-radius: 16px;
@@ -2742,7 +2742,7 @@
 }
 .voluntarios__back {
   background: #fff;
-  color: #1B5E20;
+  color: #1b5e20;
   text-decoration: none;
   padding: 10px 14px;
   border-radius: 8px;
@@ -2780,14 +2780,32 @@
   gap: 22px;
   align-items: flex-start;
 }
+.voluntarios__main {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
 .voluntarios__panel, .voluntarios__filters {
   min-width: 0;
+}
+.voluntarios__panel {
+  background: #fff;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
+.voluntarios__filters {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .hidden {
   display: none !important;
 }
 
+/* CARDS DE RESUMO */
 .voluntario-card {
   background: #fff;
   padding: 20px;
@@ -2801,7 +2819,7 @@
   width: 48px;
   height: 48px;
   background: #e8f5e9;
-  color: #2E7D32;
+  color: #2e7d32;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -2816,19 +2834,12 @@
 }
 .voluntario-card strong {
   display: block;
-  color: #2E7D32;
+  color: #2e7d32;
   font-size: 22px;
   margin-top: 4px;
 }
 
-.voluntarios__panel,
-.filter-card {
-  background: #fff;
-  padding: 22px;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
-}
-
+/* CABEÇALHO DOS PAINÉIS */
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -2839,7 +2850,7 @@
   border-bottom: 1px solid #eee;
 }
 .panel-header h2 {
-  color: #2E7D32;
+  color: #2e7d32;
   font-size: 21px;
   margin-bottom: 5px;
 }
@@ -2849,13 +2860,14 @@
 }
 .panel-header .limit-info {
   background: #f1f8f2;
-  color: #2E7D32;
+  color: #2e7d32;
   padding: 7px 10px;
   border-radius: 999px;
   font-size: 13px;
   white-space: nowrap;
 }
 
+/* LISTA VOLUNTÁRIOS */
 .voluntarios-lista {
   display: flex;
   flex-direction: column;
@@ -2873,7 +2885,7 @@
   gap: 15px;
 }
 .voluntario-item:hover {
-  border-color: #2E7D32;
+  border-color: #2e7d32;
   transform: translateY(-2px);
 }
 .voluntario-item__content {
@@ -2885,7 +2897,7 @@
   height: 46px;
   border-radius: 50%;
   background: #e8f5e9;
-  color: #2E7D32;
+  color: #2e7d32;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2920,20 +2932,86 @@
 }
 .voluntario-item__actions .btn-detalhes {
   background: #f1f8f2;
-  color: #2E7D32;
+  color: #2e7d32;
 }
 .voluntario-item__actions .btn-selecionar {
-  background: #2E7D32;
+  background: #2e7d32;
   color: #fff;
 }
 
+/* LISTA SELECIONADOS */
+.selecionados-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.selecionado-item {
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  transition: 0.2s;
+}
+.selecionado-item:hover {
+  border-color: #2e7d32;
+  transform: translateY(-2px);
+}
+.selecionado-item__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.selecionado-item__info i {
+  width: 42px;
+  height: 42px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.selecionado-item__info h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 4px;
+}
+.selecionado-item__info p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+.selecionado-item__status {
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #fff3cd;
+  color: #856404;
+  white-space: nowrap;
+}
+.selecionado-item__status.contatado {
+  background: #d4edda;
+  color: #155724;
+}
+.selecionado-item__status.recusado, .selecionado-item__status.cancelado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* ESTADO VAZIO */
 .empty-state {
   text-align: center;
   padding: 35px 15px;
   color: #666;
 }
 .empty-state i {
-  color: #2E7D32;
+  color: #2e7d32;
   font-size: 34px;
   margin-bottom: 12px;
 }
@@ -2945,14 +3023,15 @@
   font-size: 14px;
 }
 
-.voluntarios__filters {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+/* FILTROS */
+.filter-card {
+  background: #fff;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
 }
-
 .filter-card h3 {
-  color: #2E7D32;
+  color: #2e7d32;
   font-size: 20px;
   margin-bottom: 6px;
 }
@@ -2988,7 +3067,7 @@
 .filter-card .form-group input:focus,
 .filter-card .form-group select:focus {
   outline: none;
-  border-color: #2E7D32;
+  border-color: #2e7d32;
   box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.12);
 }
 .filter-card button {
@@ -3002,11 +3081,11 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #2E7D32;
+  background: #2e7d32;
   color: #fff;
 }
 .filter-card button:hover {
-  background: #1B5E20;
+  background: #1b5e20;
 }
 .filter-card .btn-limpar {
   background: #f1f1f1;
@@ -3031,7 +3110,7 @@
   gap: 9px;
 }
 .filter-card--info li i {
-  color: #2E7D32;
+  color: #2e7d32;
 }
 
 /* MODAL */
@@ -3078,7 +3157,7 @@
   margin-bottom: 18px;
 }
 .modal-voluntario__header h2 {
-  color: #2E7D32;
+  color: #2e7d32;
   margin-bottom: 4px;
 }
 .modal-voluntario__header p {
@@ -3089,7 +3168,7 @@
   width: 56px;
   height: 56px;
   background: #e8f5e9;
-  color: #2E7D32;
+  color: #2e7d32;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -3119,11 +3198,11 @@
   gap: 8px;
 }
 .modal-voluntario__actions #btnSelecionarVoluntario {
-  background: #2E7D32;
+  background: #2e7d32;
   color: #fff;
 }
 .modal-voluntario__actions #btnSelecionarVoluntario:hover {
-  background: #1B5E20;
+  background: #1b5e20;
 }
 .modal-voluntario__actions .btn-cancelar {
   background: #f1f1f1;
@@ -3160,6 +3239,7 @@
   grid-column: 1/-1;
 }
 
+/* RESPONSIVO */
 @media (max-width: 900px) {
   .voluntarios__hero {
     flex-direction: column;
@@ -3180,6 +3260,13 @@
   }
   .voluntario-item__actions button {
     flex: 1;
+  }
+  .selecionado-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .selecionado-item__status {
+    align-self: flex-start;
   }
   .modal-voluntario__body {
     grid-template-columns: 1fr;

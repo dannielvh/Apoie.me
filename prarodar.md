@@ -70,16 +70,35 @@ Depois selecione esse banco e abra o **Query Tool**.
 Execute este SQL no banco `mapa_apoio`:
 
 ```sql
+
+-- EXTENSÕES
+
+-- Usada para comparar textos ignorando acentos
+-- Exemplo: Divinópolis = Divinopolis
 CREATE EXTENSION IF NOT EXISTS unaccent;
+
+
+-- TABELA DE USUÁRIOS
 
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
+
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     senha VARCHAR(100) NOT NULL,
+
     cidade VARCHAR(100),
-    role VARCHAR(20) DEFAULT 'usuario'
+
+    -- Tipos possíveis:
+    -- usuario = usuário comum
+    -- admin = administrador do sistema
+    role VARCHAR(20) DEFAULT 'usuario',
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- TABELA DE CENTROS DE APOIO
 
 CREATE TABLE centros (
     id SERIAL PRIMARY KEY,
@@ -93,12 +112,67 @@ CREATE TABLE centros (
     cnpj VARCHAR(14),
     descricao TEXT,
     telefone VARCHAR(30),
+
     responsavel_nome VARCHAR(100),
     email_contato VARCHAR(100),
 
+    -- Status possíveis:
+    -- pendente = aguardando aprovação
+    -- aprovado = liberado para aparecer no sistema
+    -- rejeitado = recusado pelo administrador
+    -- suspenso = bloqueado temporariamente
     status VARCHAR(20) DEFAULT 'pendente',
 
+    -- Usuário que solicitou/cadastrou o centro
     usuario_id INT REFERENCES usuarios(id),
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- TABELA DE VOLUNTÁRIOS
+
+CREATE TABLE voluntarios (
+    id SERIAL PRIMARY KEY,
+
+    -- Usuário que se candidatou como voluntário
+    usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
+
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(30) NOT NULL,
+    email VARCHAR(100),
+    cidade VARCHAR(100) NOT NULL,
+
+    habilidades TEXT,
+    disponibilidade TEXT,
+    experiencia TEXT,
+    observacao TEXT,
+
+    -- Status possíveis:
+    -- ativo = disponível para ser visto pelos centros
+    -- inativo = candidatura desativada
+    status VARCHAR(20) DEFAULT 'ativo',
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- TABELA DE VOLUNTÁRIOS SELECIONADOS
+
+CREATE TABLE voluntarios_selecionados (
+    id SERIAL PRIMARY KEY,
+
+    voluntario_id INT REFERENCES voluntarios(id) ON DELETE CASCADE,
+    centro_id INT REFERENCES centros(id) ON DELETE CASCADE,
+
+    -- Status possíveis:
+    -- selecionado = centro escolheu o voluntário
+    -- contatado = centro já entrou em contato
+    -- recusado = seleção recusada
+    -- cancelado = seleção cancelada
+    status VARCHAR(20) DEFAULT 'selecionado',
+
+    mensagem TEXT,
 
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -111,19 +185,42 @@ CREATE TABLE centros (
 Execute também:
 
 ```sql
+-- ÍNDICES / REGRAS DE DUPLICIDADE
+
+-- Evita cadastrar centros com mesmo nome na mesma cidade,
+-- ignorando letras maiúsculas/minúsculas e acentos.
 CREATE UNIQUE INDEX unique_centro_nome_cidade
 ON centros (
   unaccent(lower(nome)),
   unaccent(lower(cidade))
 );
 
+
+-- Evita CNPJ duplicado, mas permite vários centros sem CNPJ.
+-- Importante: CNPJ vazio deve ser salvo como NULL, não como ''.
 CREATE UNIQUE INDEX unique_cnpj
 ON centros (cnpj)
 WHERE cnpj IS NOT NULL;
 
+
+-- Evita que o mesmo usuário cadastre mais de um centro.
+-- Use apenas se a regra do projeto for: 1 usuário representa 1 centro.
 CREATE UNIQUE INDEX unique_centro_por_usuario
 ON centros (usuario_id)
 WHERE usuario_id IS NOT NULL;
+
+
+-- Evita que o mesmo voluntário seja selecionado mais de uma vez
+-- pelo mesmo centro.
+CREATE UNIQUE INDEX unique_voluntario_por_centro
+ON voluntarios_selecionados (voluntario_id, centro_id);
+
+
+-- Evita que o mesmo usuário tenha mais de uma candidatura ativa
+-- como voluntário.
+CREATE UNIQUE INDEX unique_voluntario_ativo_por_usuario
+ON voluntarios (usuario_id)
+WHERE status = 'ativo';
 ```
 
 ---

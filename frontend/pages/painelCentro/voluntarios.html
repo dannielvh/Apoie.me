@@ -3,8 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <link rel="stylesheet" href="../../css/style.css">
+
   <title>Voluntários | Apoie.me</title>
 </head>
 
@@ -22,24 +25,25 @@
         </span>
 
         <h1>Voluntários</h1>
+
         <p>
           Veja pessoas disponíveis para ajudar, filtre por habilidades
           e selecione os voluntários mais adequados para o seu centro.
         </p>
       </div>
 
-      <a href="centroDashboard.html" class="voluntarios__back">
+      <a href="../painelCentro/dashboardCentro.html" class="voluntarios__back">
         <i class="fa-solid fa-arrow-left"></i>
         Voltar ao painel
       </a>
     </section>
 
-    <!-- AVISO -->
+    <!-- AVISO DE STATUS -->
     <section id="voluntariosAviso" class="voluntarios__aviso hidden">
       <!-- JS preenche caso o centro não esteja aprovado -->
     </section>
 
-    <!-- RESUMO -->
+    <!-- CARDS DE RESUMO -->
     <section class="voluntarios__cards">
 
       <div class="voluntario-card">
@@ -77,48 +81,75 @@
 
     </section>
 
-    <!-- CONTEÚDO -->
+    <!-- CONTEÚDO PRINCIPAL -->
     <section class="voluntarios__layout">
 
-      <!-- LISTA DE VOLUNTÁRIOS -->
-      <section class="voluntarios__panel">
-        <div class="panel-header">
-          <div>
-            <h2>Voluntários da sua cidade</h2>
-            <p>
-              Inicialmente são exibidos voluntários da mesma cidade do centro.
-            </p>
+      <!-- COLUNA PRINCIPAL -->
+      <div class="voluntarios__main">
+
+        <!-- LISTA DE VOLUNTÁRIOS DISPONÍVEIS -->
+        <section class="voluntarios__panel">
+          <div class="panel-header">
+            <div>
+              <h2>Voluntários Disponíveis</h2>
+              <p>
+                Inicialmente são exibidos voluntários da mesma cidade do centro. Use os filtros para expandir a busca ou encontrar perfis específicos.
+              </p>
+            </div>
+
+            <span class="limit-info">
+              Mostrando até 10
+            </span>
           </div>
 
-          <span class="limit-info">
-            Mostrando até 10
-          </span>
-        </div>
+          <div id="listaVoluntarios" class="voluntarios-lista">
+            <!-- JS renderiza os voluntários disponíveis -->
+          </div>
+        </section>
 
-        <div id="listaVoluntarios" class="voluntarios-lista">
-          <!-- JS vai renderizar os cards aqui -->
-        </div>
-      </section>
+        <!-- VOLUNTÁRIOS SELECIONADOS -->
+        <section class="voluntarios__panel voluntarios__selecionados">
+          <div class="panel-header">
+            <div>
+              <h2>Voluntários selecionados</h2>
+              <p>
+                Pessoas que já foram escolhidas pelo centro para possível contato.
+              </p>
+            </div>
+          </div>
+
+          <div id="listaSelecionados" class="selecionados-lista">
+            <!-- JS renderiza os voluntários selecionados -->
+          </div>
+        </section>
+
+      </div>
 
       <!-- FILTROS -->
       <aside class="voluntarios__filters">
+
         <div class="filter-card">
           <h3>Filtrar voluntários</h3>
-          <p>Refine a busca por perfil, habilidade ou disponibilidade.</p>
+
+          <p>
+            Refine a busca por perfil, habilidade ou disponibilidade.
+          </p>
 
           <form id="formFiltrosVoluntarios">
 
             <div class="form-group">
               <label for="filtroHabilidade">Habilidade</label>
-              <input 
-                type="text" 
-                id="filtroHabilidade" 
+
+              <input
+                type="text"
+                id="filtroHabilidade"
                 placeholder="Ex: transporte, enfermagem..."
               >
             </div>
 
             <div class="form-group">
               <label for="filtroDisponibilidade">Disponibilidade</label>
+
               <select id="filtroDisponibilidade">
                 <option value="">Todas</option>
                 <option value="manha">Manhã</option>
@@ -131,9 +162,10 @@
 
             <div class="form-group">
               <label for="filtroCidade">Cidade</label>
-              <input 
-                type="text" 
-                id="filtroCidade" 
+
+              <input
+                type="text"
+                id="filtroCidade"
                 placeholder="Cidade"
               >
             </div>
@@ -175,17 +207,18 @@
             </li>
           </ul>
         </div>
+
       </aside>
 
     </section>
 
   </main>
 
-  <!-- MODAL DETALHES -->
+  <!-- MODAL DETALHES DO VOLUNTÁRIO -->
   <div id="modalVoluntario" class="modal-voluntario hidden">
     <div class="modal-voluntario__content">
 
-      <button id="btnFecharModalVoluntario" class="modal-voluntario__close">
+      <button id="btnFecharModalVoluntario" class="modal-voluntario__close" type="button">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
@@ -235,12 +268,12 @@
       </div>
 
       <div class="modal-voluntario__actions">
-        <button id="btnSelecionarVoluntario">
+        <button id="btnSelecionarVoluntario" type="button">
           <i class="fa-solid fa-check"></i>
           Selecionar voluntário
         </button>
 
-        <button id="btnCancelarModalVoluntario" class="btn-cancelar">
+        <button id="btnCancelarModalVoluntario" class="btn-cancelar" type="button">
           Cancelar
         </button>
       </div>
