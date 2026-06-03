@@ -13,7 +13,7 @@ async function carregarNecessidades() {
   try {
     loadingMsg.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Carregando necessidades...";
 
-    const res = await fetch("http://localhost:3000/necessidades");
+    const res = await fetch("http://localhost:3000/api/necessidades");
     const data = await res.json();
 
     loadingMsg.remove();
@@ -72,7 +72,7 @@ function criarCard(necessidade) {
     </div>
 
     <p class="pedido-progresso-texto">
-      ${necessidade.quantidadeAtendida} de ${necessidade.quantidadeNecessaria} — faltam ${faltam}
+      ${necessidade.quantidadeAtendida} de ${necessidade.quantidadeNecessaria} unidades arrecadadas — faltam ${faltam}
     </p>
 
     <button class="btn-quero-ajudar" data-id="${necessidade.id}">
@@ -143,7 +143,7 @@ btnConfirmar.addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch("http://localhost:3000/doacoes", {
+    const res = await fetch("http://localhost:3000/api/doacoes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

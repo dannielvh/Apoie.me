@@ -20,7 +20,7 @@ const necessidades = [
     categoria: "Alimentação",
     quantidadeNecessaria: 100,
     quantidadeAtendida: 65,
-    urgencia: "crítica"
+    urgencia: "critica"
   },
   {
     id: 2,
@@ -38,7 +38,7 @@ const necessidades = [
     categoria: "Alimentação",
     quantidadeNecessaria: 200,
     quantidadeAtendida: 80,
-    urgencia: "crítica"
+    urgencia: "critica"
   },
   {
     id: 4,
