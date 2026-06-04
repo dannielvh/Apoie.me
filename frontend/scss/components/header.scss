@@ -21,15 +21,8 @@
     align-items: center;
     gap: 10px;
 
-    i {
-      color: #2e7d32;
-      font-size: 32px;
-    }
-
-    span {
-      font-size: 28px;
-      font-weight: bold;
-      color: #2e7d32;
+    img {
+      height: 60px;
     }
   }
 
@@ -186,8 +179,8 @@
   // TELAS MÉDIAS
   @media (max-width: 950px) {
     &__logo {
-      span {
-        font-size: 24px;
+      img {
+        height: 45px;
       }
     }
 
@@ -215,6 +208,7 @@
 
   // MOBILE
   @media (max-width: 768px) {
+
     &__toggle {
       display: block;
     }

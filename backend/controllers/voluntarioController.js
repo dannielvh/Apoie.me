@@ -1,428 +1,113 @@
-/*
-  CONTROLLER DE VOLUNTÁRIOS
-
-  Responsável por:
-  - cadastrar candidatura de voluntário
-  - listar voluntários disponíveis
-  - buscar detalhes de um voluntário
-  - permitir que um centro aprovado selecione um voluntário
-
-  IMPORTANTE:
-  Nesta primeira versão, algumas rotas ainda usam validações diretamente
-  dentro do controller.
-
-  Próximo passo recomendado:
-  criar um middleware "verificarCentroAprovado" para centralizar a regra:
-
-  usuário logado -> possui centro -> centro está aprovado
-
-  Esse middleware deverá ser usado nas rotas do painel do centro, como:
-  - listar voluntários
-  - buscar detalhes do voluntário
-  - selecionar voluntário
-  - criar pedidos de doação
-*/
-
+// conexão com banco de dados
 const pool = require("../config/db");
 
-// ===============================
-// CADASTRAR CANDIDATURA DE VOLUNTÁRIO
-// ===============================
+
+// ======================================
+// CADASTRAR PERFIL DE VOLUNTÁRIO
+// ======================================
 exports.cadastrarVoluntario = async (req, res) => {
+
+  // usuário obtido através do token
   const usuarioId = req.usuario.id;
 
-  let {
-    nome,
+  const {
     telefone,
-    email,
-    cidade,
-    habilidades,
     disponibilidade,
-    experiencia,
-    observacao
+    habilidades
   } = req.body;
 
   try {
-    if (!nome || !telefone || !cidade) {
+
+    // validação básica
+    if (!telefone || !disponibilidade) {
       return res.status(400).json({
-        erro: "Nome, telefone e cidade são obrigatórios"
+        erro: "Telefone e disponibilidade são obrigatórios"
       });
     }
 
-    nome = nome.trim();
-    telefone = telefone.trim();
-    cidade = cidade.trim();
-
-    email = email ? email.trim() : null;
-    habilidades = habilidades ? habilidades.trim() : null;
-    disponibilidade = disponibilidade ? disponibilidade.trim() : null;
-    experiencia = experiencia ? experiencia.trim() : null;
-    observacao = observacao ? observacao.trim() : null;
-
-    // Evita o mesmo usuário cadastrar várias candidaturas ativas
+    // verifica se já possui perfil
     const existe = await pool.query(
-      `SELECT 1 FROM voluntarios
-       WHERE usuario_id = $1
-       AND status = 'ativo'`,
+      `SELECT id
+       FROM voluntarios
+       WHERE usuario_id = $1`,
       [usuarioId]
     );
 
     if (existe.rows.length > 0) {
       return res.status(400).json({
-        erro: "Você já possui uma candidatura ativa como voluntário"
+        erro: "Usuário já possui cadastro de voluntário"
       });
     }
 
+    // cria perfil
     const result = await pool.query(
       `INSERT INTO voluntarios
-       (usuario_id, nome, telefone, email, cidade, habilidades, disponibilidade, experiencia, observacao, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'ativo')
-       RETURNING *`,
+      (
+        usuario_id,
+        telefone,
+        disponibilidade,
+        habilidades
+      )
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
       [
         usuarioId,
-        nome,
         telefone,
-        email,
-        cidade,
-        habilidades,
         disponibilidade,
-        experiencia,
-        observacao
+        habilidades
       ]
     );
 
     res.status(201).json({
-      msg: "Candidatura cadastrada com sucesso",
+      msg: "Voluntário cadastrado com sucesso",
       voluntario: result.rows[0]
     });
 
   } catch (err) {
+
     console.error(err);
-    res.status(500).json({ erro: "Erro ao cadastrar voluntário" });
+
+    res.status(500).json({
+      erro: "Erro ao cadastrar voluntário"
+    });
   }
 };
 
 
-// ===============================
-// LISTAR VOLUNTÁRIOS
-// ===============================
-// TODO:
-// Hoje qualquer usuário logado consegue listar voluntários.
-// Futuramente, essa rota deve ser liberada apenas para responsáveis
-// por centros de apoio aprovados.
-//
-// Melhor abordagem:
-// criar middleware verificarCentroAprovado e aplicar na rota.
-exports.listarVoluntarios = async (req, res) => {
-  const { cidade, habilidade } = req.query;
+// ======================================
+// BUSCAR PERFIL DO VOLUNTÁRIO
+// ======================================
+exports.buscarMeuPerfil = async (req, res) => {
+
+  const usuarioId = req.usuario.id;
+
+  console.log("USUARIO LOGADO:", usuarioId);
 
   try {
-    let query = `
-      SELECT 
-        id,
-        nome,
-        telefone,
-        email,
-        cidade,
-        habilidades,
-        disponibilidade,
-        experiencia,
-        observacao,
-        status,
-        criado_em
-      FROM voluntarios
-      WHERE status = 'ativo'
-    `;
-
-    const values = [];
-
-    if (cidade) {
-      values.push(`%${cidade.trim()}%`);
-      query += `
-        AND unaccent(lower(cidade))
-        LIKE unaccent(lower($${values.length}))
-      `;
-    }
-
-    if (habilidade) {
-      values.push(`%${habilidade.trim()}%`);
-      query += `
-        AND unaccent(lower(habilidades))
-        LIKE unaccent(lower($${values.length}))
-      `;
-    }
-
-    query += ` ORDER BY criado_em DESC`;
-
-    const result = await pool.query(query, values);
-
-    res.json(result.rows);
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: "Erro ao listar voluntários" });
-  }
-};
-
-
-// ===============================
-// BUSCAR VOLUNTÁRIO POR ID
-// ===============================
-// TODO:
-// Futuramente proteger esta rota para que apenas centros aprovados
-// possam visualizar os detalhes completos de contato do voluntário.
-//
-// Motivo:
-// telefone e email são dados sensíveis e não devem ficar abertos
-// para qualquer usuário logado.
-exports.buscarVoluntarioPorId = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    if (!id || isNaN(id)) {
-      return res.status(400).json({ erro: "ID inválido" });
-    }
 
     const result = await pool.query(
-      `SELECT 
-        id,
-        nome,
-        telefone,
-        email,
-        cidade,
-        habilidades,
-        disponibilidade,
-        experiencia,
-        observacao,
-        status,
-        criado_em
+      `SELECT *
        FROM voluntarios
-       WHERE id = $1`,
-      [id]
+       WHERE usuario_id = $1`,
+      [usuarioId]
     );
 
+    console.log("RESULTADO QUERY:", result.rows);
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ erro: "Voluntário não encontrado" });
+      return res.status(404).json({
+        erro: "Perfil não encontrado"
+      });
     }
 
     res.json(result.rows[0]);
 
   } catch (err) {
+
     console.error(err);
-    res.status(500).json({ erro: "Erro ao buscar voluntário" });
-  }
-};
 
-
-// ===============================
-// SELECIONAR VOLUNTÁRIO PARA UM CENTRO
-// ===============================
-exports.selecionarVoluntario = async (req, res) => {
-  const usuarioId = req.usuario.id;
-  const { id } = req.params;
-  const { mensagem } = req.body;
-
-  try {
-    if (!id || isNaN(id)) {
-      return res.status(400).json({ erro: "ID do voluntário inválido" });
-    }
-
-    // Busca o centro do usuário logado
-    const centroResult = await pool.query(
-      `SELECT id, status FROM centros
-       WHERE usuario_id = $1
-       LIMIT 1`,
-      [usuarioId]
-    );
-
-    if (centroResult.rows.length === 0) {
-      return res.status(403).json({
-        erro: "Você não possui um centro cadastrado"
-      });
-    }
-
-    const centro = centroResult.rows[0];
-
-    if (centro.status !== "aprovado") {
-      return res.status(403).json({
-        erro: "Seu centro precisa estar aprovado para selecionar voluntários"
-      });
-    }
-
-    // Verifica se voluntário existe
-    const voluntarioResult = await pool.query(
-      `SELECT 1 FROM voluntarios WHERE id = $1 AND status = 'ativo'`,
-      [id]
-    );
-
-    if (voluntarioResult.rows.length === 0) {
-      return res.status(404).json({
-        erro: "Voluntário não encontrado ou inativo"
-      });
-    }
-
-    // Evita selecionar o mesmo voluntário várias vezes para o mesmo centro
-    const jaSelecionado = await pool.query(
-      `SELECT 1 FROM voluntarios_selecionados
-       WHERE voluntario_id = $1
-       AND centro_id = $2`,
-      [id, centro.id]
-    );
-
-    if (jaSelecionado.rows.length > 0) {
-      return res.status(400).json({
-        erro: "Esse voluntário já foi selecionado por este centro"
-      });
-    }
-
-    const result = await pool.query(
-      `INSERT INTO voluntarios_selecionados
-       (voluntario_id, centro_id, status, mensagem)
-       VALUES ($1,$2,'selecionado',$3)
-       RETURNING *`,
-      [id, centro.id, mensagem || null]
-    );
-
-    res.status(201).json({
-      msg: "Voluntário selecionado com sucesso",
-      selecao: result.rows[0]
-    });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: "Erro ao selecionar voluntário" });
-  }
-};
-
-
-// ===============================
-// LISTAR VOLUNTÁRIOS SELECIONADOS PELO MEU CENTRO
-// ===============================
-exports.listarSelecionadosDoMeuCentro = async (req, res) => {
-  const usuarioId = req.usuario.id;
-
-  try {
-    // Busca o centro do usuário logado
-    const centroResult = await pool.query(
-      `SELECT id, status FROM centros
-       WHERE usuario_id = $1
-       LIMIT 1`,
-      [usuarioId]
-    );
-
-    if (centroResult.rows.length === 0) {
-      return res.status(403).json({
-        erro: "Você não possui um centro cadastrado"
-      });
-    }
-
-    const centro = centroResult.rows[0];
-
-    if (centro.status !== "aprovado") {
-      return res.status(403).json({
-        erro: "Seu centro precisa estar aprovado para ver voluntários selecionados"
-      });
-    }
-
-    const result = await pool.query(
-      `SELECT 
-        vs.id AS selecao_id,
-        vs.status AS status_selecao,
-        vs.mensagem,
-        vs.criado_em,
-
-        v.id AS voluntario_id,
-        v.nome,
-        v.telefone,
-        v.email,
-        v.cidade,
-        v.habilidades,
-        v.disponibilidade,
-        v.experiencia,
-        v.observacao
-       FROM voluntarios_selecionados vs
-       JOIN voluntarios v ON v.id = vs.voluntario_id
-       WHERE vs.centro_id = $1
-       ORDER BY vs.criado_em DESC`,
-      [centro.id]
-    );
-
-    res.json(result.rows);
-
-  } catch (err) {
-    console.error(err);
     res.status(500).json({
-      erro: "Erro ao listar voluntários selecionados"
-    });
-  }
-};
-
-// ===============================
-// ATUALIZAR STATUS DA SELEÇÃO DO VOLUNTÁRIO
-// ===============================
-exports.atualizarStatusSelecionado = async (req, res) => {
-  const usuarioId = req.usuario.id;
-  const { id } = req.params;
-  const { status } = req.body;
-
-  const statusPermitidos = ["selecionado", "contatado", "recusado", "cancelado"];
-
-  try {
-    if (!id || isNaN(id)) {
-      return res.status(400).json({ erro: "ID inválido" });
-    }
-
-    if (!statusPermitidos.includes(status)) {
-      return res.status(400).json({ erro: "Status inválido" });
-    }
-
-    // Busca o centro do usuário logado
-    const centroResult = await pool.query(
-      `SELECT id, status FROM centros
-       WHERE usuario_id = $1
-       LIMIT 1`,
-      [usuarioId]
-    );
-
-    if (centroResult.rows.length === 0) {
-      return res.status(403).json({
-        erro: "Você não possui um centro cadastrado"
-      });
-    }
-
-    const centro = centroResult.rows[0];
-
-    if (centro.status !== "aprovado") {
-      return res.status(403).json({
-        erro: "Seu centro precisa estar aprovado"
-      });
-    }
-
-    // Atualiza apenas seleção que pertence ao centro logado
-    const result = await pool.query(
-      `UPDATE voluntarios_selecionados
-       SET status = $1
-       WHERE id = $2
-       AND centro_id = $3
-       RETURNING *`,
-      [status, id, centro.id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        erro: "Seleção não encontrada para este centro"
-      });
-    }
-
-    res.json({
-      msg: "Status atualizado com sucesso",
-      selecao: result.rows[0]
-    });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      erro: "Erro ao atualizar status da seleção"
+      erro: "Erro ao buscar perfil"
     });
   }
 };
