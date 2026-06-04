@@ -102,6 +102,54 @@ CREATE TABLE centros (
 
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+<<<<<<< Updated upstream
+=======
+
+
+-- TABELA DE VOLUNTÁRIOS
+
+CREATE TABLE voluntarios (
+    id SERIAL PRIMARY KEY,
+
+    -- Usuário que se candidatou como voluntário
+    usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
+
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(30) NOT NULL,
+    email VARCHAR(100),
+    cidade VARCHAR(100) NOT NULL,
+
+    habilidades TEXT,
+    disponibilidade TEXT,
+    experiencia TEXT,
+    observacao TEXT,
+
+    -- Status possíveis:
+    -- ativo = disponível para ser visto pelos centros
+    -- inativo = candidatura desativada
+    status VARCHAR(20) DEFAULT 'ativo',
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- TABELA DE CANDIDATURAS DE VOLUNTARIOS
+
+CREATE TABLE candidaturas (
+  id SERIAL PRIMARY KEY,
+
+  usuario_id INT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  centro_id INT NOT NULL REFERENCES centros(id) ON DELETE CASCADE,
+
+  status VARCHAR(20) DEFAULT 'pendente',
+  data_candidatura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT unique_candidatura_usuario_centro UNIQUE (usuario_id, centro_id),
+
+  CONSTRAINT check_status_candidatura
+  CHECK (status IN ('pendente', 'aprovada', 'rejeitada'))
+);
+>>>>>>> Stashed changes
 ```
 
 ---
@@ -124,6 +172,22 @@ WHERE cnpj IS NOT NULL;
 CREATE UNIQUE INDEX unique_centro_por_usuario
 ON centros (usuario_id)
 WHERE usuario_id IS NOT NULL;
+<<<<<<< Updated upstream
+=======
+
+
+-- Evita que o mesmo voluntário seja selecionado mais de uma vez
+-- pelo mesmo centro.
+CREATE UNIQUE INDEX unique_voluntario_por_centro
+ON candidaturas (voluntario_id, centro_id);
+
+
+-- Evita que o mesmo usuário tenha mais de uma candidatura ativa
+-- como voluntário.
+CREATE UNIQUE INDEX unique_voluntario_ativo_por_usuario
+ON voluntarios (usuario_id)
+WHERE status = 'ativo';
+>>>>>>> Stashed changes
 ```
 
 ---

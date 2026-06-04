@@ -6,26 +6,36 @@ const pool = require("../config/db");
 // CADASTRAR PERFIL DE VOLUNTÁRIO
 // ======================================
 exports.cadastrarVoluntario = async (req, res) => {
-
-  // usuário obtido através do token
   const usuarioId = req.usuario.id;
 
-  const {
+  let {
+    nome,
     telefone,
+    email,
+    cidade,
+    habilidades,
     disponibilidade,
-    habilidades
+    experiencia,
+    observacao
   } = req.body;
 
   try {
-
-    // validação básica
-    if (!telefone || !disponibilidade) {
+    if (!nome || !telefone || !cidade || !disponibilidade) {
       return res.status(400).json({
-        erro: "Telefone e disponibilidade são obrigatórios"
+        erro: "Nome, telefone, cidade e disponibilidade são obrigatórios"
       });
     }
 
-    // verifica se já possui perfil
+    nome = nome.trim();
+    telefone = telefone.trim();
+    cidade = cidade.trim();
+    disponibilidade = disponibilidade.trim();
+
+    email = email ? email.trim() : null;
+    habilidades = habilidades ? habilidades.trim() : null;
+    experiencia = experiencia ? experiencia.trim() : null;
+    observacao = observacao ? observacao.trim() : null;
+
     const existe = await pool.query(
       `SELECT id
        FROM voluntarios
@@ -39,22 +49,32 @@ exports.cadastrarVoluntario = async (req, res) => {
       });
     }
 
-    // cria perfil
     const result = await pool.query(
       `INSERT INTO voluntarios
       (
         usuario_id,
+        nome,
         telefone,
+        email,
+        cidade,
+        habilidades,
         disponibilidade,
-        habilidades
+        experiencia,
+        observacao,
+        status
       )
-      VALUES ($1, $2, $3, $4)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'ativo')
       RETURNING *`,
       [
         usuarioId,
+        nome,
         telefone,
+        email,
+        cidade,
+        habilidades,
         disponibilidade,
-        habilidades
+        experiencia,
+        observacao
       ]
     );
 
@@ -64,7 +84,6 @@ exports.cadastrarVoluntario = async (req, res) => {
     });
 
   } catch (err) {
-
     console.error(err);
 
     res.status(500).json({

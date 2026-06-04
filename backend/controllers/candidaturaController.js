@@ -75,30 +75,42 @@ if (candidaturaExiste.rows.length > 0) {
 // LISTAR CANDIDATURAS
 // ======================================
 exports.listarCandidaturas = async (req, res) => {
-
   try {
-
-    // busca todas as candidaturas
-    // juntamente com os dados do usuário
-    // e do centro relacionado
     const result = await pool.query(`
       SELECT
         c.id,
         c.status,
         c.data_candidatura,
 
-        u.id as usuario_id,
-        u.nome as usuario_nome,
-        u.email,
+        -- dados do usuário
+        u.id AS usuario_id,
+        u.nome AS usuario_nome,
+        u.email AS usuario_email,
 
-        ce.id as centro_id,
-        ce.nome as centro_nome,
-        ce.cidade
+        -- dados do perfil de voluntário
+        v.id AS voluntario_id,
+        v.nome AS voluntario_nome,
+        v.telefone,
+        v.email AS voluntario_email,
+        v.cidade AS voluntario_cidade,
+        v.habilidades,
+        v.disponibilidade,
+        v.experiencia,
+        v.observacao,
+        v.status AS voluntario_status,
+
+        -- dados do centro
+        ce.id AS centro_id,
+        ce.nome AS centro_nome,
+        ce.cidade AS centro_cidade
 
       FROM candidaturas c
 
       JOIN usuarios u
         ON u.id = c.usuario_id
+
+      LEFT JOIN voluntarios v
+        ON v.usuario_id = u.id
 
       JOIN centros ce
         ON ce.id = c.centro_id
@@ -106,11 +118,9 @@ exports.listarCandidaturas = async (req, res) => {
       ORDER BY c.data_candidatura DESC
     `);
 
-    // retorna lista de candidaturas
     res.json(result.rows);
 
   } catch (err) {
-
     console.error(err);
 
     res.status(500).json({
