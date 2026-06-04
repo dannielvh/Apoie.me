@@ -173,14 +173,8 @@
   align-items: center;
   gap: 10px;
 }
-.header__logo i {
-  color: #2e7d32;
-  font-size: 32px;
-}
-.header__logo span {
-  font-size: 28px;
-  font-weight: bold;
-  color: #2e7d32;
+.header__logo img {
+  height: 60px;
 }
 .header__nav ul {
   display: flex;
@@ -307,8 +301,8 @@
   color: #c62828;
 }
 @media (max-width: 950px) {
-  .header__logo span {
-    font-size: 24px;
+  .header__logo img {
+    height: 45px;
   }
   .header__nav ul {
     gap: 2px;
