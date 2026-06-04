@@ -126,3 +126,118 @@ exports.loginUsuario = async (req, res) => {
     res.status(500).json({ erro: "Erro no servidor" });
   }
 };
+
+// BUSCAR PERFIL DO USUÁRIO LOGADO
+exports.buscarMeuPerfil = async (req, res) => {
+  const usuarioId = req.usuario.id;
+
+  try {
+    const result = await pool.query(
+      `SELECT id, nome, email, cidade
+       FROM usuarios
+       WHERE id = $1`,
+      [usuarioId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ erro: "Usuário não encontrado" });
+    }
+
+    res.json(result.rows[0]);
+
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ erro: "Erro ao buscar perfil" });
+  }
+};
+
+// ATUALIZAR PERFIL DO USUÁRIO LOGADO
+exports.atualizarMeuPerfil = async (req, res) => {
+  const usuarioId = req.usuario.id;
+
+  let {
+    nome,
+    email,
+    cidade,
+    senhaAtual,
+    novaSenha
+  } = req.body;
+
+  try {
+    const usuarioResult = await pool.query(
+      `SELECT *
+       FROM usuarios
+       WHERE id = $1`,
+      [usuarioId]
+    );
+
+    if (usuarioResult.rows.length === 0) {
+      return res.status(404).json({ erro: "Usuário não encontrado" });
+    }
+
+    const usuarioAtual = usuarioResult.rows[0];
+
+    nome = nome?.trim() || usuarioAtual.nome;
+    email = email?.trim() || usuarioAtual.email;
+    cidade = cidade?.trim() || usuarioAtual.cidade;
+
+    // Se mudou email, verifica duplicidade
+    if (email !== usuarioAtual.email) {
+      const emailExiste = await pool.query(
+        `SELECT id FROM usuarios
+         WHERE email = $1
+         AND id <> $2`,
+        [email, usuarioId]
+      );
+
+      if (emailExiste.rows.length > 0) {
+        return res.status(400).json({ erro: "Email já cadastrado" });
+      }
+    }
+
+    let senhaFinal = usuarioAtual.senha;
+
+    // Se quiser trocar senha
+    if (novaSenha) {
+      if (!senhaAtual) {
+        return res.status(400).json({
+          erro: "Informe a senha atual para alterar a senha"
+        });
+      }
+
+      const senhaValida = await bcrypt.compare(senhaAtual, usuarioAtual.senha);
+
+      if (!senhaValida) {
+        return res.status(400).json({ erro: "Senha atual inválida" });
+      }
+
+      if (novaSenha.length < 6) {
+        return res.status(400).json({
+          erro: "Nova senha deve ter no mínimo 6 caracteres"
+        });
+      }
+
+      senhaFinal = await bcrypt.hash(novaSenha, 10);
+    }
+
+    const result = await pool.query(
+      `UPDATE usuarios
+       SET nome = $1,
+           email = $2,
+           cidade = $3,
+           senha = $4
+       WHERE id = $5
+       RETURNING id, nome, email, cidade`,
+      [nome, email, cidade, senhaFinal, usuarioId]
+    );
+
+    res.json({
+      msg: "Perfil atualizado com sucesso",
+      usuario: result.rows[0]
+    });
+
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ erro: "Erro ao atualizar perfil" });
+  }
+};

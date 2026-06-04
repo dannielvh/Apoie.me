@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <title>Meu Perfil | Apoie.me</title>
+</head>
+
+<body class="perfil-page">
+  <div id="header"></div>
+
+  <main class="perfil">
+
+    <section class="perfil__hero">
+      <div>
+        <span class="perfil__badge">
+          <i class="fa-solid fa-user"></i>
+          Área do usuário
+        </span>
+
+        <h1>Meu Perfil</h1>
+
+        <p>
+          Visualize e atualize suas informações pessoais cadastradas na plataforma.
+        </p>
+      </div>
+
+      <a href="dashboard.html" class="perfil__back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar ao dashboard
+      </a>
+    </section>
+
+    <section class="perfil__layout">
+
+      <aside class="perfil__sidebar">
+        <div class="perfil-card">
+          <div class="perfil-card__avatar">
+            <i class="fa-solid fa-user"></i>
+          </div>
+
+          <h2 id="perfilNomePreview">Usuário</h2>
+          <p id="perfilEmailPreview">email@email.com</p>
+
+          <span class="perfil-card__status">
+            Conta ativa
+          </span>
+        </div>
+
+        <div class="perfil-info">
+          <h3>Informações</h3>
+
+          <p>
+            Mantenha seus dados atualizados para facilitar o contato com centros de apoio,
+            voluntariado e futuras funcionalidades.
+          </p>
+        </div>
+      </aside>
+
+      <section class="perfil__content">
+        <div class="perfil__form-header">
+          <div>
+            <h2>Dados pessoais</h2>
+            <p>Edite apenas as informações que deseja alterar.</p>
+          </div>
+        </div>
+
+        <form id="formPerfil">
+
+          <div class="form-group">
+            <label for="nome">Nome completo *</label>
+            <input type="text" id="nome" placeholder="Seu nome completo">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" placeholder="seuemail@email.com">
+          </div>
+
+          <div class="form-group">
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" placeholder="Sua cidade">
+          </div>
+
+          <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" id="telefone" placeholder="(00) 00000-0000">
+          </div>
+
+          <div class="form-group">
+            <label for="senhaAtual">Senha atual</label>
+            <input type="password" id="senhaAtual" placeholder="Digite sua senha atual">
+          </div>
+
+          <div class="form-group">
+            <label for="novaSenha">Nova senha</label>
+            <input type="password" id="novaSenha" placeholder="Digite uma nova senha">
+          </div>
+
+          <div class="form-actions">
+            <button type="submit">
+              <i class="fa-solid fa-floppy-disk"></i>
+              Salvar alterações
+            </button>
+
+            <button type="button" id="btnCancelarPerfil" class="btn-cancelar">
+              Cancelar
+            </button>
+          </div>
+
+        </form>
+
+        <p id="msgPerfil"></p>
+      </section>
+
+    </section>
+
+  </main>
+
+  <script src="../js/components/header.js"></script>
+  <script src="../js/perfil.js"></script>
+</body>
+
+</html>

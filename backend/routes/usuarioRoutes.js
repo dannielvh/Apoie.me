@@ -9,6 +9,8 @@ const router = express.Router();
 // Esse arquivo tem as funções cadastrarUsuario e loginUsuario
 const usuarioController = require('../controllers/usuarioController');
 
+const autenticar = require('../middlewares/authMiddlewares');
+
 
 // ROTA DE CADASTRO
 // Quando alguém fizer uma requisição POST para /cadastro
@@ -20,6 +22,19 @@ router.post('/cadastro', usuarioController.cadastrarUsuario);
 // Quando alguém fizer POST para /login
 // chama a função loginUsuario do controller
 router.post('/login', usuarioController.loginUsuario);
+
+
+router.get(
+  "/usuarios/me",
+  autenticar,
+  usuarioController.buscarMeuPerfil
+);
+
+router.put(
+  "/usuarios/me",
+  autenticar,
+  usuarioController.atualizarMeuPerfil
+);
 
 
 // Exporta esse conjunto de rotas

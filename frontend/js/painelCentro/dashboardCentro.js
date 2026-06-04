@@ -50,13 +50,13 @@ async function carregarCentroDashboard() {
     controlarStatusCentro(centro.status);
 
     // Busca resumo dinâmico de voluntários selecionados
-    const totalVoluntariosSelecionados = await carregarResumoVoluntarios();
+    const resumoCandidaturas = await carregarResumoCandidaturas(centro.id);
 
     // Por enquanto pedidos continuam zerados
     // Depois, quando criar pedidos de doação, esses campos virão do backend também
     preencherResumo({
       pedidosAtivos: 0,
-      voluntarios: totalVoluntariosSelecionados,
+      voluntarios: resumoCandidaturas.total,
       urgentes: 0,
       atendidos: 0
     });
@@ -69,12 +69,12 @@ async function carregarCentroDashboard() {
 
 
 // ===============================
-// BUSCAR RESUMO DE VOLUNTÁRIOS
+// BUSCAR RESUMO DE CANDIDATURAS
 // ===============================
 
-async function carregarResumoVoluntarios() {
+async function carregarResumoCandidaturas(centroId) {
   try {
-    const res = await fetch("http://localhost:3000/api/voluntarios/selecionados/meu-centro", {
+    const res = await fetch("http://localhost:3000/api/candidaturas", {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -83,14 +83,37 @@ async function carregarResumoVoluntarios() {
     const data = await res.json();
 
     if (!res.ok) {
-      return 0;
+      return {
+        total: 0,
+        pendentes: 0,
+        aprovadas: 0,
+        rejeitadas: 0
+      };
     }
 
-    return Array.isArray(data) ? data.length : 0;
+    const candidaturas = Array.isArray(data) ? data : [];
+
+    // Filtra só as candidaturas do centro logado
+    const candidaturasDoCentro = candidaturas.filter((c) => {
+      return Number(c.centro_id) === Number(centroId);
+    });
+
+    return {
+      total: candidaturasDoCentro.length,
+      pendentes: candidaturasDoCentro.filter((c) => c.status === "pendente").length,
+      aprovadas: candidaturasDoCentro.filter((c) => c.status === "aprovada").length,
+      rejeitadas: candidaturasDoCentro.filter((c) => c.status === "rejeitada").length
+    };
 
   } catch (err) {
-    console.error("Erro ao carregar resumo de voluntários:", err);
-    return 0;
+    console.error("Erro ao carregar resumo de candidaturas:", err);
+
+    return {
+      total: 0,
+      pendentes: 0,
+      aprovadas: 0,
+      rejeitadas: 0
+    };
   }
 }
 
