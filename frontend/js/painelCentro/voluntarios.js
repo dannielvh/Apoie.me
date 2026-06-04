@@ -12,51 +12,51 @@ if (!token) {
 // ===============================
 // ELEMENTOS DA PÁGINA
 // ===============================
-const listaVoluntarios = document.getElementById("listaVoluntarios");
-const listaSelecionados = document.getElementById("listaSelecionados");
+const listaCandidaturas = document.getElementById("listaCandidaturas");
 
-const totalVoluntarios = document.getElementById("totalVoluntarios");
-const cidadeCentro = document.getElementById("cidadeCentro");
-const totalSelecionados = document.getElementById("totalSelecionados");
+const totalCandidaturas = document.getElementById("totalCandidaturas");
+const totalPendentes = document.getElementById("totalPendentes");
+const totalAprovadas = document.getElementById("totalAprovadas");
+const totalRejeitadas = document.getElementById("totalRejeitadas");
 
-const voluntariosAviso = document.getElementById("voluntariosAviso");
+const candidaturasAviso = document.getElementById("candidaturasAviso");
 
-const sugestoesCidadeFiltro = document.getElementById("sugestoesCidadeFiltro");
-
-let cidades = [];
-
-const formFiltros = document.getElementById("formFiltrosVoluntarios");
+const formFiltros = document.getElementById("formFiltrosCandidaturas");
+const filtroNome = document.getElementById("filtroNome");
 const filtroHabilidade = document.getElementById("filtroHabilidade");
-const filtroDisponibilidade = document.getElementById("filtroDisponibilidade");
-const filtroCidade = document.getElementById("filtroCidade");
+const filtroStatus = document.getElementById("filtroStatus");
 const btnLimparFiltros = document.getElementById("btnLimparFiltros");
 
 
 // ===============================
 // ELEMENTOS DO MODAL
 // ===============================
-const modalVoluntario = document.getElementById("modalVoluntario");
-const btnFecharModalVoluntario = document.getElementById("btnFecharModalVoluntario");
-const btnCancelarModalVoluntario = document.getElementById("btnCancelarModalVoluntario");
-const btnSelecionarVoluntario = document.getElementById("btnSelecionarVoluntario");
+const modalCandidatura = document.getElementById("modalCandidatura");
+
+const btnFecharModalCandidatura = document.getElementById("btnFecharModalCandidatura");
+const btnCancelarModalCandidatura = document.getElementById("btnCancelarModalCandidatura");
+
+const btnAprovarCandidatura = document.getElementById("btnAprovarCandidatura");
+const btnRejeitarCandidatura = document.getElementById("btnRejeitarCandidatura");
 
 const modalNome = document.getElementById("modalNome");
-const modalCidade = document.getElementById("modalCidade");
-const modalTelefone = document.getElementById("modalTelefone");
 const modalEmail = document.getElementById("modalEmail");
-const modalHabilidades = document.getElementById("modalHabilidades");
+const modalStatus = document.getElementById("modalStatus");
+const modalTelefone = document.getElementById("modalTelefone");
 const modalDisponibilidade = document.getElementById("modalDisponibilidade");
-const modalExperiencia = document.getElementById("modalExperiencia");
-const modalObservacao = document.getElementById("modalObservacao");
-const msgModalVoluntario = document.getElementById("msgModalVoluntario");
+const modalHabilidades = document.getElementById("modalHabilidades");
+const modalCentro = document.getElementById("modalCentro");
+const modalData = document.getElementById("modalData");
+
+const msgModalCandidatura = document.getElementById("msgModalCandidatura");
 
 
 // ===============================
 // VARIÁVEIS GLOBAIS
 // ===============================
 let centroLogado = null;
-let voluntariosCarregados = [];
-let voluntarioSelecionadoId = null;
+let candidaturasCarregadas = [];
+let candidaturaSelecionadaId = null;
 
 
 // ===============================
@@ -74,7 +74,7 @@ function textoOuPadrao(valor, padrao = "-") {
   return valor && String(valor).trim() ? valor : padrao;
 }
 
-function formatarStatus(status) {
+function formatarStatusCentro(status) {
   const statusMap = {
     pendente: "Aguardando aprovação",
     aprovado: "Aprovado",
@@ -85,34 +85,29 @@ function formatarStatus(status) {
   return statusMap[status] || status || "-";
 }
 
-function formatarStatusSelecao(status) {
+function formatarStatusCandidatura(status) {
   const statusMap = {
-    selecionado: "Selecionado",
-    contatado: "Contatado",
-    recusado: "Recusado",
-    cancelado: "Cancelado"
+    pendente: "Pendente",
+    aprovada: "Aprovada",
+    rejeitada: "Rejeitada"
   };
 
   return statusMap[status] || status || "-";
 }
 
-// CARREGAR CIDADES DE MG PARA SUGESTÕES
-async function carregarCidades() {
-  try {
-    const res = await fetch(
-      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios"
-    );
+function formatarData(data) {
+  if (!data) return "-";
 
-    cidades = await res.json();
-  } catch (err) {
-    console.error("Erro ao carregar cidades:", err);
-  }
+  return new Date(data).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
 }
 
 
-
 // ===============================
-// CARREGAR CENTRO DO USUÁRIO
+// CARREGAR CENTRO DO USUÁRIO LOGADO
 // ===============================
 async function carregarCentroLogado() {
   try {
@@ -148,81 +143,54 @@ async function carregarCentroLogado() {
 
 
 // ===============================
-// CONTROLAR ACESSO PELO STATUS
+// CONTROLAR ACESSO PELO STATUS DO CENTRO
 // ===============================
 function controlarAcessoCentro(centro) {
   if (!centro) return false;
 
-  if (cidadeCentro) {
-    cidadeCentro.textContent = centro.cidade || "-";
-  }
-
   if (centro.status === "aprovado") {
-    voluntariosAviso.classList.add("hidden");
+    candidaturasAviso.classList.add("hidden");
     return true;
   }
 
-  voluntariosAviso.classList.remove("hidden");
+  candidaturasAviso.classList.remove("hidden");
 
-  voluntariosAviso.innerHTML = `
+  candidaturasAviso.innerHTML = `
     <h3>Funcionalidade indisponível</h3>
     <p>
-      Seu centro está com status <strong>${formatarStatus(centro.status)}</strong>.
-      Apenas centros aprovados podem visualizar e selecionar voluntários.
+      Seu centro está com status <strong>${formatarStatusCentro(centro.status)}</strong>.
+      Apenas centros aprovados podem gerenciar candidaturas de voluntários.
     </p>
   `;
 
-  listaVoluntarios.innerHTML = `
+  listaCandidaturas.innerHTML = `
     <div class="empty-state">
       <i class="fa-solid fa-lock"></i>
       <h3>Acesso limitado</h3>
-      <p>Aguarde a aprovação do centro para acessar voluntários.</p>
+      <p>Aguarde a aprovação do centro para visualizar candidaturas.</p>
     </div>
   `;
 
-  if (listaSelecionados) {
-    listaSelecionados.innerHTML = `
-      <div class="empty-state">
-        <i class="fa-solid fa-lock"></i>
-        <h3>Acesso limitado</h3>
-        <p>Voluntários selecionados aparecerão após aprovação do centro.</p>
-      </div>
-    `;
-  }
-
-  if (totalVoluntarios) totalVoluntarios.textContent = "0";
-  if (totalSelecionados) totalSelecionados.textContent = "0";
+  atualizarCards([]);
 
   return false;
 }
 
 
 // ===============================
-// CARREGAR VOLUNTÁRIOS DISPONÍVEIS
+// CARREGAR CANDIDATURAS
 // ===============================
-async function carregarVoluntarios(filtros = {}) {
+async function carregarCandidaturas() {
   try {
-    listaVoluntarios.innerHTML = `
+    listaCandidaturas.innerHTML = `
       <div class="empty-state">
         <i class="fa-solid fa-spinner"></i>
-        <h3>Carregando voluntários...</h3>
-        <p>Aguarde enquanto buscamos os candidatos disponíveis.</p>
+        <h3>Carregando candidaturas...</h3>
+        <p>Aguarde enquanto buscamos os candidatos.</p>
       </div>
     `;
 
-    const params = new URLSearchParams();
-
-    if (filtros.cidade) {
-      params.append("cidade", filtros.cidade.trim());
-    }
-
-    if (filtros.habilidade) {
-      params.append("habilidade", filtros.habilidade.trim());
-    }
-
-    const url = `http://localhost:3000/api/voluntarios?${params.toString()}`;
-
-    const res = await fetch(url, {
+    const res = await fetch("http://localhost:3000/api/candidaturas", {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -231,42 +199,38 @@ async function carregarVoluntarios(filtros = {}) {
     const data = await res.json();
 
     if (!res.ok) {
-      listaVoluntarios.innerHTML = `
+      listaCandidaturas.innerHTML = `
         <div class="empty-state">
           <i class="fa-solid fa-triangle-exclamation"></i>
-          <h3>Erro ao carregar voluntários</h3>
+          <h3>Erro ao carregar candidaturas</h3>
           <p>${data.erro || "Tente novamente mais tarde."}</p>
         </div>
       `;
       return;
     }
 
-    let voluntarios = Array.isArray(data) ? data : [];
+    let candidaturas = Array.isArray(data) ? data : [];
 
-    // Filtro de disponibilidade no front por enquanto
-    if (filtros.disponibilidade) {
-      voluntarios = voluntarios.filter((v) =>
-        normalizar(v.disponibilidade).includes(normalizar(filtros.disponibilidade))
-      );
-    }
+    // IMPORTANTE:
+    // O backend dela lista todas as candidaturas.
+    // Então aqui filtramos para mostrar só as candidaturas do centro logado.
+    candidaturas = candidaturas.filter((c) => {
+      return Number(c.centro_id) === Number(centroLogado.id);
+    });
 
-    voluntariosCarregados = voluntarios;
+    candidaturasCarregadas = candidaturas;
 
-    // Mostra no máximo 10 na tela
-    renderizarVoluntarios(voluntarios.slice(0, 10));
-
-    if (totalVoluntarios) {
-      totalVoluntarios.textContent = voluntarios.length;
-    }
+    atualizarCards(candidaturas);
+    renderizarCandidaturas(candidaturas);
 
   } catch (err) {
-    console.error("Erro ao carregar voluntários:", err);
+    console.error("Erro ao carregar candidaturas:", err);
 
-    listaVoluntarios.innerHTML = `
+    listaCandidaturas.innerHTML = `
       <div class="empty-state">
         <i class="fa-solid fa-triangle-exclamation"></i>
         <h3>Erro inesperado</h3>
-        <p>Não foi possível carregar os voluntários.</p>
+        <p>Não foi possível carregar as candidaturas.</p>
       </div>
     `;
   }
@@ -274,280 +238,250 @@ async function carregarVoluntarios(filtros = {}) {
 
 
 // ===============================
-// RENDERIZAR VOLUNTÁRIOS DISPONÍVEIS
+// ATUALIZAR CARDS
 // ===============================
-function renderizarVoluntarios(voluntarios) {
-  listaVoluntarios.innerHTML = "";
+function atualizarCards(candidaturas) {
+  const total = candidaturas.length;
 
-  if (!voluntarios || voluntarios.length === 0) {
-    listaVoluntarios.innerHTML = `
+  const pendentes = candidaturas.filter((c) => c.status === "pendente").length;
+  const aprovadas = candidaturas.filter((c) => c.status === "aprovada").length;
+  const rejeitadas = candidaturas.filter((c) => c.status === "rejeitada").length;
+
+  if (totalCandidaturas) totalCandidaturas.textContent = total;
+  if (totalPendentes) totalPendentes.textContent = pendentes;
+  if (totalAprovadas) totalAprovadas.textContent = aprovadas;
+  if (totalRejeitadas) totalRejeitadas.textContent = rejeitadas;
+}
+
+
+// ===============================
+// RENDERIZAR CANDIDATURAS
+// ===============================
+function renderizarCandidaturas(candidaturas) {
+  listaCandidaturas.innerHTML = "";
+
+  if (!candidaturas || candidaturas.length === 0) {
+    listaCandidaturas.innerHTML = `
       <div class="empty-state">
         <i class="fa-solid fa-users-slash"></i>
-        <h3>Nenhum voluntário encontrado</h3>
-        <p>Tente ajustar os filtros ou buscar por outra habilidade.</p>
+        <h3>Nenhuma candidatura encontrada</h3>
+        <p>Quando usuários se candidatarem ao seu centro, aparecerão aqui.</p>
       </div>
     `;
     return;
   }
 
-  voluntarios.forEach((voluntario) => {
+  candidaturas.forEach((candidatura) => {
     const div = document.createElement("div");
-    div.classList.add("voluntario-item");
+    div.classList.add("candidatura-item");
 
     div.innerHTML = `
-      <div class="voluntario-item__content">
-        <div class="voluntario-item__avatar">
+      <div class="candidatura-item__content">
+        <div class="candidatura-item__avatar">
           <i class="fa-solid fa-user"></i>
         </div>
 
         <div>
-          <h3>${textoOuPadrao(voluntario.nome, "Voluntário")}</h3>
+          <h3>${textoOuPadrao(candidatura.usuario_nome, "Candidato")}</h3>
 
           <p>
-            <i class="fa-solid fa-location-dot"></i>
-            ${textoOuPadrao(voluntario.cidade)}
+            <i class="fa-solid fa-envelope"></i>
+            ${textoOuPadrao(candidatura.email)}
           </p>
 
           <small>
-            <strong>Habilidades:</strong>
-            ${textoOuPadrao(voluntario.habilidades, "Não informado")}
+            <strong>Data:</strong>
+            ${formatarData(candidatura.data_candidatura)}
           </small>
+
+          <br>
+
+          <span class="status-pill ${candidatura.status}">
+            ${formatarStatusCandidatura(candidatura.status)}
+          </span>
         </div>
       </div>
 
-      <div class="voluntario-item__actions">
-        <button class="btn-detalhes" data-id="${voluntario.id}">
+      <div class="candidatura-item__actions">
+        <button class="btn-detalhes" data-id="${candidatura.id}">
           Ver detalhes
         </button>
 
-        <button class="btn-selecionar" data-id="${voluntario.id}">
-          Selecionar
-        </button>
+        ${
+          candidatura.status === "pendente"
+            ? `
+              <button class="btn-aprovar" data-id="${candidatura.id}">
+                Aprovar
+              </button>
+            `
+            : ""
+        }
       </div>
     `;
 
-    listaVoluntarios.appendChild(div);
+    listaCandidaturas.appendChild(div);
   });
 }
 
 
 // ===============================
-// CARREGAR VOLUNTÁRIOS SELECIONADOS
+// FILTRAR CANDIDATURAS NO FRONT
 // ===============================
-async function carregarSelecionados() {
-  try {
-    if (listaSelecionados) {
-      listaSelecionados.innerHTML = `
-        <div class="empty-state">
-          <i class="fa-solid fa-spinner"></i>
-          <h3>Carregando selecionados...</h3>
-          <p>Buscando voluntários já escolhidos pelo centro.</p>
-        </div>
-      `;
-    }
+function aplicarFiltros() {
+  const nome = filtroNome.value.trim();
+  const habilidade = filtroHabilidade.value.trim();
+  const status = filtroStatus.value.trim();
 
-    const res = await fetch("http://localhost:3000/api/voluntarios/selecionados/meu-centro", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+  let candidaturasFiltradas = [...candidaturasCarregadas];
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      if (totalSelecionados) totalSelecionados.textContent = "0";
-
-      if (listaSelecionados) {
-        listaSelecionados.innerHTML = `
-          <div class="empty-state">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <h3>Erro ao carregar selecionados</h3>
-            <p>${data.erro || "Tente novamente mais tarde."}</p>
-          </div>
-        `;
-      }
-
-      return;
-    }
-
-    const selecionados = Array.isArray(data) ? data : [];
-
-    if (totalSelecionados) {
-      totalSelecionados.textContent = selecionados.length;
-    }
-
-    renderizarSelecionados(selecionados);
-
-  } catch (err) {
-    console.error("Erro ao carregar selecionados:", err);
-
-    if (totalSelecionados) totalSelecionados.textContent = "0";
-
-    if (listaSelecionados) {
-      listaSelecionados.innerHTML = `
-        <div class="empty-state">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <h3>Erro inesperado</h3>
-          <p>Não foi possível carregar os voluntários selecionados.</p>
-        </div>
-      `;
-    }
-  }
-}
-
-
-// ===============================
-// RENDERIZAR VOLUNTÁRIOS SELECIONADOS
-// ===============================
-function renderizarSelecionados(selecionados) {
-  if (!listaSelecionados) return;
-
-  listaSelecionados.innerHTML = "";
-
-  if (!selecionados || selecionados.length === 0) {
-    listaSelecionados.innerHTML = `
-      <div class="empty-state">
-        <i class="fa-solid fa-user-clock"></i>
-        <h3>Nenhum voluntário selecionado</h3>
-        <p>Quando você selecionar voluntários, eles aparecerão aqui.</p>
-      </div>
-    `;
-    return;
+  if (nome) {
+    candidaturasFiltradas = candidaturasFiltradas.filter((c) =>
+      normalizar(c.usuario_nome).includes(normalizar(nome))
+    );
   }
 
-  selecionados.forEach((item) => {
-    const div = document.createElement("div");
-    div.classList.add("selecionado-item");
+  if (habilidade) {
+    candidaturasFiltradas = candidaturasFiltradas.filter((c) =>
+      normalizar(c.habilidades).includes(normalizar(habilidade))
+    );
+  }
 
-    div.innerHTML = `
-      <div class="selecionado-item__info">
-        <i class="fa-solid fa-user-check"></i>
+  if (status) {
+    candidaturasFiltradas = candidaturasFiltradas.filter((c) =>
+      c.status === status
+    );
+  }
 
-        <div>
-          <h3>${textoOuPadrao(item.nome, "Voluntário")}</h3>
-          <p>
-            ${textoOuPadrao(item.cidade)}
-            • ${textoOuPadrao(item.habilidades, "Sem habilidades informadas")}
-          </p>
-        </div>
-      </div>
-
-      <span class="selecionado-item__status ${item.status_selecao}">
-        ${formatarStatusSelecao(item.status_selecao)}
-      </span>
-    `;
-
-    listaSelecionados.appendChild(div);
-  });
+  atualizarCards(candidaturasFiltradas);
+  renderizarCandidaturas(candidaturasFiltradas);
 }
 
 
 // ===============================
-// ENCONTRAR VOLUNTÁRIO PELO ID
+// ENCONTRAR CANDIDATURA PELO ID
 // ===============================
-function encontrarVoluntarioPorId(id) {
-  return voluntariosCarregados.find((v) => Number(v.id) === Number(id));
+function encontrarCandidaturaPorId(id) {
+  return candidaturasCarregadas.find((c) => Number(c.id) === Number(id));
 }
 
 
 // ===============================
-// ABRIR MODAL DE DETALHES
+// ABRIR MODAL
 // ===============================
-function abrirModalVoluntario(voluntario) {
-  if (!voluntario) return;
+function abrirModalCandidatura(candidatura) {
+  if (!candidatura) return;
 
-  voluntarioSelecionadoId = voluntario.id;
+  candidaturaSelecionadaId = candidatura.id;
 
-  modalNome.textContent = textoOuPadrao(voluntario.nome, "Voluntário");
-  modalCidade.textContent = textoOuPadrao(voluntario.cidade);
+  modalNome.textContent = textoOuPadrao(candidatura.usuario_nome, "Candidato");
+  modalEmail.textContent = textoOuPadrao(candidatura.email);
 
-  modalTelefone.textContent = textoOuPadrao(voluntario.telefone);
-  modalEmail.textContent = textoOuPadrao(voluntario.email);
-  modalHabilidades.textContent = textoOuPadrao(voluntario.habilidades);
-  modalDisponibilidade.textContent = textoOuPadrao(voluntario.disponibilidade);
-  modalExperiencia.textContent = textoOuPadrao(voluntario.experiencia);
-  modalObservacao.textContent = textoOuPadrao(voluntario.observacao);
+  modalStatus.textContent = formatarStatusCandidatura(candidatura.status);
+  modalStatus.className = "";
+  modalStatus.classList.add("status-pill", candidatura.status);
 
-  msgModalVoluntario.textContent = "";
-  modalVoluntario.classList.remove("hidden");
+  modalTelefone.textContent = textoOuPadrao(candidatura.telefone);
+  modalDisponibilidade.textContent = textoOuPadrao(candidatura.disponibilidade);
+  modalHabilidades.textContent = textoOuPadrao(candidatura.habilidades);
+
+  modalCentro.textContent = textoOuPadrao(candidatura.centro_nome);
+  modalData.textContent = formatarData(candidatura.data_candidatura);
+
+  msgModalCandidatura.textContent = "";
+
+  // Se já foi aprovada/rejeitada, desativa os botões principais
+  const estaPendente = candidatura.status === "pendente";
+
+  btnAprovarCandidatura.disabled = !estaPendente;
+  btnRejeitarCandidatura.disabled = !estaPendente;
+
+  btnAprovarCandidatura.style.opacity = estaPendente ? "1" : "0.5";
+  btnRejeitarCandidatura.style.opacity = estaPendente ? "1" : "0.5";
+
+  modalCandidatura.classList.remove("hidden");
 }
 
 
 // ===============================
 // FECHAR MODAL
 // ===============================
-function fecharModalVoluntario() {
-  voluntarioSelecionadoId = null;
-  msgModalVoluntario.textContent = "";
-  modalVoluntario.classList.add("hidden");
+function fecharModalCandidatura() {
+  candidaturaSelecionadaId = null;
+  msgModalCandidatura.textContent = "";
+  modalCandidatura.classList.add("hidden");
 }
 
 
 // ===============================
-// SELECIONAR VOLUNTÁRIO
+// ATUALIZAR STATUS DA CANDIDATURA
 // ===============================
-async function selecionarVoluntario(id) {
+async function atualizarStatusCandidatura(id, status) {
   if (!id) return;
 
   try {
-    msgModalVoluntario.textContent = "Selecionando voluntário...";
-    msgModalVoluntario.style.color = "#555";
+    msgModalCandidatura.textContent = "Atualizando candidatura...";
+    msgModalCandidatura.style.color = "#555";
 
-    const res = await fetch(`http://localhost:3000/api/voluntarios/${id}/selecionar`, {
-      method: "POST",
+    const res = await fetch(`http://localhost:3000/api/candidaturas/${id}/status`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        mensagem: "Seu perfil foi selecionado por um centro de apoio."
-      })
+      body: JSON.stringify({ status })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      msgModalVoluntario.textContent = data.erro || "Erro ao selecionar voluntário.";
-      msgModalVoluntario.style.color = "red";
+      msgModalCandidatura.textContent =
+        data.erro || "Erro ao atualizar candidatura.";
+
+      msgModalCandidatura.style.color = "red";
       return;
     }
 
-    msgModalVoluntario.textContent = "Voluntário selecionado com sucesso.";
-    msgModalVoluntario.style.color = "green";
+    msgModalCandidatura.textContent =
+      status === "aprovada"
+        ? "Candidatura aprovada com sucesso."
+        : "Candidatura rejeitada com sucesso.";
 
-    await carregarSelecionados();
+    msgModalCandidatura.style.color = "green";
+
+    await carregarCandidaturas();
 
     setTimeout(() => {
-      fecharModalVoluntario();
+      fecharModalCandidatura();
     }, 800);
 
   } catch (err) {
-    console.error("Erro ao selecionar voluntário:", err);
-    msgModalVoluntario.textContent = "Erro na requisição.";
-    msgModalVoluntario.style.color = "red";
+    console.error("Erro ao atualizar status:", err);
+
+    msgModalCandidatura.textContent = "Erro na requisição.";
+    msgModalCandidatura.style.color = "red";
   }
 }
 
 
 // ===============================
-// EVENTOS DA LISTA DE VOLUNTÁRIOS
+// EVENTOS DA LISTA
 // ===============================
-listaVoluntarios.addEventListener("click", (e) => {
+listaCandidaturas.addEventListener("click", (e) => {
   const btnDetalhes = e.target.closest(".btn-detalhes");
-  const btnSelecionar = e.target.closest(".btn-selecionar");
+  const btnAprovar = e.target.closest(".btn-aprovar");
 
   if (btnDetalhes) {
     const id = btnDetalhes.getAttribute("data-id");
-    const voluntario = encontrarVoluntarioPorId(id);
+    const candidatura = encontrarCandidaturaPorId(id);
 
-    abrirModalVoluntario(voluntario);
+    abrirModalCandidatura(candidatura);
   }
 
-  if (btnSelecionar) {
-    const id = btnSelecionar.getAttribute("data-id");
-    const voluntario = encontrarVoluntarioPorId(id);
+  if (btnAprovar) {
+    const id = btnAprovar.getAttribute("data-id");
+    const candidatura = encontrarCandidaturaPorId(id);
 
-    abrirModalVoluntario(voluntario);
+    abrirModalCandidatura(candidatura);
   }
 });
 
@@ -555,65 +489,39 @@ listaVoluntarios.addEventListener("click", (e) => {
 // ===============================
 // EVENTOS DO MODAL
 // ===============================
-btnFecharModalVoluntario.addEventListener("click", fecharModalVoluntario);
-btnCancelarModalVoluntario.addEventListener("click", fecharModalVoluntario);
+btnFecharModalCandidatura.addEventListener("click", fecharModalCandidatura);
+btnCancelarModalCandidatura.addEventListener("click", fecharModalCandidatura);
 
-modalVoluntario.addEventListener("click", (e) => {
-  if (e.target === modalVoluntario) {
-    fecharModalVoluntario();
+modalCandidatura.addEventListener("click", (e) => {
+  if (e.target === modalCandidatura) {
+    fecharModalCandidatura();
   }
 });
 
-btnSelecionarVoluntario.addEventListener("click", () => {
-  selecionarVoluntario(voluntarioSelecionadoId);
+btnAprovarCandidatura.addEventListener("click", () => {
+  atualizarStatusCandidatura(candidaturaSelecionadaId, "aprovada");
+});
+
+btnRejeitarCandidatura.addEventListener("click", () => {
+  atualizarStatusCandidatura(candidaturaSelecionadaId, "rejeitada");
 });
 
 
 // ===============================
-// FILTROS
+// EVENTOS DOS FILTROS
 // ===============================
-formFiltros.addEventListener("submit", async (e) => {
+formFiltros.addEventListener("submit", (e) => {
   e.preventDefault();
-
-  const filtros = {
-    cidade: filtroCidade.value.trim(), // se vazio, busca todos
-    habilidade: filtroHabilidade.value.trim(),
-    disponibilidade: filtroDisponibilidade.value.trim()
-  };
-
-  await carregarVoluntarios(filtros);
+  aplicarFiltros();
 });
 
-btnLimparFiltros.addEventListener("click", async () => {
+btnLimparFiltros.addEventListener("click", () => {
+  filtroNome.value = "";
   filtroHabilidade.value = "";
-  filtroDisponibilidade.value = "";
-  filtroCidade.value = "";
+  filtroStatus.value = "";
 
-  await carregarVoluntarios({});
-});
-
-filtroCidade.addEventListener("input", () => {
-  const valor = filtroCidade.value.trim();
-
-  sugestoesCidadeFiltro.innerHTML = "";
-
-  if (valor.length < 2) return;
-
-  const filtradas = cidades.filter((cidade) =>
-    normalizar(cidade.nome).includes(normalizar(valor))
-  );
-
-  filtradas.slice(0, 8).forEach((cidade) => {
-    const li = document.createElement("li");
-    li.textContent = cidade.nome;
-
-    li.addEventListener("click", () => {
-      filtroCidade.value = cidade.nome;
-      sugestoesCidadeFiltro.innerHTML = "";
-    });
-
-    sugestoesCidadeFiltro.appendChild(li);
-  });
+  atualizarCards(candidaturasCarregadas);
+  renderizarCandidaturas(candidaturasCarregadas);
 });
 
 
@@ -621,19 +529,11 @@ filtroCidade.addEventListener("input", () => {
 // INICIALIZAÇÃO
 // ===============================
 window.addEventListener("load", async () => {
-  await carregarCidades();
-
   centroLogado = await carregarCentroLogado();
 
   const podeAcessar = controlarAcessoCentro(centroLogado);
 
   if (!podeAcessar) return;
 
-  filtroCidade.value = centroLogado.cidade || "";
-
-  await carregarVoluntarios({
-    cidade: centroLogado.cidade
-  });
-
-  await carregarSelecionados();
+  await carregarCandidaturas();
 });

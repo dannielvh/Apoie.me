@@ -1,9 +1,9 @@
-.voluntarios-page {
+.candidaturas-page {
   background: #f5f5dc;
   min-height: 100vh;
 }
 
-.voluntarios {
+.candidaturas {
   max-width: 1200px;
   margin: 0 auto;
   padding: 35px 20px;
@@ -26,7 +26,7 @@
     }
 
     p {
-      max-width: 700px;
+      max-width: 720px;
       color: rgba(255, 255, 255, 0.9);
       line-height: 1.5;
     }
@@ -79,7 +79,7 @@
 
   &__cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 18px;
     margin-bottom: 22px;
   }
@@ -91,29 +91,19 @@
     align-items: flex-start;
   }
 
-  &__main {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    min-width: 0;
-  }
-
-  &__panel,
-  &__filters {
-    min-width: 0;
-  }
-
   &__panel {
     background: #fff;
     padding: 22px;
     border-radius: 14px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+    min-width: 0;
   }
 
   &__filters {
     display: flex;
     flex-direction: column;
     gap: 18px;
+    min-width: 0;
   }
 }
 
@@ -121,8 +111,8 @@
   display: none !important;
 }
 
-/* CARDS DE RESUMO */
-.voluntario-card {
+/* CARDS */
+.candidatura-card {
   background: #fff;
   padding: 20px;
   border-radius: 14px;
@@ -157,12 +147,12 @@
   strong {
     display: block;
     color: #2e7d32;
-    font-size: 22px;
+    font-size: 24px;
     margin-top: 4px;
   }
 }
 
-/* CABEÇALHO DOS PAINÉIS */
+/* HEADER DOS PAINÉIS */
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -194,14 +184,14 @@
   }
 }
 
-/* LISTA VOLUNTÁRIOS */
-.voluntarios-lista {
+/* LISTA */
+.candidaturas-lista {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.voluntario-item {
+.candidatura-item {
   border: 1px solid #e5e5e5;
   border-radius: 12px;
   padding: 15px;
@@ -272,94 +262,42 @@
       color: #2e7d32;
     }
 
-    .btn-selecionar {
+    .btn-aprovar {
       background: #2e7d32;
       color: #fff;
     }
   }
 }
 
-/* LISTA SELECIONADOS */
-.selecionados-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+/* STATUS */
+.status-pill {
+  display: inline-block;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
 
-.selecionado-item {
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 14px;
+  background: #fff3cd;
+  color: #856404;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-
-  transition: 0.2s;
-
-  &:hover {
-    border-color: #2e7d32;
-    transform: translateY(-2px);
+  &.aprovada {
+    background: #d4edda;
+    color: #155724;
   }
 
-  &__info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    i {
-      width: 42px;
-      height: 42px;
-
-      background: #e8f5e9;
-      color: #2e7d32;
-      border-radius: 50%;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      flex-shrink: 0;
-    }
-
-    h3 {
-      font-size: 16px;
-      color: #333;
-      margin-bottom: 4px;
-    }
-
-    p {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.4;
-    }
+  &.rejeitada {
+    background: #f8d7da;
+    color: #721c24;
   }
 
-  &__status {
-    padding: 7px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-
+  &.pendente {
     background: #fff3cd;
     color: #856404;
-    white-space: nowrap;
-
-    &.contatado {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    &.recusado,
-    &.cancelado {
-      background: #f8d7da;
-      color: #721c24;
-    }
   }
 }
 
-/* ESTADO VAZIO */
+/* EMPTY */
 .empty-state {
   text-align: center;
   padding: 35px 15px;
@@ -491,7 +429,7 @@
 }
 
 /* MODAL */
-.modal-voluntario {
+.modal-candidatura {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -569,6 +507,27 @@
     }
   }
 
+  &__status {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    span {
+      color: #777;
+      font-size: 14px;
+    }
+
+    strong {
+      color: #2e7d32;
+    }
+  }
+
   &__body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -579,6 +538,7 @@
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    flex-wrap: wrap;
 
     button {
       border: none;
@@ -592,12 +552,21 @@
       gap: 8px;
     }
 
-    #btnSelecionarVoluntario {
+    #btnAprovarCandidatura {
       background: #2e7d32;
       color: #fff;
 
       &:hover {
         background: #1b5e20;
+      }
+    }
+
+    .btn-rejeitar {
+      background: #c62828;
+      color: #fff;
+
+      &:hover {
+        background: #b71c1c;
       }
     }
 
@@ -611,7 +580,7 @@
     }
   }
 
-  #msgModalVoluntario {
+  #msgModalCandidatura {
     margin-top: 12px;
     font-size: 14px;
     font-weight: 600;
@@ -644,8 +613,20 @@
 }
 
 /* RESPONSIVO */
-@media (max-width: 900px) {
-  .voluntarios {
+@media (max-width: 1000px) {
+  .candidaturas {
+    &__cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__layout {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .candidaturas {
     &__hero {
       flex-direction: column;
       align-items: flex-start;
@@ -654,13 +635,9 @@
     &__cards {
       grid-template-columns: 1fr;
     }
-
-    &__layout {
-      grid-template-columns: 1fr;
-    }
   }
 
-  .voluntario-item {
+  .candidatura-item {
     flex-direction: column;
 
     &__actions {
@@ -673,16 +650,7 @@
     }
   }
 
-  .selecionado-item {
-    flex-direction: column;
-    align-items: flex-start;
-
-    &__status {
-      align-self: flex-start;
-    }
-  }
-
-  .modal-voluntario {
+  .modal-candidatura {
     &__body {
       grid-template-columns: 1fr;
     }

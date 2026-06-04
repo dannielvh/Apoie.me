@@ -2695,17 +2695,17 @@
     grid-template-columns: 1fr;
   }
 }
-.voluntarios-page {
+.candidaturas-page {
   background: #f5f5dc;
   min-height: 100vh;
 }
 
-.voluntarios {
+.candidaturas {
   max-width: 1200px;
   margin: 0 auto;
   padding: 35px 20px;
 }
-.voluntarios__hero {
+.candidaturas__hero {
   background: linear-gradient(135deg, #2e7d32, #1b5e20);
   color: #fff;
   padding: 30px;
@@ -2716,16 +2716,16 @@
   align-items: center;
   gap: 25px;
 }
-.voluntarios__hero h1 {
+.candidaturas__hero h1 {
   font-size: 32px;
   margin: 12px 0 8px;
 }
-.voluntarios__hero p {
-  max-width: 700px;
+.candidaturas__hero p {
+  max-width: 720px;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.5;
 }
-.voluntarios__badge {
+.candidaturas__badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2734,7 +2734,7 @@
   border-radius: 999px;
   font-size: 14px;
 }
-.voluntarios__back {
+.candidaturas__back {
   background: #fff;
   color: #1b5e20;
   text-decoration: none;
@@ -2745,10 +2745,10 @@
   align-items: center;
   gap: 8px;
 }
-.voluntarios__back:hover {
+.candidaturas__back:hover {
   opacity: 0.9;
 }
-.voluntarios__aviso {
+.candidaturas__aviso {
   background: #fff3cd;
   border: 1px solid #ffeeba;
   color: #856404;
@@ -2756,51 +2756,44 @@
   border-radius: 12px;
   margin-bottom: 22px;
 }
-.voluntarios__aviso h3 {
+.candidaturas__aviso h3 {
   margin-bottom: 5px;
 }
-.voluntarios__aviso p {
+.candidaturas__aviso p {
   font-size: 14px;
 }
-.voluntarios__cards {
+.candidaturas__cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   margin-bottom: 22px;
 }
-.voluntarios__layout {
+.candidaturas__layout {
   display: grid;
   grid-template-columns: 1.5fr 0.9fr;
   gap: 22px;
   align-items: flex-start;
 }
-.voluntarios__main {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  min-width: 0;
-}
-.voluntarios__panel, .voluntarios__filters {
-  min-width: 0;
-}
-.voluntarios__panel {
+.candidaturas__panel {
   background: #fff;
   padding: 22px;
   border-radius: 14px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+  min-width: 0;
 }
-.voluntarios__filters {
+.candidaturas__filters {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  min-width: 0;
 }
 
 .hidden {
   display: none !important;
 }
 
-/* CARDS DE RESUMO */
-.voluntario-card {
+/* CARDS */
+.candidatura-card {
   background: #fff;
   padding: 20px;
   border-radius: 14px;
@@ -2809,7 +2802,7 @@
   align-items: center;
   gap: 15px;
 }
-.voluntario-card__icon {
+.candidatura-card__icon {
   width: 48px;
   height: 48px;
   background: #e8f5e9;
@@ -2819,21 +2812,21 @@
   align-items: center;
   justify-content: center;
 }
-.voluntario-card__icon i {
+.candidatura-card__icon i {
   font-size: 20px;
 }
-.voluntario-card span {
+.candidatura-card span {
   color: #666;
   font-size: 14px;
 }
-.voluntario-card strong {
+.candidatura-card strong {
   display: block;
   color: #2e7d32;
-  font-size: 22px;
+  font-size: 24px;
   margin-top: 4px;
 }
 
-/* CABEÇALHO DOS PAINÉIS */
+/* HEADER DOS PAINÉIS */
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -2861,14 +2854,14 @@
   white-space: nowrap;
 }
 
-/* LISTA VOLUNTÁRIOS */
-.voluntarios-lista {
+/* LISTA */
+.candidaturas-lista {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.voluntario-item {
+.candidatura-item {
   border: 1px solid #e5e5e5;
   border-radius: 12px;
   padding: 15px;
@@ -2878,15 +2871,15 @@
   align-items: flex-start;
   gap: 15px;
 }
-.voluntario-item:hover {
+.candidatura-item:hover {
   border-color: #2e7d32;
   transform: translateY(-2px);
 }
-.voluntario-item__content {
+.candidatura-item__content {
   display: flex;
   gap: 12px;
 }
-.voluntario-item__avatar {
+.candidatura-item__avatar {
   width: 46px;
   height: 46px;
   border-radius: 50%;
@@ -2897,26 +2890,26 @@
   justify-content: center;
   flex-shrink: 0;
 }
-.voluntario-item h3 {
+.candidatura-item h3 {
   color: #333;
   margin-bottom: 5px;
   font-size: 17px;
 }
-.voluntario-item p {
+.candidatura-item p {
   color: #666;
   font-size: 14px;
   margin-bottom: 4px;
 }
-.voluntario-item small {
+.candidatura-item small {
   color: #888;
   font-size: 13px;
 }
-.voluntario-item__actions {
+.candidatura-item__actions {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.voluntario-item__actions button {
+.candidatura-item__actions button {
   border: none;
   border-radius: 8px;
   padding: 8px 10px;
@@ -2924,81 +2917,40 @@
   font-size: 13px;
   white-space: nowrap;
 }
-.voluntario-item__actions .btn-detalhes {
+.candidatura-item__actions .btn-detalhes {
   background: #f1f8f2;
   color: #2e7d32;
 }
-.voluntario-item__actions .btn-selecionar {
+.candidatura-item__actions .btn-aprovar {
   background: #2e7d32;
   color: #fff;
 }
 
-/* LISTA SELECIONADOS */
-.selecionados-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.selecionado-item {
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  transition: 0.2s;
-}
-.selecionado-item:hover {
-  border-color: #2e7d32;
-  transform: translateY(-2px);
-}
-.selecionado-item__info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.selecionado-item__info i {
-  width: 42px;
-  height: 42px;
-  background: #e8f5e9;
-  color: #2e7d32;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.selecionado-item__info h3 {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 4px;
-}
-.selecionado-item__info p {
-  font-size: 13px;
-  color: #666;
-  line-height: 1.4;
-}
-.selecionado-item__status {
-  padding: 7px 10px;
+/* STATUS */
+.status-pill {
+  display: inline-block;
+  width: fit-content;
+  padding: 6px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   background: #fff3cd;
   color: #856404;
-  white-space: nowrap;
 }
-.selecionado-item__status.contatado {
+.status-pill.aprovada {
   background: #d4edda;
   color: #155724;
 }
-.selecionado-item__status.recusado, .selecionado-item__status.cancelado {
+.status-pill.rejeitada {
   background: #f8d7da;
   color: #721c24;
 }
+.status-pill.pendente {
+  background: #fff3cd;
+  color: #856404;
+}
 
-/* ESTADO VAZIO */
+/* EMPTY */
 .empty-state {
   text-align: center;
   padding: 35px 15px;
@@ -3108,7 +3060,7 @@
 }
 
 /* MODAL */
-.modal-voluntario {
+.modal-candidatura {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -3118,7 +3070,7 @@
   justify-content: center;
   padding: 20px;
 }
-.modal-voluntario__content {
+.modal-candidatura__content {
   position: relative;
   background: #fff;
   width: 100%;
@@ -3127,7 +3079,7 @@
   padding: 24px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
-.modal-voluntario__close {
+.modal-candidatura__close {
   position: absolute;
   top: 14px;
   right: 14px;
@@ -3139,10 +3091,10 @@
   border-radius: 50%;
   cursor: pointer;
 }
-.modal-voluntario__close:hover {
+.modal-candidatura__close:hover {
   background: #e1e1e1;
 }
-.modal-voluntario__header {
+.modal-candidatura__header {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -3150,15 +3102,15 @@
   border-bottom: 1px solid #eee;
   margin-bottom: 18px;
 }
-.modal-voluntario__header h2 {
+.modal-candidatura__header h2 {
   color: #2e7d32;
   margin-bottom: 4px;
 }
-.modal-voluntario__header p {
+.modal-candidatura__header p {
   color: #666;
   font-size: 14px;
 }
-.modal-voluntario__icon {
+.modal-candidatura__icon {
   width: 56px;
   height: 56px;
   background: #e8f5e9;
@@ -3168,20 +3120,38 @@
   align-items: center;
   justify-content: center;
 }
-.modal-voluntario__icon i {
+.modal-candidatura__icon i {
   font-size: 24px;
 }
-.modal-voluntario__body {
+.modal-candidatura__status {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.modal-candidatura__status span {
+  color: #777;
+  font-size: 14px;
+}
+.modal-candidatura__status strong {
+  color: #2e7d32;
+}
+.modal-candidatura__body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
-.modal-voluntario__actions {
+.modal-candidatura__actions {
   display: flex;
   gap: 10px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
-.modal-voluntario__actions button {
+.modal-candidatura__actions button {
   border: none;
   border-radius: 8px;
   padding: 11px 14px;
@@ -3191,21 +3161,28 @@
   align-items: center;
   gap: 8px;
 }
-.modal-voluntario__actions #btnSelecionarVoluntario {
+.modal-candidatura__actions #btnAprovarCandidatura {
   background: #2e7d32;
   color: #fff;
 }
-.modal-voluntario__actions #btnSelecionarVoluntario:hover {
+.modal-candidatura__actions #btnAprovarCandidatura:hover {
   background: #1b5e20;
 }
-.modal-voluntario__actions .btn-cancelar {
+.modal-candidatura__actions .btn-rejeitar {
+  background: #c62828;
+  color: #fff;
+}
+.modal-candidatura__actions .btn-rejeitar:hover {
+  background: #b71c1c;
+}
+.modal-candidatura__actions .btn-cancelar {
   background: #f1f1f1;
   color: #333;
 }
-.modal-voluntario__actions .btn-cancelar:hover {
+.modal-candidatura__actions .btn-cancelar:hover {
   background: #e5e5e5;
 }
-.modal-voluntario #msgModalVoluntario {
+.modal-candidatura #msgModalCandidatura {
   margin-top: 12px;
   font-size: 14px;
   font-weight: 600;
@@ -3234,41 +3211,39 @@
 }
 
 /* RESPONSIVO */
-@media (max-width: 900px) {
-  .voluntarios__hero {
+@media (max-width: 1000px) {
+  .candidaturas__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .candidaturas__layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 700px) {
+  .candidaturas__hero {
     flex-direction: column;
     align-items: flex-start;
   }
-  .voluntarios__cards {
+  .candidaturas__cards {
     grid-template-columns: 1fr;
   }
-  .voluntarios__layout {
-    grid-template-columns: 1fr;
-  }
-  .voluntario-item {
+  .candidatura-item {
     flex-direction: column;
   }
-  .voluntario-item__actions {
+  .candidatura-item__actions {
     width: 100%;
     flex-direction: row;
   }
-  .voluntario-item__actions button {
+  .candidatura-item__actions button {
     flex: 1;
   }
-  .selecionado-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .selecionado-item__status {
-    align-self: flex-start;
-  }
-  .modal-voluntario__body {
+  .modal-candidatura__body {
     grid-template-columns: 1fr;
   }
-  .modal-voluntario__actions {
+  .modal-candidatura__actions {
     flex-direction: column;
   }
-  .modal-voluntario__actions button {
+  .modal-candidatura__actions button {
     justify-content: center;
   }
 }

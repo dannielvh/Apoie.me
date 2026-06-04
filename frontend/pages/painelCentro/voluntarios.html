@@ -8,163 +8,151 @@
 
   <link rel="stylesheet" href="../../css/style.css">
 
-  <title>Voluntários | Apoie.me</title>
+  <title>Candidaturas | Apoie.me</title>
 </head>
 
-<body class="voluntarios-page">
+<body class="candidaturas-page">
   <div id="header"></div>
 
-  <main class="voluntarios">
+  <main class="candidaturas">
 
     <!-- TOPO -->
-    <section class="voluntarios__hero">
+    <section class="candidaturas__hero">
       <div>
-        <span class="voluntarios__badge">
+        <span class="candidaturas__badge">
           <i class="fa-solid fa-users"></i>
           Painel do Centro
         </span>
 
-        <h1>Voluntários</h1>
+        <h1>Candidaturas de voluntários</h1>
 
         <p>
-          Veja pessoas disponíveis para ajudar, filtre por habilidades
-          e selecione os voluntários mais adequados para o seu centro.
+          Acompanhe os usuários que se candidataram para ajudar seu centro,
+          veja seus dados e aprove ou rejeite as candidaturas.
         </p>
       </div>
 
-      <a href="../painelCentro/dashboardCentro.html" class="voluntarios__back">
+      <a href="centroDashboard.html" class="candidaturas__back">
         <i class="fa-solid fa-arrow-left"></i>
         Voltar ao painel
       </a>
     </section>
 
-    <!-- AVISO DE STATUS -->
-    <section id="voluntariosAviso" class="voluntarios__aviso hidden">
-      <!-- JS preenche caso o centro não esteja aprovado -->
+    <!-- AVISO STATUS -->
+    <section id="candidaturasAviso" class="candidaturas__aviso hidden">
+      <!-- JS preenche se o centro não estiver aprovado -->
     </section>
 
-    <!-- CARDS DE RESUMO -->
-    <section class="voluntarios__cards">
+    <!-- CARDS -->
+    <section class="candidaturas__cards">
 
-      <div class="voluntario-card">
-        <div class="voluntario-card__icon">
-          <i class="fa-solid fa-user-check"></i>
+      <div class="candidatura-card">
+        <div class="candidatura-card__icon">
+          <i class="fa-solid fa-inbox"></i>
         </div>
 
         <div>
-          <span>Voluntários encontrados</span>
-          <strong id="totalVoluntarios">0</strong>
+          <span>Total de candidaturas</span>
+          <strong id="totalCandidaturas">0</strong>
         </div>
       </div>
 
-      <div class="voluntario-card">
-        <div class="voluntario-card__icon">
-          <i class="fa-solid fa-location-dot"></i>
+      <div class="candidatura-card">
+        <div class="candidatura-card__icon">
+          <i class="fa-solid fa-clock"></i>
         </div>
 
         <div>
-          <span>Cidade do centro</span>
-          <strong id="cidadeCentro">-</strong>
+          <span>Pendentes</span>
+          <strong id="totalPendentes">0</strong>
         </div>
       </div>
 
-      <div class="voluntario-card">
-        <div class="voluntario-card__icon">
-          <i class="fa-solid fa-handshake-angle"></i>
+      <div class="candidatura-card">
+        <div class="candidatura-card__icon">
+          <i class="fa-solid fa-circle-check"></i>
         </div>
 
         <div>
-          <span>Selecionados</span>
-          <strong id="totalSelecionados">0</strong>
+          <span>Aprovadas</span>
+          <strong id="totalAprovadas">0</strong>
+        </div>
+      </div>
+
+      <div class="candidatura-card">
+        <div class="candidatura-card__icon">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+
+        <div>
+          <span>Rejeitadas</span>
+          <strong id="totalRejeitadas">0</strong>
         </div>
       </div>
 
     </section>
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <section class="voluntarios__layout">
+    <section class="candidaturas__layout">
 
-      <!-- COLUNA PRINCIPAL -->
-      <div class="voluntarios__main">
-
-        <!-- LISTA DE VOLUNTÁRIOS DISPONÍVEIS -->
-        <section class="voluntarios__panel">
-          <div class="panel-header">
-            <div>
-              <h2>Voluntários Disponíveis</h2>
-              <p>
-                Inicialmente são exibidos voluntários da mesma cidade do centro. Use os filtros para expandir a busca ou
-                encontrar perfis específicos.
-              </p>
-            </div>
-
-            <span class="limit-info">
-              Mostrando até 10
-            </span>
+      <!-- LISTA -->
+      <section class="candidaturas__panel">
+        <div class="panel-header">
+          <div>
+            <h2>Candidaturas recebidas</h2>
+            <p>
+              Veja os voluntários que demonstraram interesse em ajudar este centro.
+            </p>
           </div>
 
-          <div id="listaVoluntarios" class="voluntarios-lista">
-            <!-- JS renderiza os voluntários disponíveis -->
-          </div>
-        </section>
+          <span class="limit-info">
+            Mais recentes primeiro
+          </span>
+        </div>
 
-        <!-- VOLUNTÁRIOS SELECIONADOS -->
-        <section class="voluntarios__panel voluntarios__selecionados">
-          <div class="panel-header">
-            <div>
-              <h2>Voluntários selecionados</h2>
-              <p>
-                Pessoas que já foram escolhidas pelo centro para possível contato.
-              </p>
-            </div>
-          </div>
-
-          <div id="listaSelecionados" class="selecionados-lista">
-            <!-- JS renderiza os voluntários selecionados -->
-          </div>
-        </section>
-
-      </div>
+        <div id="listaCandidaturas" class="candidaturas-lista">
+          <!-- JS renderiza aqui -->
+        </div>
+      </section>
 
       <!-- FILTROS -->
-      <aside class="voluntarios__filters">
+      <aside class="candidaturas__filters">
 
         <div class="filter-card">
-          <h3>Filtrar voluntários</h3>
+          <h3>Filtrar candidaturas</h3>
 
           <p>
-            Refine a busca por perfil, habilidade ou disponibilidade.
+            Use os filtros para encontrar candidatos por status, habilidade ou nome.
           </p>
 
-          <form id="formFiltrosVoluntarios">
+          <form id="formFiltrosCandidaturas">
+
+            <div class="form-group">
+              <label for="filtroNome">Nome</label>
+              <input
+                type="text"
+                id="filtroNome"
+                placeholder="Ex: João, Maria..."
+              >
+            </div>
 
             <div class="form-group">
               <label for="filtroHabilidade">Habilidade</label>
-
-              <input type="text" id="filtroHabilidade" placeholder="Ex: transporte, enfermagem...">
+              <input
+                type="text"
+                id="filtroHabilidade"
+                placeholder="Ex: transporte, enfermagem..."
+              >
             </div>
 
             <div class="form-group">
-              <label for="filtroDisponibilidade">Disponibilidade</label>
-
-              <select id="filtroDisponibilidade">
-                <option value="">Todas</option>
-                <option value="manha">Manhã</option>
-                <option value="tarde">Tarde</option>
-                <option value="noite">Noite</option>
-                <option value="finais de semana">Finais de semana</option>
-                <option value="qualquer horário">Qualquer horário</option>
+              <label for="filtroStatus">Status</label>
+              <select id="filtroStatus">
+                <option value="">Todos</option>
+                <option value="pendente">Pendente</option>
+                <option value="aprovada">Aprovada</option>
+                <option value="rejeitada">Rejeitada</option>
               </select>
-            </div>
-
-            <div class="form-group">
-              <label for="filtroCidade">Cidade</label>
-
-              <div class="cidade__select-wrapper">
-                <input type="text" id="filtroCidade" placeholder="Digite a cidade" autocomplete="off">
-
-                <ul id="sugestoesCidadeFiltro" class="sugestoes-lista"></ul>
-              </div>
             </div>
 
             <button type="submit">
@@ -185,22 +173,22 @@
           <ul>
             <li>
               <i class="fa-solid fa-circle-check"></i>
-              Veja voluntários cadastrados.
+              O usuário cria um perfil de voluntário.
             </li>
 
             <li>
               <i class="fa-solid fa-circle-check"></i>
-              Abra os detalhes do candidato.
+              Depois ele se candidata ao centro.
             </li>
 
             <li>
               <i class="fa-solid fa-circle-check"></i>
-              Selecione quem se encaixa melhor.
+              O centro analisa os dados do candidato.
             </li>
 
             <li>
               <i class="fa-solid fa-circle-check"></i>
-              Depois entre em contato por fora.
+              A candidatura pode ser aprovada ou rejeitada.
             </li>
           </ul>
         </div>
@@ -211,40 +199,35 @@
 
   </main>
 
-  <!-- MODAL DETALHES DO VOLUNTÁRIO -->
-  <div id="modalVoluntario" class="modal-voluntario hidden">
-    <div class="modal-voluntario__content">
+  <!-- MODAL DETALHES -->
+  <div id="modalCandidatura" class="modal-candidatura hidden">
+    <div class="modal-candidatura__content">
 
-      <button id="btnFecharModalVoluntario" class="modal-voluntario__close" type="button">
+      <button id="btnFecharModalCandidatura" class="modal-candidatura__close" type="button">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <div class="modal-voluntario__header">
-        <div class="modal-voluntario__icon">
+      <div class="modal-candidatura__header">
+        <div class="modal-candidatura__icon">
           <i class="fa-solid fa-user"></i>
         </div>
 
         <div>
-          <h2 id="modalNome">Nome do voluntário</h2>
-          <p id="modalCidade">Cidade</p>
+          <h2 id="modalNome">Nome do candidato</h2>
+          <p id="modalEmail">email@email.com</p>
         </div>
       </div>
 
-      <div class="modal-voluntario__body">
+      <div class="modal-candidatura__status">
+        <span>Status atual:</span>
+        <strong id="modalStatus">-</strong>
+      </div>
+
+      <div class="modal-candidatura__body">
 
         <div class="detail-item">
           <span>Telefone</span>
           <strong id="modalTelefone">-</strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Email</span>
-          <strong id="modalEmail">-</strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Habilidades</span>
-          <strong id="modalHabilidades">-</strong>
         </div>
 
         <div class="detail-item">
@@ -253,29 +236,39 @@
         </div>
 
         <div class="detail-item detail-item--full">
-          <span>Experiência</span>
-          <p id="modalExperiencia">-</p>
+          <span>Habilidades</span>
+          <p id="modalHabilidades">-</p>
         </div>
 
-        <div class="detail-item detail-item--full">
-          <span>Observação</span>
-          <p id="modalObservacao">-</p>
+        <div class="detail-item">
+          <span>Centro</span>
+          <strong id="modalCentro">-</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>Data da candidatura</span>
+          <strong id="modalData">-</strong>
         </div>
 
       </div>
 
-      <div class="modal-voluntario__actions">
-        <button id="btnSelecionarVoluntario" type="button">
+      <div class="modal-candidatura__actions">
+        <button id="btnAprovarCandidatura" type="button">
           <i class="fa-solid fa-check"></i>
-          Selecionar voluntário
+          Aprovar
         </button>
 
-        <button id="btnCancelarModalVoluntario" class="btn-cancelar" type="button">
+        <button id="btnRejeitarCandidatura" class="btn-rejeitar" type="button">
+          <i class="fa-solid fa-xmark"></i>
+          Rejeitar
+        </button>
+
+        <button id="btnCancelarModalCandidatura" class="btn-cancelar" type="button">
           Cancelar
         </button>
       </div>
 
-      <p id="msgModalVoluntario"></p>
+      <p id="msgModalCandidatura"></p>
 
     </div>
   </div>
