@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="../../css/style.css">
+
+  <title>Pedidos de Doação | Apoie.me</title>
+</head>
+
+<body class="pedidos-page">
+  <div id="header"></div>
+
+  <main class="pedidos">
+
+    <!-- TOPO -->
+    <section class="pedidos__hero">
+      <div>
+        <span class="pedidos__badge">
+          <i class="fa-solid fa-box-open"></i>
+          Painel do Centro
+        </span>
+
+        <h1>Pedidos de Doação</h1>
+
+        <p>
+          Crie, acompanhe e atualize pedidos de doação do seu centro de apoio.
+        </p>
+      </div>
+
+      <a href="centroDashboard.html" class="pedidos__back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar ao painel
+      </a>
+    </section>
+
+    <!-- AVISO -->
+    <section id="pedidosAviso" class="pedidos__aviso hidden">
+      <!-- JS preenche caso o centro não esteja aprovado -->
+    </section>
+
+    <!-- CARDS -->
+    <section class="pedidos__cards">
+
+      <div class="pedido-card">
+        <div class="pedido-card__icon">
+          <i class="fa-solid fa-list-check"></i>
+        </div>
+
+        <div>
+          <span>Pedidos ativos</span>
+          <strong id="totalPedidosAtivos">0</strong>
+        </div>
+      </div>
+
+      <div class="pedido-card">
+        <div class="pedido-card__icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <div>
+          <span>Urgentes</span>
+          <strong id="totalPedidosUrgentes">0</strong>
+        </div>
+      </div>
+
+      <div class="pedido-card">
+        <div class="pedido-card__icon">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <div>
+          <span>Atendidos</span>
+          <strong id="totalPedidosAtendidos">0</strong>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CONTEÚDO -->
+    <section class="pedidos__layout">
+
+      <!-- COLUNA PRINCIPAL -->
+      <div class="pedidos__main">
+
+        <!-- LISTA DE PEDIDOS -->
+        <section class="pedidos__panel">
+          <div class="panel-header">
+            <div>
+              <h2>Pedidos cadastrados</h2>
+              <p>
+                Acompanhe os pedidos de doação criados pelo seu centro.
+              </p>
+            </div>
+
+            <span class="limit-info">
+              Gerenciamento
+            </span>
+          </div>
+
+          <div id="listaPedidos" class="pedidos-lista">
+            <!-- JS renderiza os pedidos aqui -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- COLUNA LATERAL -->
+      <aside class="pedidos__side">
+
+        <!-- FORMULÁRIO CRIAR PEDIDO -->
+        <div class="pedido-form-card">
+          <h3>Criar novo pedido</h3>
+
+          <p>
+            Cadastre uma necessidade atual do centro.
+          </p>
+
+          <form id="formPedidoDoacao">
+
+            <div class="form-group">
+              <label for="titulo">Título *</label>
+              <input
+                type="text"
+                id="titulo"
+                placeholder="Ex: Precisamos de água potável"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="categoria">Categoria *</label>
+              <select id="categoria">
+                <option value="">Selecione</option>
+                <option value="Água">Água</option>
+                <option value="Alimentos">Alimentos</option>
+                <option value="Roupas">Roupas</option>
+                <option value="Cobertores">Cobertores</option>
+                <option value="Produtos de higiene">Produtos de higiene</option>
+                <option value="Medicamentos">Medicamentos</option>
+                <option value="Materiais de limpeza">Materiais de limpeza</option>
+                <option value="Fraldas">Fraldas</option>
+                <option value="Ração animal">Ração animal</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="quantidadeNecessaria">Necessário *</label>
+                <input
+                  type="number"
+                  id="quantidadeNecessaria"
+                  min="1"
+                  placeholder="100"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="quantidadeRecebida">Recebido</label>
+                <input
+                  type="number"
+                  id="quantidadeRecebida"
+                  min="0"
+                  placeholder="0"
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="unidade">Unidade</label>
+              <select id="unidade">
+                <option value="unidades">Unidades</option>
+                <option value="kg">Kg</option>
+                <option value="litros">Litros</option>
+                <option value="caixas">Caixas</option>
+                <option value="pacotes">Pacotes</option>
+                <option value="sacos">Sacos</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="urgencia">Urgência</label>
+              <select id="urgencia">
+                <option value="baixa">Baixa</option>
+                <option value="media" selected>Média</option>
+                <option value="alta">Alta</option>
+                <option value="critica">Crítica</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="descricao">Descrição</label>
+              <textarea
+                id="descricao"
+                placeholder="Descreva melhor a necessidade..."
+              ></textarea>
+            </div>
+
+            <button type="submit">
+              <i class="fa-solid fa-plus"></i>
+              Criar pedido
+            </button>
+
+            <p id="msgPedido"></p>
+
+          </form>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="pedido-form-card">
+          <h3>Filtrar pedidos</h3>
+
+          <p>
+            Encontre pedidos por categoria, status ou urgência.
+          </p>
+
+          <form id="formFiltrosPedidos">
+
+            <div class="form-group">
+              <label for="filtroCategoria">Categoria</label>
+              <select id="filtroCategoria">
+                <option value="">Todas</option>
+                <option value="Água">Água</option>
+                <option value="Alimentos">Alimentos</option>
+                <option value="Roupas">Roupas</option>
+                <option value="Cobertores">Cobertores</option>
+                <option value="Produtos de higiene">Produtos de higiene</option>
+                <option value="Medicamentos">Medicamentos</option>
+                <option value="Materiais de limpeza">Materiais de limpeza</option>
+                <option value="Fraldas">Fraldas</option>
+                <option value="Ração animal">Ração animal</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="filtroStatus">Status</label>
+              <select id="filtroStatus">
+                <option value="">Todos</option>
+                <option value="aberto">Aberto</option>
+                <option value="atendido">Atendido</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="filtroUrgencia">Urgência</label>
+              <select id="filtroUrgencia">
+                <option value="">Todas</option>
+                <option value="baixa">Baixa</option>
+                <option value="media">Média</option>
+                <option value="alta">Alta</option>
+                <option value="critica">Crítica</option>
+              </select>
+            </div>
+
+            <button type="submit">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              Aplicar filtros
+            </button>
+
+            <button type="button" id="btnLimparFiltrosPedidos" class="btn-limpar">
+              Limpar filtros
+            </button>
+
+          </form>
+        </div>
+
+      </aside>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL EDITAR PEDIDO -->
+  <div id="modalPedido" class="modal-pedido hidden">
+    <div class="modal-pedido__content">
+
+      <button id="btnFecharModalPedido" class="modal-pedido__close" type="button">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="modal-pedido__header">
+        <div class="modal-pedido__icon">
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+
+        <div>
+          <h2 id="modalPedidoTitulo">Editar pedido</h2>
+          <p id="modalPedidoStatus">Status</p>
+        </div>
+      </div>
+
+      <form id="formEditarPedido">
+
+        <input type="hidden" id="pedidoIdEditar">
+
+        <div class="form-group">
+          <label for="modalTitulo">Título</label>
+          <input type="text" id="modalTitulo">
+        </div>
+
+        <div class="form-group">
+          <label for="modalCategoria">Categoria</label>
+          <select id="modalCategoria">
+            <option value="Água">Água</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Roupas">Roupas</option>
+            <option value="Cobertores">Cobertores</option>
+            <option value="Produtos de higiene">Produtos de higiene</option>
+            <option value="Medicamentos">Medicamentos</option>
+            <option value="Materiais de limpeza">Materiais de limpeza</option>
+            <option value="Fraldas">Fraldas</option>
+            <option value="Ração animal">Ração animal</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="modalQuantidadeNecessaria">Necessário</label>
+            <input type="number" id="modalQuantidadeNecessaria" min="1">
+          </div>
+
+          <div class="form-group">
+            <label for="modalQuantidadeRecebida">Recebido</label>
+            <input type="number" id="modalQuantidadeRecebida" min="0">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modalUnidade">Unidade</label>
+          <select id="modalUnidade">
+            <option value="unidades">Unidades</option>
+            <option value="kg">Kg</option>
+            <option value="litros">Litros</option>
+            <option value="caixas">Caixas</option>
+            <option value="pacotes">Pacotes</option>
+            <option value="sacos">Sacos</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="modalUrgencia">Urgência</label>
+          <select id="modalUrgencia">
+            <option value="baixa">Baixa</option>
+            <option value="media">Média</option>
+            <option value="alta">Alta</option>
+            <option value="critica">Crítica</option>
+          </select>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label for="modalDescricao">Descrição</label>
+          <textarea id="modalDescricao"></textarea>
+        </div>
+
+        <div class="modal-pedido__actions">
+          <button type="submit">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Salvar alterações
+          </button>
+
+          <button type="button" id="btnAtualizarRecebidos" class="btn-secondary">
+            Atualizar recebidos
+          </button>
+
+          <button type="button" id="btnCancelarPedido" class="btn-danger">
+            Cancelar pedido
+          </button>
+        </div>
+
+        <p id="msgModalPedido"></p>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script src="../../js/components/headerCentro.js"></script>
+  <script src="../../js/painelCentro/pedidoDoacao.js"></script>
+</body>
+
+</html>

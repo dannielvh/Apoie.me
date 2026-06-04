@@ -27,6 +27,13 @@ async function carregarCentroDashboard() {
 
     const data = await res.json();
 
+    // Se der erro no backend
+    if (!res.ok) {
+      alert(data.erro || "Erro ao buscar centro.");
+      window.location.href = "../dashboard.html";
+      return;
+    }
+
     // Se o usuário não tiver centro cadastrado, volta para o dashboard normal
     if (!data.temCentro) {
       alert("Você ainda não possui um centro cadastrado.");
@@ -42,10 +49,14 @@ async function carregarCentroDashboard() {
     // Controla o que aparece dependendo do status do centro
     controlarStatusCentro(centro.status);
 
-    // Por enquanto os dados são zerados porque ainda não existe endpoint de resumo
+    // Busca resumo dinâmico de voluntários selecionados
+    const totalVoluntariosSelecionados = await carregarResumoVoluntarios();
+
+    // Por enquanto pedidos continuam zerados
+    // Depois, quando criar pedidos de doação, esses campos virão do backend também
     preencherResumo({
       pedidosAtivos: 0,
-      voluntarios: 0,
+      voluntarios: totalVoluntariosSelecionados,
       urgentes: 0,
       atendidos: 0
     });
@@ -53,6 +64,33 @@ async function carregarCentroDashboard() {
   } catch (err) {
     console.error("Erro ao carregar painel do centro:", err);
     alert("Erro ao carregar painel do centro.");
+  }
+}
+
+
+// ===============================
+// BUSCAR RESUMO DE VOLUNTÁRIOS
+// ===============================
+
+async function carregarResumoVoluntarios() {
+  try {
+    const res = await fetch("http://localhost:3000/api/voluntarios/selecionados/meu-centro", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return 0;
+    }
+
+    return Array.isArray(data) ? data.length : 0;
+
+  } catch (err) {
+    console.error("Erro ao carregar resumo de voluntários:", err);
+    return 0;
   }
 }
 
