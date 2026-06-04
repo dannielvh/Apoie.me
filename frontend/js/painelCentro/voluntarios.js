@@ -21,6 +21,10 @@ const totalSelecionados = document.getElementById("totalSelecionados");
 
 const voluntariosAviso = document.getElementById("voluntariosAviso");
 
+const sugestoesCidadeFiltro = document.getElementById("sugestoesCidadeFiltro");
+
+let cidades = [];
+
 const formFiltros = document.getElementById("formFiltrosVoluntarios");
 const filtroHabilidade = document.getElementById("filtroHabilidade");
 const filtroDisponibilidade = document.getElementById("filtroDisponibilidade");
@@ -91,6 +95,20 @@ function formatarStatusSelecao(status) {
 
   return statusMap[status] || status || "-";
 }
+
+// CARREGAR CIDADES DE MG PARA SUGESTÕES
+async function carregarCidades() {
+  try {
+    const res = await fetch(
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/MG/municipios"
+    );
+
+    cidades = await res.json();
+  } catch (err) {
+    console.error("Erro ao carregar cidades:", err);
+  }
+}
+
 
 
 // ===============================
@@ -574,11 +592,37 @@ btnLimparFiltros.addEventListener("click", async () => {
   await carregarVoluntarios({});
 });
 
+filtroCidade.addEventListener("input", () => {
+  const valor = filtroCidade.value.trim();
+
+  sugestoesCidadeFiltro.innerHTML = "";
+
+  if (valor.length < 2) return;
+
+  const filtradas = cidades.filter((cidade) =>
+    normalizar(cidade.nome).includes(normalizar(valor))
+  );
+
+  filtradas.slice(0, 8).forEach((cidade) => {
+    const li = document.createElement("li");
+    li.textContent = cidade.nome;
+
+    li.addEventListener("click", () => {
+      filtroCidade.value = cidade.nome;
+      sugestoesCidadeFiltro.innerHTML = "";
+    });
+
+    sugestoesCidadeFiltro.appendChild(li);
+  });
+});
+
 
 // ===============================
 // INICIALIZAÇÃO
 // ===============================
 window.addEventListener("load", async () => {
+  await carregarCidades();
+
   centroLogado = await carregarCentroLogado();
 
   const podeAcessar = controlarAcessoCentro(centroLogado);

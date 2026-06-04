@@ -93,7 +93,8 @@
             <div>
               <h2>Voluntários Disponíveis</h2>
               <p>
-                Inicialmente são exibidos voluntários da mesma cidade do centro. Use os filtros para expandir a busca ou encontrar perfis específicos.
+                Inicialmente são exibidos voluntários da mesma cidade do centro. Use os filtros para expandir a busca ou
+                encontrar perfis específicos.
               </p>
             </div>
 
@@ -140,11 +141,7 @@
             <div class="form-group">
               <label for="filtroHabilidade">Habilidade</label>
 
-              <input
-                type="text"
-                id="filtroHabilidade"
-                placeholder="Ex: transporte, enfermagem..."
-              >
+              <input type="text" id="filtroHabilidade" placeholder="Ex: transporte, enfermagem...">
             </div>
 
             <div class="form-group">
@@ -163,11 +160,11 @@
             <div class="form-group">
               <label for="filtroCidade">Cidade</label>
 
-              <input
-                type="text"
-                id="filtroCidade"
-                placeholder="Cidade"
-              >
+              <div class="cidade__select-wrapper">
+                <input type="text" id="filtroCidade" placeholder="Digite a cidade" autocomplete="off">
+
+                <ul id="sugestoesCidadeFiltro" class="sugestoes-lista"></ul>
+              </div>
             </div>
 
             <button type="submit">
