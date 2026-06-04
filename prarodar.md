@@ -1,6 +1,4 @@
-Claro. Essa versão é mais direta, focada em **fazer outra pessoa baixar o projeto e rodar**.
 
-````md
 # 🚀 Como rodar o projeto Apoie.me
 
 Este guia mostra o passo a passo para rodar o projeto localmente.
@@ -70,16 +68,35 @@ Depois selecione esse banco e abra o **Query Tool**.
 Execute este SQL no banco `mapa_apoio`:
 
 ```sql
+
+-- EXTENSÕES
+
+-- Usada para comparar textos ignorando acentos
+-- Exemplo: Divinópolis = Divinopolis
 CREATE EXTENSION IF NOT EXISTS unaccent;
+
+
+-- TABELA DE USUÁRIOS
 
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
+
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     senha VARCHAR(100) NOT NULL,
+
     cidade VARCHAR(100),
-    role VARCHAR(20) DEFAULT 'usuario'
+
+    -- Tipos possíveis:
+    -- usuario = usuário comum
+    -- admin = administrador do sistema
+    role VARCHAR(20) DEFAULT 'usuario',
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- TABELA DE CENTROS DE APOIO
 
 CREATE TABLE centros (
     id SERIAL PRIMARY KEY,
@@ -93,17 +110,23 @@ CREATE TABLE centros (
     cnpj VARCHAR(14),
     descricao TEXT,
     telefone VARCHAR(30),
+
     responsavel_nome VARCHAR(100),
     email_contato VARCHAR(100),
 
+    -- Status possíveis:
+    -- pendente = aguardando aprovação
+    -- aprovado = liberado para aparecer no sistema
+    -- rejeitado = recusado pelo administrador
+    -- suspenso = bloqueado temporariamente
     status VARCHAR(20) DEFAULT 'pendente',
 
+    -- Usuário que solicitou/cadastrou o centro
     usuario_id INT REFERENCES usuarios(id),
 
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-<<<<<<< Updated upstream
-=======
+
 
 
 -- TABELA DE VOLUNTÁRIOS
@@ -149,7 +172,9 @@ CREATE TABLE candidaturas (
   CONSTRAINT check_status_candidatura
   CHECK (status IN ('pendente', 'aprovada', 'rejeitada'))
 );
->>>>>>> Stashed changes
+
+
+
 ```
 
 ---
@@ -159,27 +184,38 @@ CREATE TABLE candidaturas (
 Execute também:
 
 ```sql
+-- ÍNDICES / REGRAS DE DUPLICIDADE
+
+-- Evita cadastrar centros com mesmo nome na mesma cidade,
+-- ignorando letras maiúsculas/minúsculas e acentos.
 CREATE UNIQUE INDEX unique_centro_nome_cidade
 ON centros (
   unaccent(lower(nome)),
   unaccent(lower(cidade))
 );
 
+
+-- Evita CNPJ duplicado, mas permite vários centros sem CNPJ.
+-- Importante: CNPJ vazio deve ser salvo como NULL, não como ''.
 CREATE UNIQUE INDEX unique_cnpj
 ON centros (cnpj)
 WHERE cnpj IS NOT NULL;
 
+
+-- Evita que o mesmo usuário cadastre mais de um centro.
+-- Use apenas se a regra do projeto for: 1 usuário representa 1 centro.
 CREATE UNIQUE INDEX unique_centro_por_usuario
 ON centros (usuario_id)
 WHERE usuario_id IS NOT NULL;
-<<<<<<< Updated upstream
-=======
 
 
 -- Evita que o mesmo voluntário seja selecionado mais de uma vez
 -- pelo mesmo centro.
 CREATE UNIQUE INDEX unique_voluntario_por_centro
+
 ON candidaturas (voluntario_id, centro_id);
+
+
 
 
 -- Evita que o mesmo usuário tenha mais de uma candidatura ativa
@@ -187,7 +223,10 @@ ON candidaturas (voluntario_id, centro_id);
 CREATE UNIQUE INDEX unique_voluntario_ativo_por_usuario
 ON voluntarios (usuario_id)
 WHERE status = 'ativo';
->>>>>>> Stashed changes
+
+
+
+
 ```
 
 ---
