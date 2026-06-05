@@ -1310,6 +1310,185 @@
   color: #333;
 }
 
+.saiba-mais-page {
+  background: #f5f5dc;
+  color: #1f2937;
+}
+
+.hero-saiba-mais {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 4rem;
+  margin: 3rem auto;
+  max-width: 1200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.mission-section {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 4rem;
+  margin: 3rem auto;
+  max-width: 1200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.how-it-works,
+.features-section,
+.about-project {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 4rem;
+  margin: 3rem auto;
+  max-width: 1200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.team-section,
+.cta-section {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-saiba-mais {
+  text-align: center;
+  padding-top: 8rem;
+}
+.hero-saiba-mais h1 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+.hero-saiba-mais p {
+  max-width: 700px;
+  margin: auto;
+  line-height: 1.8;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.info-card,
+.feature-card,
+.team-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.info-card i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.mission-section,
+.about-project,
+.cta-section {
+  text-align: center;
+}
+
+.cta-section {
+  margin-bottom: 4rem;
+}
+
+.footer-saiba-mais {
+  background: white;
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+}
+.footer-saiba-mais p {
+  margin: 0.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .hero-saiba-mais h1 {
+    font-size: 2rem;
+  }
+}
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-links a {
+  font-size: 1.8rem;
+  color: inherit;
+  transition: 0.3s;
+}
+
+.social-links a:hover {
+  transform: translateY(-3px);
+}
+
+.team-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 2rem auto 0 auto;
+}
+
+.team-role {
+  display: block;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
+
+.team-description {
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 35px;
+  flex-wrap: wrap;
+}
+.hero-buttons .primary-btn,
+.hero-buttons .secondary-btn {
+  padding: 14px 24px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.hero-buttons .primary-btn {
+  background-color: #2E7D32;
+  color: #FFFFFF;
+}
+.hero-buttons .primary-btn:hover {
+  background-color: #1B5E20;
+}
+.hero-buttons .secondary-btn {
+  background-color: transparent;
+  border: 2px solid #2E7D32;
+  color: #2E7D32;
+}
+.hero-buttons .secondary-btn:hover {
+  background-color: #2E7D32;
+  color: #FFFFFF;
+}
+
 .mapa-page {
   background: #f5f5dc;
   min-height: 100vh;
