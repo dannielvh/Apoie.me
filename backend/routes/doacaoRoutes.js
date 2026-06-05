@@ -1,19 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const doacaoController = require('../controllers/doacaoController');
 
-router.post('/doacao', (req, res) => {
-  const token = req.headers.authorization;
-  const { valor } = req.body;
-
-  if (!token) {
-    return res.status(401).json({ msg: "Usuário não está logado" });
-  }
-
-  if (!valor) {
-    return res.status(400).json({ msg: "Valor da doação é obrigatório" });
-  }
-
-  res.json({ msg: "Doação realizada com sucesso" });
-});
+router.get('/necessidades', doacaoController.listarNecessidades);
+router.post('/doacoes', doacaoController.criarDoacao);
 
 module.exports = router;

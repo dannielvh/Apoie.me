@@ -16,6 +16,9 @@ app.use('/api', centroRoutes);
 app.use('/api', voluntarioRoutes);
 app.use('/api', candidaturaRoutes);
 
+const doacaoRoutes = require('./routes/doacaoRoutes');
+app.use('/api', doacaoRoutes);
+
 app.listen(3000, () => {
   console.log('Servidor iniciado na porta 3000');
 });
