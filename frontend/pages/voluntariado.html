@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <title>Quero ser Voluntário | Apoie.me</title>
+</head>
+
+<body class="cadastro-centro-page">
+  <div id="header"></div>
+
+  <main class="cadastro-centro">
+
+    <section class="cadastro-centro__hero">
+      <div>
+        <span class="cadastro-centro__badge">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+          Programa de Voluntariado
+        </span>
+
+        <h1>Quero ser Voluntário</h1>
+
+        <p>
+          Preencha seus dados para se candidatar a vagas de apoio nos centros locais. 
+          Sua ajuda faz toda a diferença para a comunidade!
+        </p>
+      </div>
+
+      <a href="dashboard.html" class="cadastro-centro__back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar ao dashboard
+      </a>
+    </section>
+
+    <section class="cadastro-centro__layout">
+
+      <aside class="cadastro-centro__sidebar">
+
+        <div class="cadastro-info-card">
+          <div class="cadastro-info-card__icon">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+
+          <h3>Minhas Inscrições</h3>
+
+          <p>
+            Abaixo você pode acompanhar em tempo real as candidaturas enviadas e seus respectivos status.
+          </p>
+        </div>
+
+        <div class="cadastro-info-list">
+          <h4>Status das Candidaturas</h4>
+          
+          <div id="container-candidaturas">
+            </div>
+        </div>
+
+      </aside>
+
+      <section class="cadastro-centro__card">
+
+        <div class="form-title">
+          <div>
+            <h2>Formulário de Inscrição</h2>
+            <p>Selecione seu local e nos conte como você pode colaborar.</p>
+          </div>
+        </div>
+
+        <form id="form-candidatura">
+
+          <div class="form-group">
+            <label for="nome">Nome completo *</label>
+            <input type="text" id="nome" placeholder="Digite seu nome completo" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email de contato *</label>
+            <input type="email" id="email" placeholder="seuemail@contato.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="telefone">Telefone (WhatsApp) *</label>
+            <input type="text" id="telefone" placeholder="(00) 00000-0000" required>
+          </div>
+
+          <div class="form-group">
+            <label for="select-cidade">Cidade *</label>
+            <select id="select-cidade" required>
+              <option value="">Selecione sua Cidade</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="select-centro">Centro de Apoio desejado *</label>
+            <select id="select-centro" disabled required>
+              <option value="">Selecione um Centro de Apoio</option>
+            </select>
+          </div>
+
+          <div class="form-group form-group--full">
+            <label for="habilidades">O que você pode oferecer? *</label>
+            <textarea
+              id="habilidades"
+              placeholder="Descreva brevemente suas habilidades, recursos ou disponibilidade (Ex: Cozinhar, triagem de roupas, transporte com carro próprio, etc)."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit">
+              <i class="fa-solid fa-paper-plane"></i>
+              Enviar Candidatura
+            </button>
+
+            <a href="dashboard.html">Cancelar</a>
+          </div>
+
+        </form>
+
+        <p id="msg" style="margin-top: 20px; font-weight: 600; text-align: center;"></p>
+
+      </section>
+
+    </section>
+
+  </main>
+
+  <script src="../js/components/header.js"></script>
+  <script src="../js/voluntario.js"></script>
+</body>
+
+</html>
