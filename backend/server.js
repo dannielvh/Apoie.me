@@ -34,14 +34,23 @@ const usuarioRoutes = require('./routes/usuarioRoutes');
 
 app.use('/api', usuarioRoutes);
 
+// ======================
+// ROTAS
+// ======================
+const usuarioRoutes = require('./routes/usuarioRoutes');
+console.log("usuarioRoutes carregado");
+
 /**
  * Rotas de Gerenciamento e Cadastro de Centros de Apoio
  * @path /api
  */
 
 const centroRoutes = require('./routes/centroRoutes');
+
 const voluntarioRoutes = require('./routes/voluntarioRoutes');
 const candidaturaRoutes = require('./routes/candidaturaRoutes');
+
+console.log("centroRoutes carregado");
 
 app.use('/api', usuarioRoutes);
 app.use('/api', centroRoutes);
@@ -53,6 +62,7 @@ app.use('/api', doacaoRoutes);
 
 app.listen(3000, () => {
   console.log('Servidor iniciado na porta 3000');
+});
 
 /**
  * Rotas do Programa de Voluntariado
