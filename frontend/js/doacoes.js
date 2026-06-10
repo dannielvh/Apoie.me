@@ -1,19 +1,52 @@
+// Função responsável por exibir mensagens na tela (sucesso, erro, loading)
+function mostrarMensagem(texto, tipo) {
+  const msg = document.getElementById("mensagem");
+
+  if (!msg) return; // evita erro se não existir no HTML
+
+  msg.className = "mensagem";
+  msg.classList.add(tipo);
+  msg.innerText = texto;
+}
+
 const token = localStorage.getItem('token');
 
 
-//  função de doação
+// função de doação
 async function fazerDoacao(valor) {
   const token = localStorage.getItem('token');
 
-  const res = await fetch('http://localhost:3000/api/doacao', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': token
-    },
-    body: JSON.stringify({ valor })
-  });
+  if (!token) {
+    alert('Faça login para realizar uma doação.');
+    window.location.href = 'login.html';
+    return;
+  }
 
-  const data = await res.json();
-  alert(data.msg);
+  // mensagem de carregamento
+  mostrarMensagem("Enviando doação...", "loading");
+
+  try {
+    const res = await fetch('http://localhost:3000/api/doacao', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify({ valor })
+    });
+
+    const data = await res.json();
+
+    // verifica erro na resposta
+    if (!res.ok) {
+      throw new Error(data.msg);
+    }
+
+    // sucesso
+    mostrarMensagem(data.msg, "sucesso");
+
+  } catch (error) {
+    // erro
+    mostrarMensagem(error.message || "Erro ao realizar doação", "erro");
+  }
 }

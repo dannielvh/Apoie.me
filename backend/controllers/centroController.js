@@ -197,9 +197,22 @@ exports.criarCentro = async (req, res) => {
 
   const usuarioId = req.usuario.id; // AQUI
 
+
+
   let cnpjTratado = cnpj ? cnpj : null;
 
   try {
+    const centroDoUsuario = await pool.query(
+      `SELECT 1 FROM centros WHERE usuario_id = $1 LIMIT 1`,
+      [usuarioId]
+    );
+
+    if (centroDoUsuario.rows.length > 0) {
+      return res.status(400).json({
+        erro: "Você já possui um centro cadastrado"
+      });
+    }
+
     if (
       !nome ||
       !cidade ||
