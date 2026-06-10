@@ -11,7 +11,7 @@ module.exports = router;
 const doacaoController = require('../controllers/doacaoController'); 
 
 // Middleware unificado de autenticação (substitui as validações manuais de token nas rotas)
-const autenticar = require('../middlewares/authMiddleware'); 
+const autenticar = require('../middlewares/authMiddlewares'); 
 
 /**
  * ROTA: Registro de nova doação

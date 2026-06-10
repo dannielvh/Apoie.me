@@ -269,33 +269,73 @@ exports.criarCentro = async (req, res) => {
   }
 };
 
-// LISTAR
+
+// LISTAR  + NECESSIDADES (NOVA MODELAGEM)
 exports.listarCentros = async (req, res) => {
   let { cidade } = req.query;
 
   try {
+
+
     let query = `
-      SELECT * FROM centros
-      WHERE status = 'aprovado'
+      SELECT 
+        c.id_centro,
+        c.nome,
+        c.descricao,
+        c.categoria,
+        c.endereco,
+        c.contato,
+        c.validado,
+
+        n.id_necessidade,
+        n.nome_item,
+        n.descricao AS necessidade_descricao,
+        n.quantidade_necessaria,
+        n.quantidade_arrecadada,
+        n.urgencia
+
+      FROM centro c
+
+      /*
+        LEFT JOIN:
+        garante que centros apareçam mesmo sem necessidades
+      */
+      LEFT JOIN necessidade n
+        ON c.id_centro = n.id_centro
+
+      WHERE c.validado = true
     `;
+
     let values = [];
 
+    // filtro opcional por cidade
     if (cidade) {
-      cidade = cidade.trim();
-
-      query += `
-        AND unaccent(lower(cidade)) 
-        LIKE unaccent(lower($1))
-      `;
+      query += ` AND LOWER(c.endereco) LIKE LOWER($1)`;
       values.push(`%${cidade}%`);
     }
 
+    query += ` ORDER BY c.id_centro`;
+
     const result = await pool.query(query, values);
 
-    res.json(result.rows);
-  } catch (err)
-  {
-    res.status(500).json({ erro: 'Erro ao buscar centros' });
+    /*
+      PADRÃO NOVO DE RESPOSTA DA API
+    */
+    return res.json({
+      sucesso: true,
+      mensagem: "Centros listados com necessidades",
+      dados: result.rows
+    });
+
+  } catch (err) {
+
+    console.error("Erro ao listar centros:", err);
+
+    return res.status(500).json({
+      sucesso: false,
+      mensagem: "Erro ao buscar centros",
+      dados: null
+    });
   }
 };
 
