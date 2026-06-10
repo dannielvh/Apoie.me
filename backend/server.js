@@ -2,13 +2,12 @@
  * ============================================================================
  * APOIE.ME - SERVIDOR PRINCIPAL (BACKEND)
  * ============================================================================
- * Arquivo de inicialização da API RESTful, responsável pela configuração do 
- * ecossistema Express, middlewares globais, roteamento modular e injeção de 
- * dependências para integração de serviços.
+ * Arquivo de inicialização da API RESTful, responsável pela configuração do
+ * Express, middlewares globais e roteamento modular da aplicação.
  */
 
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
@@ -16,67 +15,47 @@ const app = express();
 // MIDDLEWARES GLOBAIS
 // ==========================================
 
-// Permite requisições de origens diferentes (CORS), essencial para a comunicação Front-to-Back local
+// Permite requisições entre frontend e backend
 app.use(cors());
 
-// Habilita o parse automático de payloads em formato JSON no corpo das requisições (req.body)
+// Permite receber JSON no corpo das requisições
 app.use(express.json());
 
 // ==========================================
-// DEFINIÇÃO DE ROTAS MODULARES (ENDPOINTS)
+// IMPORTAÇÃO DAS ROTAS
 // ==========================================
 
-/**
- * Rotas de Autenticação e Usuários
- * @path /api
- */
-const usuarioRoutes = require('./routes/usuarioRoutes');
+const usuarioRoutes = require("./routes/usuarioRoutes");
+const centroRoutes = require("./routes/centroRoutes");
+const voluntarioRoutes = require("./routes/voluntarioRoutes");
+const candidaturaRoutes = require("./routes/candidaturaRoutes");
+const doacaoRoutes = require("./routes/doacaoRoutes");
 
-app.use('/api', usuarioRoutes);
+// ==========================================
+// USO DAS ROTAS
+// ==========================================
 
-// ======================
-// ROTAS
-// ======================
-const usuarioRoutes = require('./routes/usuarioRoutes');
-console.log("usuarioRoutes carregado");
+// Todas as rotas começam com /api
+app.use("/api", usuarioRoutes);
+app.use("/api", centroRoutes);
+app.use("/api", voluntarioRoutes);
+app.use("/api", candidaturaRoutes);
+app.use("/api", doacaoRoutes);
 
-/**
- * Rotas de Gerenciamento e Cadastro de Centros de Apoio
- * @path /api
- */
+// ==========================================
+// ROTA DE TESTE
+// ==========================================
 
-const centroRoutes = require('./routes/centroRoutes');
-
-const voluntarioRoutes = require('./routes/voluntarioRoutes');
-const candidaturaRoutes = require('./routes/candidaturaRoutes');
-
-console.log("centroRoutes carregado");
-
-app.use('/api', usuarioRoutes);
-app.use('/api', centroRoutes);
-app.use('/api', voluntarioRoutes);
-app.use('/api', candidaturaRoutes);
-
-const doacaoRoutes = require('./routes/doacaoRoutes');
-app.use('/api', doacaoRoutes);
-
-app.listen(3000, () => {
-  console.log('Servidor iniciado na porta 3000');
+app.get("/", (req, res) => {
+  res.send("API Apoie.me rodando");
 });
 
-/**
- * Rotas do Programa de Voluntariado
- * Gerencia a busca de localidades, carregamento dinâmico de postos e submissão de candidaturas
- * @path /api/voluntarios
- */
-const voluntarioRoutes = require('./routes/voluntarioRoutes');
-app.use('/api/voluntarios', voluntarioRoutes); 
-
 // ==========================================
-// INICIALIZAÇÃO DO SERVIDOR HTTP
+// INICIALIZAÇÃO DO SERVIDOR
 // ==========================================
 
 const PORT = 3000;
+
 app.listen(PORT, () => {
-     console.log(`[SERVER] Servidor rodando com sucesso e escutando na porta ${PORT}`);
+  console.log(`Servidor iniciado na porta ${PORT}`);
 });
