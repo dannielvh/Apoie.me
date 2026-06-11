@@ -2311,6 +2311,330 @@
     padding: 0.4rem 0.9rem;
   }
 }
+.cadastro-centro-page {
+  background: #f5f5dc;
+  min-height: 100vh;
+}
+
+.cadastro-centro {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 35px 20px;
+}
+.cadastro-centro__hero {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  color: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.cadastro-centro__hero h1 {
+  font-size: 32px;
+  margin: 12px 0 8px;
+}
+.cadastro-centro__hero p {
+  max-width: 680px;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.5;
+}
+.cadastro-centro__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.cadastro-centro__back {
+  background: #fff;
+  color: #1b5e20;
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+.cadastro-centro__back:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.cadastro-centro__layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+.cadastro-centro__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.cadastro-centro__card {
+  background: #fff;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+.cadastro-centro .form-title {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+}
+.cadastro-centro .form-title h2 {
+  color: #2e7d32;
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+.cadastro-centro .form-title p {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.cadastro-centro form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.cadastro-centro .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.cadastro-centro .form-group--full {
+  grid-column: 1/-1;
+}
+.cadastro-centro .form-group label {
+  color: #333333;
+  font-size: 14px;
+  font-weight: 700;
+}
+.cadastro-centro .form-group input,
+.cadastro-centro .form-group select,
+.cadastro-centro .form-group textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  background: #fff;
+  color: #333333;
+  font-size: 14px;
+  font-family: inherit;
+  transition: 0.2s;
+}
+.cadastro-centro .form-group input:focus,
+.cadastro-centro .form-group select:focus,
+.cadastro-centro .form-group textarea:focus {
+  outline: none;
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.12);
+}
+.cadastro-centro .form-group input::placeholder,
+.cadastro-centro .form-group select::placeholder,
+.cadastro-centro .form-group textarea::placeholder {
+  color: #999999;
+}
+.cadastro-centro .form-group input:disabled,
+.cadastro-centro .form-group select:disabled,
+.cadastro-centro .form-group textarea:disabled {
+  background: #f1f1f1;
+  color: #777777;
+  cursor: not-allowed;
+}
+.cadastro-centro .form-group select {
+  cursor: pointer;
+}
+.cadastro-centro .form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.cadastro-centro .form-group small {
+  color: #666666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.cadastro-centro .form-actions {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+.cadastro-centro .form-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  background: #2e7d32;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+.cadastro-centro .form-actions button:hover {
+  background: #1b5e20;
+  transform: translateY(-1px);
+}
+.cadastro-centro .form-actions a {
+  background: #f1f1f1;
+  color: #333333;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: 0.2s;
+}
+.cadastro-centro .form-actions a:hover {
+  background: #e5e5e5;
+}
+.cadastro-centro #msg {
+  margin-top: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cadastro-info-card,
+.cadastro-info-list {
+  background: #fff;
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.cadastro-info-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.cadastro-info-card__icon i {
+  font-size: 24px;
+}
+.cadastro-info-card h3 {
+  color: #2e7d32;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.cadastro-info-card p {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cadastro-info-list h4 {
+  color: #2e7d32;
+  margin-bottom: 14px;
+  font-size: 17px;
+}
+.cadastro-info-list #container-candidaturas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cadastro-info-list #container-candidaturas > p {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.card-candidatura {
+  background: #f8f8f8;
+  border: 1px solid #eeeeee;
+  border-left: 4px solid #2e7d32;
+  padding: 14px;
+  border-radius: 10px;
+}
+.card-candidatura h4 {
+  color: #2e7d32;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.card-candidatura p {
+  color: #555555;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+.card-candidatura p strong {
+  color: #333333;
+}
+.card-candidatura .status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.card-candidatura .status.status-pendente {
+  background: #fff3cd;
+  color: #856404;
+}
+.card-candidatura .status.status-aprovada {
+  background: #d4edda;
+  color: #155724;
+}
+.card-candidatura .status.status-rejeitada {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+@media (max-width: 900px) {
+  .cadastro-centro__hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cadastro-centro__layout {
+    grid-template-columns: 1fr;
+  }
+  .cadastro-centro form {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 520px) {
+  .cadastro-centro {
+    padding: 25px 15px;
+  }
+  .cadastro-centro__hero {
+    padding: 24px;
+  }
+  .cadastro-centro__hero h1 {
+    font-size: 26px;
+  }
+  .cadastro-centro__card {
+    padding: 22px;
+  }
+  .cadastro-centro .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cadastro-centro .form-actions button,
+  .cadastro-centro .form-actions a {
+    justify-content: center;
+    text-align: center;
+  }
+  .cadastro-info-card,
+  .cadastro-info-list {
+    padding: 20px;
+  }
+}
 .perfil-page {
   background: #f5f5dc;
   min-height: 100vh;

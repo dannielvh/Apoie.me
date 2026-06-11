@@ -26,7 +26,7 @@
         <h1>Quero ser Voluntário</h1>
 
         <p>
-          Preencha seus dados para se candidatar a vagas de apoio nos centros locais. 
+          Preencha seus dados para se candidatar a vagas de apoio nos centros locais.
           Sua ajuda faz toda a diferença para a comunidade!
         </p>
       </div>
@@ -55,9 +55,9 @@
 
         <div class="cadastro-info-list">
           <h4>Status das Candidaturas</h4>
-          
+
           <div id="container-candidaturas">
-            </div>
+          </div>
         </div>
 
       </aside>
@@ -70,7 +70,6 @@
             <p>Selecione seu local e nos conte como você pode colaborar.</p>
           </div>
         </div>
-
         <form id="form-candidatura">
 
           <div class="form-group">
@@ -103,12 +102,25 @@
           </div>
 
           <div class="form-group form-group--full">
-            <label for="habilidades">O que você pode oferecer? *</label>
-            <textarea
-              id="habilidades"
-              placeholder="Descreva brevemente suas habilidades, recursos ou disponibilidade (Ex: Cozinhar, triagem de roupas, transporte com carro próprio, etc)."
-              required
-            ></textarea>
+            <label for="habilidades">Habilidades que podem ser úteis *</label>
+            <input type="text" id="habilidades"
+              placeholder="Ex: cozinhar, transporte, triagem de roupas, atendimento, organização, limpeza" required>
+
+            <small>
+              Separe as habilidades por vírgula. Informe apenas as atividades ou competências que você consegue ajudar.
+            </small>
+          </div>
+
+          <div class="form-group form-group--full">
+            <label for="observacao">Descrição / Observações *</label>
+            <textarea id="observacao"
+              placeholder="Descreva sua disponibilidade, experiência anterior, horários que pode ajudar, se possui veículo próprio ou outras observações importantes."
+              required></textarea>
+
+            <small>
+              Use este campo para explicar melhor sua disponibilidade, experiência e qualquer informação complementar
+              para o centro de apoio.
+            </small>
           </div>
 
           <div class="form-actions">
