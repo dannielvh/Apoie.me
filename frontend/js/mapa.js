@@ -106,6 +106,16 @@ input.addEventListener("keydown", (e) => {
   buscarPontos(cidadeEncontrada.nome);
 });
 
+function formatarUrgenciaPedido(urgencia) {
+  const urgencias = {
+    critica: "Crítica",
+    alta: "Alta",
+    media: "Média",
+    baixa: "Baixa"
+  };
+
+  return urgencias[urgencia] || "Média";
+}
 
 // ===============================
 // BUSCAR CENTROS NO BACKEND
@@ -221,7 +231,7 @@ function renderPontos(pontos) {
 // ===============================
 // MODAL DE DETALHES DO CENTRO
 // ===============================
-function abrirModalCentro(centro) {
+async function abrirModalCentro(centro) {
   document.getElementById("modalCentroTipo").textContent =
     centro.tipo || "Tipo não informado";
 
@@ -243,9 +253,9 @@ function abrirModalCentro(centro) {
   document.getElementById("modalCentroTelefone").textContent =
     centro.telefone || "-";
 
-  renderPedidosCentro([]);
-
   document.getElementById("modalCentro").classList.remove("hidden");
+
+  await carregarPedidosDoCentro(centro.id);
 }
 
 
@@ -255,10 +265,64 @@ function fecharModalCentro() {
 
 
 // ===============================
+// BUSCAR PEDIDOS DE DOAÇÃO DO CENTRO
+// ===============================
+async function carregarPedidosDoCentro(centroId) {
+  const container = document.getElementById("modalCentroPedidos");
+
+  if (!container) return;
+
+  container.innerHTML = `
+    <p>
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Carregando pedidos de doação...
+    </p>
+  `;
+
+  try {
+    const res = await fetch("http://localhost:3000/api/necessidades");
+
+    const data = await res.json();
+
+    console.log("STATUS DA RESPOSTA:", res.status);
+    console.log("RESPOSTA /api/necessidades:", data);
+
+    if (!res.ok) {
+      container.innerHTML = `
+        <p>Erro ao carregar pedidos deste centro.</p>
+      `;
+      return;
+    }
+
+    // aceita os dois formatos:
+    // { sucesso: true, dados: [...] }
+    // ou direto [...]
+    const pedidos = Array.isArray(data)
+      ? data
+      : Array.isArray(data.dados)
+        ? data.dados
+        : [];
+
+    const pedidosDoCentro = pedidos.filter((pedido) => {
+      return Number(pedido.centroId || pedido.centro_id) === Number(centroId);
+    });
+
+    renderPedidosCentro(pedidosDoCentro);
+
+  } catch (err) {
+    console.error("Erro ao carregar pedidos do centro:", err);
+
+    container.innerHTML = `
+      <p>Erro ao carregar pedidos de doação.</p>
+    `;
+  }
+}
+
+
+
+// ===============================
 // PEDIDOS DO CENTRO
 // ===============================
-// Por enquanto fica vazio.
-// Depois, quando existir backend de pedidos, essa função recebe os pedidos reais.
 function renderPedidosCentro(pedidos) {
   const container = document.getElementById("modalCentroPedidos");
 
@@ -274,12 +338,49 @@ function renderPedidosCentro(pedidos) {
   container.innerHTML = "";
 
   pedidos.forEach((pedido) => {
+    const quantidadeNecessaria = Number(pedido.quantidadeNecessaria || 0);
+    const quantidadeAtendida = Number(pedido.quantidadeAtendida || 0);
+
+    const porcentagem =
+      quantidadeNecessaria > 0
+        ? Math.round((quantidadeAtendida / quantidadeNecessaria) * 100)
+        : 0;
+
+    const faltam = quantidadeNecessaria - quantidadeAtendida;
+
     const div = document.createElement("div");
     div.classList.add("pedido-modal");
 
     div.innerHTML = `
-      <strong>${pedido.titulo}</strong>
-      <span>${pedido.quantidade_atual || 0} / ${pedido.quantidade_necessaria || 0}</span>
+      <div class="pedido-modal__header">
+        <strong>${pedido.item || "Pedido de doação"}</strong>
+        <span class="pedido-modal__urgencia ${pedido.urgencia || "media"}">
+          ${formatarUrgenciaPedido(pedido.urgencia)}
+        </span>
+      </div>
+
+      <p>
+        <strong>Categoria:</strong>
+        ${pedido.categoria || "Não informada"}
+      </p>
+
+      <p>
+        <strong>Descrição:</strong>
+        ${pedido.descricao || "Sem descrição informada."}
+      </p>
+
+      <p>
+        <strong>Quantidade:</strong>
+        ${quantidadeAtendida} de ${quantidadeNecessaria} recebidos
+      </p>
+
+      <div class="pedido-modal__progress">
+        <div style="width: ${porcentagem}%"></div>
+      </div>
+
+      <small>
+        Faltam ${faltam > 0 ? faltam : 0} unidades para atingir a meta.
+      </small>
     `;
 
     container.appendChild(div);
