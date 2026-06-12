@@ -84,30 +84,53 @@
     <div class="modal-box">
 
       <div class="modal-header">
-        <h2>Confirmar doação</h2>
+        <h2>Como doar</h2>
+
         <button class="modal-fechar" id="modal-fechar">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <div class="modal-body">
-        <!--
-          esse paragrafo e preenchido pelo JS com o nome do item e do centro quando o modal abre
-         ex: "vc vai contribuir com cobertores para o centro esperança"
-        -->
-        <p id="modal-descricao">Você está prestes a confirmar uma doação.</p>
 
-        <div class="modal-input-grupo">
-          <label for="modal-quantidade">Quantidade que você vai doar:</label>
+        <div class="modal-section">
+          <h3>
+            <i class="fa-solid fa-box-open"></i>
+            Detalhes da doação
+          </h3>
 
-          <input type="number" id="modal-quantidade" min="1" placeholder="Ex: 5">
+          <p id="modal-item"></p>
+          <p id="modal-categoria"></p>
+          <p id="modal-quantidade-info"></p>
+          <p id="modal-urgencia"></p>
+          <p id="modal-descricao-pedido"></p>
         </div>
+
+        <div class="modal-section">
+          <h3>
+            <i class="fa-solid fa-building"></i>
+            Centro de apoio
+          </h3>
+
+          <p id="modal-centro"></p>
+          <p id="modal-cidade"></p>
+          <p id="modal-endereco"></p>
+          <p id="modal-telefone"></p>
+          <p id="modal-horario"></p>
+        </div>
+
+        <div class="modal-alerta">
+          <i class="fa-solid fa-circle-info"></i>
+          <p>
+            Para realizar a doação, entre em contato com o centro de apoio ou leve os itens até o local informado.
+            A confirmação da quantidade recebida será feita pelo próprio centro.
+          </p>
+        </div>
+
       </div>
 
-      <!-- botoes de açao -->
       <div class="modal-footer">
-        <button class="btn-cancelar" id="btn-cancelar">Cancelar</button>
-        <button class="btn-confirmar" id="btn-confirmar">Confirmar doação</button>
+        <button class="btn-cancelar" id="btn-cancelar">Fechar</button>
       </div>
 
     </div>
