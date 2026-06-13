@@ -187,7 +187,8 @@ exports.criarCentro = async (req, res) => {
     cidade,
     tipo,
     rua,
-    horario,
+    horario_abertura,
+    horario_fechamento,
     cnpj,
     descricao,
     telefone,
@@ -244,7 +245,7 @@ exports.criarCentro = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO centros 
-      (nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, status, responsavel_nome, email_contato, usuario_id)
+      (nome, cidade, tipo, rua, horario_abertura, horario_fechamento, cnpj, descricao, telefone, status, responsavel_nome, email_contato, usuario_id)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente',$9,$10,$11)
       RETURNING *`,
       [

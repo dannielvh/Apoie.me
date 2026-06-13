@@ -34,7 +34,8 @@ CREATE TABLE centros (
     cidade VARCHAR(100) NOT NULL,
     tipo VARCHAR(100) NOT NULL,
     rua VARCHAR(150) NOT NULL,
-    horario VARCHAR(50),
+    horario_abertura TIME,
+    horario_fechamento TIME,
 
     cnpj VARCHAR(14),
     descricao TEXT,
