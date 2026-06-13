@@ -8,6 +8,93 @@ function validarSenha(senha) {
   };
 }
 
+const senhaInput = document.getElementById("senha");
+
+senhaInput.addEventListener("input", () => {
+
+  const resultado = validarSenha(senhaInput.value);
+
+  atualizarRequisito(
+    "req-maiuscula",
+    resultado.maiuscula,
+    "Pelo menos uma letra maiúscula"
+  );
+
+  atualizarRequisito(
+    "req-maiuscula",
+    resultado.maiuscula,
+    "Pelo menos uma letra maiúscula"
+  );
+
+  atualizarRequisito(
+    "req-numero",
+    resultado.numero,
+    "Pelo menos um número"
+  );
+
+  atualizarRequisito(
+    "req-especial",
+    resultado.especial,
+    "Pelo menos um caractere especial"
+  );
+
+  atualizarRequisito(
+    "req-tamanho",
+    resultado.tamanho,
+    "Pelo menos 6 caracteres"
+  );
+
+});
+
+function atualizarRequisito(id, valido, texto){
+
+    const elemento = document.getElementById(id);
+
+    if(valido){
+
+        elemento.innerHTML = "✓ " + texto;
+        elemento.classList.add("ok");
+
+    }else{
+
+        elemento.innerHTML = "✗ " + texto;
+        elemento.classList.remove("ok");
+
+    }
+
+}
+
+// ==========================
+// VERIFICAÇÃO DAS SENHAS
+// ==========================
+const confirmarInput = document.getElementById("confirmarSenha");
+const mensagem = document.getElementById("mensagem-confirmacao");
+
+function verificarSenhas() {
+
+    if (!confirmarInput.value) {
+
+        mensagem.innerHTML = "";
+        return;
+    }
+
+    if (senhaInput.value === confirmarInput.value) {
+
+        mensagem.innerHTML = "✓ As senhas coincidem";
+        mensagem.style.color = "#16a34a";
+
+    }
+    else {
+
+        mensagem.innerHTML = "✗ As senhas não coincidem";
+        mensagem.style.color = "#dc2626";
+
+    }
+}
+
+senhaInput.addEventListener("input", verificarSenhas);
+confirmarInput.addEventListener("input", verificarSenhas);
+
 document.getElementById('formCadastro').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -15,7 +102,15 @@ document.getElementById('formCadastro').addEventListener('submit', async (e) => 
   const email = document.getElementById('email').value;
   const cidade = document.getElementById('cidade').value;
   const senha = document.getElementById('senha').value;
+  const confirmarSenha = document.getElementById("confirmarSenha").value;
 
+  if (senha !== confirmarSenha) {
+
+  mensagem.textContent = "✗ As senhas não coincidem";
+  mensagem.style.color = "red";
+
+  return;
+  }
  
   const resultado = validarSenha(senha);
 
@@ -26,10 +121,8 @@ document.getElementById('formCadastro').addEventListener('submit', async (e) => 
     !resultado.especial ||
     !resultado.tamanho
   ) {
-    alert('Senha fraca! Use:\n- Letra maiúscula\n- Letra minúscula\n- Número\n- Caractere especial\n- Mínimo 6 caracteres');
     return;
   }
-
 
   const res = await fetch('http://localhost:3000/api/cadastro', {
     method: 'POST',

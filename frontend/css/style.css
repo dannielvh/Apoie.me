@@ -4734,4 +4734,18 @@
   }
 }
 
+.senha-requisitos{
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.senha-requisitos p{
+    margin: 4px 0;
+    color: #dc2626;
+}
+
+.senha-requisitos .ok{
+    color: #16a34a;
+}
+
 /*# sourceMappingURL=style.css.map */
