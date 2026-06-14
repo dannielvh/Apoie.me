@@ -1,465 +1,468 @@
 /* ========================================================= */
-/* DASHBOARD.JS - APOIE.ME                                   */
+/* DASHBOARD.JS - APOIE.ME                                  */
 /* ========================================================= */
 
-
-/* ========================================================= */
-/* DADOS MOCKADOS                                            */
-/* Futuramente essas informações virão do backend/API        */
-/* ========================================================= */
-
-const necessidades = [
-
-    {
-        centro: 'Centro Esperança',
-        item: 'Cobertores',
-        arrecadado: 45,
-        necessario: 100,
-        urgencia: 'Crítica',
-        classeUrgencia: 'critical',
-        prazo: '25/05'
-    },
-
-    {
-        centro: 'Casa do Bem',
-        item: 'Cestas básicas',
-        arrecadado: 30,
-        necessario: 80,
-        urgencia: 'Alta',
-        classeUrgencia: 'high',
-        prazo: '28/05'
-    },
-
-    {
-        centro: 'Projeto Luz',
-        item: 'Roupas infantis',
-        arrecadado: 60,
-        necessario: 120,
-        urgencia: 'Média',
-        classeUrgencia: 'medium',
-        prazo: '30/05'
-    },
-
-    {
-        centro: 'Lar Solidário',
-        item: 'Produtos de higiene',
-        arrecadado: 20,
-        necessario: 70,
-        urgencia: 'Alta',
-        classeUrgencia: 'high',
-        prazo: '02/06'
-    }
-
-];
-
-
-
-/* ========================================================= */
-/* ATIVIDADES RECENTES                                       */
-/* ========================================================= */
-
-const atividades = [
-
-    {
-        tipo: 'donation',
-        icone: 'fa-hand-holding-heart',
-        texto: 'Nova doação recebida para cestas básicas.',
-        tempo: 'Há 10 minutos'
-    },
-
-    {
-        tipo: 'alert',
-        icone: 'fa-circle-exclamation',
-        texto: 'Nova necessidade urgente cadastrada.',
-        tempo: 'Há 30 minutos'
-    },
-
-    {
-        tipo: 'success',
-        icone: 'fa-circle-check',
-        texto: 'Campanha de roupas parcialmente atendida.',
-        tempo: 'Hoje'
-    },
-
-    {
-        tipo: 'donation',
-        icone: 'fa-box-open',
-        texto: 'Novos itens arrecadados para o Centro Esperança.',
-        tempo: 'Hoje'
-    }
-
-];
-
-
-
-/* ========================================================= */
-/* FUNÇÃO - CARREGAR NECESSIDADES                            */
-/* ========================================================= */
-
-function carregarNecessidades() {
-
-    const container =
-        document.querySelector('.urgent-needs-list');
-
-
-    /* Limpa o container */
-    container.innerHTML = '';
-
-
-
-    /* Percorre cada necessidade */
-    necessidades.forEach(necessidade => {
-
-        /* Calcula porcentagem */
-        const porcentagem =
-            Math.round(
-                (necessidade.arrecadado / necessidade.necessario) * 100
-            );
-
-
-
-        /* Estrutura HTML do card */
-        const card = `
-
-      <div class="need-card">
-
-        <!-- TOPO -->
-        <div class="need-card-header">
-
-          <h3>${necessidade.centro}</h3>
-
-          <span class="urgency-badge ${necessidade.classeUrgencia}">
-            ${necessidade.urgencia}
-          </span>
-
-        </div>
-
-
-
-        <!-- ITEM -->
-        <p class="need-item">
-
-          Item solicitado:
-          <strong>${necessidade.item}</strong>
-
-        </p>
-
-
-
-        <!-- QUANTIDADES -->
-        <div class="need-quantity">
-
-          <span>
-            ${necessidade.arrecadado} arrecadados
-          </span>
-
-          <span>
-            ${necessidade.necessario} necessários
-          </span>
-
-        </div>
-
-
-
-        <!-- BARRA DE PROGRESSO -->
-        <div class="progress-bar">
-
-          <div
-            class="progress-fill"
-            style="width: ${porcentagem}%;">
-          </div>
-
-        </div>
-
-
-
-        <!-- RODAPÉ -->
-        <div class="need-footer">
-
-          <span class="progress-text">
-            ${porcentagem}% concluído
-          </span>
-
-          <span class="deadline">
-            Prazo: ${necessidade.prazo}
-          </span>
-
-        </div>
-
-      </div>
-
-    `;
-
-
-
-        /* Adiciona card ao container */
-        container.innerHTML += card;
-
-    });
-
-}
-
-
-
-/* ========================================================= */
-/* FUNÇÃO - CARREGAR ATIVIDADES                              */
-/* ========================================================= */
-
-function carregarAtividades() {
-
-    const container =
-        document.querySelector('.activities-list');
-
-
-    /* Limpa conteúdo */
-    container.innerHTML = '';
-
-
-
-    /* Percorre atividades */
-    atividades.forEach(atividade => {
-
-        const item = `
-
-      <div class="activity-item">
-
-        <!-- ÍCONE -->
-        <div class="activity-icon ${atividade.tipo}">
-
-          <i class="fa-solid ${atividade.icone}"></i>
-
-        </div>
-
-
-
-        <!-- TEXTO -->
-        <div class="activity-content">
-
-          <p>${atividade.texto}</p>
-
-          <span>${atividade.tempo}</span>
-
-        </div>
-
-      </div>
-
-    `;
-
-
-
-        /* Adiciona atividade */
-        container.innerHTML += item;
-
-    });
-
-}
-
-
-
-/* ========================================================= */
-/* FUNÇÃO - DROPDOWNS                                        */
-/* Controla abrir/fechar da seção "Como doar"                */
-/* ========================================================= */
-
-function configurarDropdowns() {
-
-    /* Seleciona todos os botões */
-    const toggles =
-        document.querySelectorAll('.guide-toggle');
-
-
-
-    /* Percorre todos */
-    toggles.forEach(toggle => {
-
-        toggle.addEventListener('click', () => {
-
-            /* Item pai */
-            const item = toggle.parentElement;
-
-
-            /* Alterna classe active */
-            item.classList.toggle('active');
-
-        });
-
-    });
-
-}
-
-
-
-/* ========================================================= */
-/* FUNÇÃO PRINCIPAL                                          */
-/* ========================================================= */
-
-function iniciarDashboard() {
-
-    carregarNecessidades();
-
-    carregarAtividades();
-
-    configurarDropdowns();
-
-}
-
-
-
-/* ========================================================= */
-/* INICIALIZAÇÃO                                             */
-/* ========================================================= */
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    iniciarDashboard();
-
+let necessidades = [];
+
+
+// ===============================
+// INICIALIZAÇÃO
+// ===============================
+window.addEventListener("load", () => {
+  configurarDropdowns();
+  configurarCardAcesso();
+  configurarBotaoCentro();
+  carregarDashboard();
 });
 
 
+// ===============================
+// DROPDOWNS DE COMO DOAR
+// ===============================
+function configurarDropdowns() {
+  const toggles = document.querySelectorAll(".guide-toggle");
 
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const item = toggle.closest(".guide-item");
+
+      if (!item) return;
+
+      item.classList.toggle("active");
+    });
+  });
+}
 
 
 // ===============================
-// ÁREA DO CENTRO NO DASHBOARD
+// CARD LOGIN / USUÁRIO LOGADO
 // ===============================
+function configurarCardAcesso() {
+  const accessCard = document.getElementById("access-card");
 
-// Section do dashboard onde vamos mostrar:
-// - botão para cadastrar centro
-// OU
-// - botão para gerenciar centro já cadastrado
-const sectionCentro = document.getElementById("sectionCentro");
+  if (!accessCard) return;
 
-// Modal que aparece quando o usuário tenta cadastrar centro sem estar logado
-const modalLogin = document.getElementById("modalLogin");
-
-// Botão do modal que leva para a página de login
-const btnIrLogin = document.getElementById("btnIrLogin");
-
-// Botão do modal que fecha o aviso
-const btnFecharModal = document.getElementById("btnFecharModal");
-
-
-// Função principal: verifica se o usuário tem centro cadastrado
-async function carregarAreaCentro() {
-  // Pega o token salvo no login
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  // Se não tiver token, significa que o usuário não está logado
-  // Então mostra a opção de cadastrar centro, mas o botão vai abrir o modal
-  if (!token) {
-    renderCadastrarCentro();
+  if (!token || !user) {
     return;
   }
 
-  try {
-    // Busca no backend se o usuário logado já possui um centro cadastrado
-    const res = await fetch("http://localhost:3000/api/centros/meu-centro", {
-      headers: {
-        Authorization: `Bearer ${token}`
+  const primeiroNome = user.nome ? user.nome.split(" ")[0] : "usuário";
+
+  accessCard.innerHTML = `
+    <div class="access-icon">
+      <i class="fa-solid fa-circle-user"></i>
+    </div>
+
+    <div class="access-text">
+      <h2>Olá, ${primeiroNome}!</h2>
+
+      <p>
+        Você está logado na Apoie.me. Agora pode acompanhar necessidades,
+        visualizar centros de apoio e participar das ações sociais.
+      </p>
+    </div>
+
+    <div class="access-buttons">
+      <a href="../pages/perfil.html" class="login-btn">
+        Meu perfil
+      </a>
+
+      <a href="../pages/cadastroCentro.html" class="register-btn">
+        Cadastrar centro
+      </a>
+    </div>
+  `;
+}
+
+
+// ===============================
+// BOTÃO CADASTRAR CENTRO
+// ===============================
+function configurarBotaoCentro() {
+  const btnCadastrarCentro = document.getElementById("btnCadastrarCentro");
+  const modalLogin = document.getElementById("modalLogin");
+  const btnIrLogin = document.getElementById("btnIrLogin");
+  const btnFecharModal = document.getElementById("btnFecharModal");
+
+  if (btnCadastrarCentro) {
+    btnCadastrarCentro.addEventListener("click", () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        if (modalLogin) {
+          modalLogin.classList.remove("hidden");
+        }
+
+        return;
+      }
+
+      window.location.href = "../pages/cadastroCentro.html";
+    });
+  }
+
+  if (btnIrLogin) {
+    btnIrLogin.addEventListener("click", () => {
+      window.location.href = "../pages/login.html";
+    });
+  }
+
+  if (btnFecharModal) {
+    btnFecharModal.addEventListener("click", () => {
+      if (modalLogin) {
+        modalLogin.classList.add("hidden");
       }
     });
+  }
 
-    const data = await res.json();
-
-    // Se o backend responder que o usuário não tem centro,
-    // mostra a chamada para cadastrar um centro
-    if (!data.temCentro) {
-      renderCadastrarCentro();
-      return;
-    }
-
-    // Se o usuário já tem centro, mostra a chamada para gerenciar
-    renderGerenciarCentro(data.centro);
-
-  } catch (err) {
-    // Se der erro na requisição, mostra a opção padrão de cadastrar centro
-    console.error("Erro ao carregar centro:", err);
-    renderCadastrarCentro();
+  if (modalLogin) {
+    modalLogin.addEventListener("click", (e) => {
+      if (e.target === modalLogin) {
+        modalLogin.classList.add("hidden");
+      }
+    });
   }
 }
 
 
-// Mostra a versão da section para quem ainda não tem centro cadastrado
-function renderCadastrarCentro() {
-  sectionCentro.innerHTML = `
-    <div>
-      <h2><i class="fa-solid fa-building-user"></i> Você representa um centro de apoio?</h2>
-      <p>
-        Cadastre seu centro para solicitar doações, abrir pedidos de voluntários
-        e divulgar informações para a comunidade.
-      </p>
-    </div>
+// ===============================
+// CARREGAR DADOS DO DASHBOARD
+// ===============================
+async function carregarDashboard() {
+  try {
+    const containerNecessidades = document.querySelector(".urgent-needs-list");
+    const containerAtividades = document.querySelector(".activities-list");
 
-    <button id="btnCadastrarCentro" type="button" class="btn-centro">
-      Cadastrar centro de apoio
-    </button>
-  `;
+    if (containerNecessidades) {
+      containerNecessidades.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <p>Carregando necessidades...</p>
+        </div>
+      `;
+    }
 
-  // Depois que o botão é criado via innerHTML,
-  // precisamos pegar ele novamente para adicionar o evento de clique
-  document.getElementById("btnCadastrarCentro").addEventListener("click", () => {
-    const token = localStorage.getItem("token");
+    if (containerAtividades) {
+      containerAtividades.innerHTML = `
+        <div class="activity-item">
+          <div class="activity-icon donation">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+          </div>
 
-    // Se clicar sem estar logado, abre o modal avisando que precisa login
-    if (!token) {
-      modalLogin.classList.remove("hidden");
+          <div class="activity-content">
+            <p>Carregando atividades recentes...</p>
+            <span>Aguarde</span>
+          </div>
+        </div>
+      `;
+    }
+
+    const res = await fetch("http://localhost:3000/api/necessidades");
+    const data = await res.json();
+
+    console.log("Resposta /api/necessidades:", data);
+
+    if (!res.ok) {
+      mostrarErroDashboard();
       return;
     }
 
-    // Se estiver logado, vai para a página de cadastro de centro
-    window.location.href = "cadastroCentro.html";
-  });
+    necessidades = Array.isArray(data)
+      ? data
+      : Array.isArray(data.dados)
+        ? data.dados
+        : [];
+
+    carregarNecessidadesUrgentes();
+    carregarAtividadesRecentes();
+
+  } catch (err) {
+    console.error("Erro ao carregar dashboard:", err);
+    mostrarErroDashboard();
+  }
 }
 
 
-// Mostra a versão da section para quem já cadastrou um centro
-function renderGerenciarCentro(centro) {
-  sectionCentro.innerHTML = `
-    <div>
-      <h2><i class="fa-solid fa-building-user"></i> Gerencie seu centro de apoio</h2>
-      <p>
-        ${centro.nome} está com status: 
-        <strong>${formatarStatus(centro.status)}</strong>.
+// ===============================
+// NECESSIDADES MAIS URGENTES
+// ===============================
+function carregarNecessidadesUrgentes() {
+  const container = document.querySelector(".urgent-needs-list");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const necessidadesOrdenadas = necessidades
+    .filter((pedido) => pedido.status !== "cancelado")
+    .sort((a, b) => {
+      return pesoUrgencia(a.urgencia) - pesoUrgencia(b.urgencia);
+    })
+    .slice(0, 4);
+
+  if (necessidadesOrdenadas.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-box-open"></i>
+        <p>Nenhuma necessidade cadastrada no momento.</p>
+      </div>
+    `;
+    return;
+  }
+
+  necessidadesOrdenadas.forEach((necessidade) => {
+    const quantidadeAtendida = Number(
+      necessidade.quantidadeAtendida ||
+      necessidade.quantidade_recebida ||
+      0
+    );
+
+    const quantidadeNecessaria = Number(
+      necessidade.quantidadeNecessaria ||
+      necessidade.quantidade_necessaria ||
+      0
+    );
+
+    const porcentagem =
+      quantidadeNecessaria > 0
+        ? Math.min(Math.round((quantidadeAtendida / quantidadeNecessaria) * 100), 100)
+        : 0;
+
+    const faltam = Math.max(quantidadeNecessaria - quantidadeAtendida, 0);
+
+    const card = document.createElement("div");
+    card.classList.add("need-card");
+
+    card.innerHTML = `
+      <div class="need-card-header">
+        <h3>${necessidade.nomeCentro || necessidade.nome_centro || "Centro não informado"}</h3>
+
+        <span class="urgency-badge ${classeUrgencia(necessidade.urgencia)}">
+          ${textoUrgencia(necessidade.urgencia)}
+        </span>
+      </div>
+
+      <p class="need-item">
+        Item solicitado:
+        <strong>${necessidade.item || necessidade.titulo || "Item não informado"}</strong>
       </p>
-    </div>
 
-    <button id="btnGerenciarCentro" type="button" class="btn-centro">
-      Acessar painel do centro
-    </button>
-  `;
+      <p class="need-description">
+        ${necessidade.descricao || "Sem descrição informada."}
+      </p>
 
-  // Botão para acessar o painel específico do centro
-  document.getElementById("btnGerenciarCentro").addEventListener("click", () => {
-    window.location.href = "painelCentro/dashboardCentro.html";
+      <div class="need-quantity">
+        <span>${quantidadeAtendida} recebidos</span>
+        <span>${quantidadeNecessaria} necessários</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${porcentagem}%"></div>
+      </div>
+
+      <div class="need-footer">
+        <span class="progress-text">${porcentagem}% concluído</span>
+        <span class="deadline">Faltam ${faltam}</span>
+      </div>
+
+      <a href="../pages/pedidos.html" class="need-action">
+        Ver como doar
+      </a>
+    `;
+
+    container.appendChild(card);
   });
 }
 
 
-// Converte o status do banco para um texto mais amigável na tela
-function formatarStatus(status) {
-  const statusMap = {
-    pendente: "Aguardando aprovação",
-    aprovado: "Aprovado",
-    rejeitado: "Rejeitado",
-    suspenso: "Suspenso"
+// ===============================
+// ATIVIDADES RECENTES
+// ===============================
+function carregarAtividadesRecentes() {
+  const container = document.querySelector(".activities-list");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const atividades = necessidades
+    .filter((pedido) => pedido.status !== "cancelado")
+    .sort((a, b) => {
+      const dataA = new Date(a.atualizadoEm || a.criadoEm || a.atualizado_em || a.criado_em || 0);
+      const dataB = new Date(b.atualizadoEm || b.criadoEm || b.atualizado_em || b.criado_em || 0);
+
+      return dataB - dataA;
+    })
+    .slice(0, 5);
+
+  if (atividades.length === 0) {
+    container.innerHTML = `
+      <div class="activity-item">
+        <div class="activity-icon donation">
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+
+        <div class="activity-content">
+          <p>Nenhuma atividade recente encontrada.</p>
+          <span>Agora</span>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  atividades.forEach((pedido) => {
+    const quantidadeAtendida = Number(
+      pedido.quantidadeAtendida ||
+      pedido.quantidade_recebida ||
+      0
+    );
+
+    const quantidadeNecessaria = Number(
+      pedido.quantidadeNecessaria ||
+      pedido.quantidade_necessaria ||
+      0
+    );
+
+    const item = pedido.item || pedido.titulo || "Pedido de doação";
+    const centro = pedido.nomeCentro || pedido.nome_centro || "centro de apoio";
+
+    let tipo = "donation";
+    let icone = "fa-box-open";
+    let texto = `Novo pedido de doação: ${item} em ${centro}.`;
+
+    if (pedido.status === "atendido" || quantidadeAtendida >= quantidadeNecessaria && quantidadeNecessaria > 0) {
+      tipo = "success";
+      icone = "fa-circle-check";
+      texto = `Pedido atendido: ${item} em ${centro}.`;
+    } else if (pedido.urgencia === "alta" || pedido.urgencia === "critica") {
+      tipo = "alert";
+      icone = "fa-triangle-exclamation";
+      texto = `Pedido urgente cadastrado: ${item} em ${centro}.`;
+    }
+
+    const atividade = document.createElement("div");
+    atividade.classList.add("activity-item");
+
+    atividade.innerHTML = `
+      <div class="activity-icon ${tipo}">
+        <i class="fa-solid ${icone}"></i>
+      </div>
+
+      <div class="activity-content">
+        <p>${texto}</p>
+        <span>${formatarDataAtividade(pedido.atualizadoEm || pedido.criadoEm || pedido.atualizado_em || pedido.criado_em)}</span>
+      </div>
+    `;
+
+    container.appendChild(atividade);
+  });
+}
+
+
+// ===============================
+// TEXTO DA URGÊNCIA
+// ===============================
+function textoUrgencia(urgencia) {
+  const urgencias = {
+    critica: "Crítica",
+    alta: "Alta",
+    media: "Média",
+    baixa: "Baixa"
   };
 
-  // Se não encontrar no mapa, retorna o status original
-  return statusMap[status] || status;
+  return urgencias[urgencia] || "Média";
 }
 
 
-// Botão do modal: leva para login
-btnIrLogin.addEventListener("click", () => {
-  window.location.href = "login.html";
-});
+// ===============================
+// CLASSE DA URGÊNCIA
+// ===============================
+function classeUrgencia(urgencia) {
+  const classes = {
+    critica: "critical",
+    alta: "high",
+    media: "medium",
+    baixa: "low"
+  };
+
+  return classes[urgencia] || "medium";
+}
 
 
-// Botão do modal: fecha o modal
-btnFecharModal.addEventListener("click", () => {
-  modalLogin.classList.add("hidden");
-});
+// ===============================
+// ORDEM DA URGÊNCIA
+// ===============================
+function pesoUrgencia(urgencia) {
+  const pesos = {
+    critica: 1,
+    alta: 2,
+    media: 3,
+    baixa: 4
+  };
+
+  return pesos[urgencia] || 5;
+}
 
 
-// Quando a página carregar, verifica qual versão da section deve aparecer
-window.addEventListener("load", carregarAreaCentro);
+// ===============================
+// FORMATAR DATA
+// ===============================
+function formatarDataAtividade(data) {
+  if (!data) return "Recentemente";
+
+  const dataPedido = new Date(data);
+
+  if (isNaN(dataPedido.getTime())) {
+    return "Recentemente";
+  }
+
+  const agora = new Date();
+
+  const diferencaMs = agora - dataPedido;
+  const minutos = Math.floor(diferencaMs / 1000 / 60);
+  const horas = Math.floor(minutos / 60);
+  const dias = Math.floor(horas / 24);
+
+  if (minutos < 1) return "Agora";
+  if (minutos < 60) return `Há ${minutos} min`;
+  if (horas < 24) return `Há ${horas}h`;
+  if (dias === 1) return "Ontem";
+
+  return `Há ${dias} dias`;
+}
+
+
+// ===============================
+// MOSTRAR ERRO
+// ===============================
+function mostrarErroDashboard() {
+  const necessidadesContainer = document.querySelector(".urgent-needs-list");
+  const atividadesContainer = document.querySelector(".activities-list");
+
+  if (necessidadesContainer) {
+    necessidadesContainer.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p>Erro ao carregar necessidades.</p>
+      </div>
+    `;
+  }
+
+  if (atividadesContainer) {
+    atividadesContainer.innerHTML = `
+      <div class="activity-item">
+        <div class="activity-icon alert">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <div class="activity-content">
+          <p>Erro ao carregar atividades recentes.</p>
+          <span>Tente novamente</span>
+        </div>
+      </div>
+    `;
+  }
+}

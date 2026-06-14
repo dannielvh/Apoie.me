@@ -843,7 +843,7 @@
 /* DASHBOARD - APOIE.ME                                      */
 /* ========================================================= */
 .dashboard-page {
-  background-color: #F5F5dc;
+  background-color: #f5f5dc;
   min-height: 100vh;
   font-family: "Inter", sans-serif;
   /* ========================================================= */
@@ -870,7 +870,7 @@
 }
 .dashboard-page .dashboard-container .hero-section .hero-content {
   flex: 2;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 40px;
   border-radius: 18px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -886,7 +886,7 @@
 .dashboard-page .dashboard-container .hero-section .hero-content .hero-text h1 {
   font-size: 42px;
   line-height: 1.2;
-  color: #2E7D32;
+  color: #2e7d32;
   font-weight: 700;
 }
 .dashboard-page .dashboard-container .hero-section .hero-content .hero-text p {
@@ -915,20 +915,20 @@
   transition: 0.3s ease;
 }
 .dashboard-page .dashboard-container .hero-section .hero-content .hero-buttons .primary-btn {
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  background-color: #2e7d32;
+  color: #ffffff;
 }
 .dashboard-page .dashboard-container .hero-section .hero-content .hero-buttons .primary-btn:hover {
-  background-color: #1B5E20;
+  background-color: #1b5e20;
 }
 .dashboard-page .dashboard-container .hero-section .hero-content .hero-buttons .secondary-btn {
   background-color: transparent;
-  border: 2px solid #2E7D32;
-  color: #2E7D32;
+  border: 2px solid #2e7d32;
+  color: #2e7d32;
 }
 .dashboard-page .dashboard-container .hero-section .hero-content .hero-buttons .secondary-btn:hover {
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  background-color: #2e7d32;
+  color: #ffffff;
 }
 .dashboard-page .dashboard-container .hero-section {
   /* ========================================================= */
@@ -937,7 +937,7 @@
 }
 .dashboard-page .dashboard-container .hero-section .access-card {
   flex: 1;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 18px;
   padding: 35px 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -949,14 +949,14 @@
 .dashboard-page .dashboard-container .hero-section .access-card .access-icon {
   width: 80px;
   height: 80px;
-  background-color: #2E7D32;
+  background-color: #2e7d32;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-icon i {
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 32px;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-text {
@@ -965,7 +965,7 @@
   gap: 15px;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-text h2 {
-  color: #2E7D32;
+  color: #2e7d32;
   font-size: 28px;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-text p {
@@ -995,19 +995,19 @@
   transition: 0.3s ease;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-buttons .login-btn {
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  background-color: #2e7d32;
+  color: #ffffff;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-buttons .login-btn:hover {
-  background-color: #1B5E20;
+  background-color: #1b5e20;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-buttons .register-btn {
-  border: 2px solid #2E7D32;
-  color: #2E7D32;
+  border: 2px solid #2e7d32;
+  color: #2e7d32;
 }
 .dashboard-page .dashboard-container .hero-section .access-card .access-buttons .register-btn:hover {
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  background-color: #2e7d32;
+  color: #ffffff;
 }
 .dashboard-page .dashboard-container {
   /* ========================================================= */
@@ -1016,43 +1016,49 @@
 }
 .dashboard-page .dashboard-container .urgent-needs-section {
   margin-bottom: 50px;
-  /* ========================================================= */
-  /* BOTÃO VER TODAS                                           */
-  /* ========================================================= */
 }
 .dashboard-page .dashboard-container .urgent-needs-section .see-all-btn {
   border: none;
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  background-color: #2e7d32;
+  color: #ffffff;
   padding: 10px 18px;
   border-radius: 10px;
   cursor: pointer;
   transition: 0.3s ease;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .see-all-btn:hover {
-  background-color: #1B5E20;
+  background-color: #1b5e20;
+  transform: translateY(-1px);
 }
 .dashboard-page .dashboard-container .urgent-needs-section {
   /* ========================================================= */
-  /* GRID DE NECESSIDADES                                      */
+  /* GRID DE NECESSIDADES - 4 POR LINHA                         */
   /* ========================================================= */
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
   /* ========================================================= */
   /* CARD NECESSIDADE                                          */
   /* ========================================================= */
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-card {
-  background-color: #FFFFFF;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid #e7eee8;
+  border-top: 5px solid #2e7d32;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  min-height: 285px;
+  transition: 0.25s ease;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
   /* ========================================================= */
@@ -1062,12 +1068,18 @@
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 15px;
+  align-items: flex-start;
+  gap: 12px;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-card-header h3 {
-  color: #2E7D32;
-  font-size: 22px;
+  color: #2e7d32;
+  font-size: 18px;
+  line-height: 1.25;
+  font-weight: 700;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
   /* ========================================================= */
@@ -1075,22 +1087,28 @@
   /* ========================================================= */
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .urgency-badge {
-  padding: 8px 14px;
-  border-radius: 30px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .critical {
-  background-color: #FDECEC;
-  color: #D32F2F;
+  background-color: #fdecec;
+  color: #d32f2f;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .high {
-  background-color: #FFF4E5;
-  color: #EF6C00;
+  background-color: #fff4e5;
+  color: #ef6c00;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .medium {
-  background-color: #FFF8E1;
-  color: #F9A825;
+  background-color: #fff8e1;
+  color: #f9a825;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .low {
+  background-color: #e8f5e9;
+  color: #2e7d32;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
   /* ========================================================= */
@@ -1098,8 +1116,22 @@
   /* ========================================================= */
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-item {
-  color: #666666;
-  line-height: 1.6;
+  color: #555555;
+  line-height: 1.5;
+  font-size: 14px;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-item strong {
+  color: #333333;
+  font-weight: 700;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-description {
+  color: #777777;
+  font-size: 13px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
   /* ========================================================= */
@@ -1109,10 +1141,12 @@
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-quantity {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-quantity span {
   color: #666666;
-  font-size: 15px;
+  font-size: 13px;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
   /* ========================================================= */
@@ -1121,15 +1155,16 @@
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .progress-bar {
   width: 100%;
-  height: 10px;
-  background-color: #E0E0E0;
-  border-radius: 20px;
+  height: 9px;
+  background-color: #e0e0e0;
+  border-radius: 999px;
   overflow: hidden;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .progress-fill {
   height: 100%;
-  background-color: #2E7D32;
-  border-radius: 20px;
+  background: linear-gradient(90deg, #2e7d32, #66bb6a);
+  border-radius: 999px;
+  transition: width 0.3s ease;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
   /* ========================================================= */
@@ -1140,10 +1175,58 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-footer span {
-  font-size: 14px;
+  font-size: 13px;
   color: #666666;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-footer .progress-text {
+  font-weight: 700;
+  color: #2e7d32;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-footer .deadline {
+  background-color: #f5f5f5;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-action {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background-color: #2e7d32;
+  color: #ffffff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.25s ease;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-action:hover {
+  background-color: #1b5e20;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .empty-state {
+  grid-column: 1/-1;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 35px;
+  border: 1px dashed #b7c7b8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #666666;
+  text-align: center;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .empty-state i {
+  color: #2e7d32;
+  font-size: 30px;
+}
+.dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .empty-state p {
+  color: #666666;
+  font-size: 15px;
 }
 .dashboard-page .dashboard-container {
   /* ========================================================= */
@@ -1151,29 +1234,20 @@
   /* ========================================================= */
 }
 .dashboard-page .dashboard-container .recent-activities-section {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 18px;
   padding: 35px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  /* ========================================================= */
-  /* LISTA DE ATIVIDADES                                       */
-  /* ========================================================= */
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list {
   display: flex;
   flex-direction: column;
   gap: 25px;
-  /* ========================================================= */
-  /* ITEM ATIVIDADE                                            */
-  /* ========================================================= */
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item {
   display: flex;
   gap: 18px;
   align-items: flex-start;
-  /* ========================================================= */
-  /* ÍCONE ATIVIDADE                                           */
-  /* ========================================================= */
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item .activity-icon {
   width: 50px;
@@ -1182,24 +1256,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item .activity-icon i {
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 18px;
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item .activity-icon.donation {
-  background-color: #2E7D32;
+  background-color: #2e7d32;
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item .activity-icon.alert {
-  background-color: #EF6C00;
+  background-color: #ef6c00;
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item .activity-icon.success {
-  background-color: #43A047;
-}
-.dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item {
-  /* ========================================================= */
-  /* TEXTO ATIVIDADE                                           */
-  /* ========================================================= */
+  background-color: #43a047;
 }
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item .activity-content p {
   color: #444444;
@@ -1209,6 +1279,11 @@
 .dashboard-page .dashboard-container .recent-activities-section .activities-list .activity-item .activity-content span {
   color: #888888;
   font-size: 14px;
+}
+.dashboard-page .dashboard-container {
+  /* ========================================================= */
+  /* CADASTRO CENTRO                                           */
+  /* ========================================================= */
 }
 .dashboard-page .dashboard-container .dashboard-secondary {
   margin: 0 auto;
@@ -1252,6 +1327,9 @@
   scale: 1.02;
 }
 
+/* ========================================================= */
+/* CABEÇALHO DAS SEÇÕES                                      */
+/* ========================================================= */
 .section-header {
   margin-bottom: 30px;
   display: flex;
@@ -1263,7 +1341,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #2E7D32;
+  color: #2e7d32;
   font-size: 28px;
 }
 .section-header p {
@@ -1275,17 +1353,11 @@
 /* COMO DOAR                                                 */
 /* ========================================================= */
 .donation-guide-section {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 40px;
   border-radius: 18px;
   margin-bottom: 50px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  /* ========================================================= */
-  /* CABEÇALHOS DAS SEÇÕES                                     */
-  /* ========================================================= */
-  /* ========================================================= */
-  /* DROPDOWNS                                                 */
-  /* ========================================================= */
 }
 .donation-guide-section .guide-dropdowns {
   display: flex;
@@ -1293,13 +1365,13 @@
   gap: 20px;
 }
 .donation-guide-section .guide-dropdowns .guide-item {
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
   overflow: hidden;
 }
 .donation-guide-section .guide-dropdowns .guide-toggle {
   width: 100%;
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   border: none;
   padding: 20px;
   display: flex;
@@ -1309,7 +1381,7 @@
   transition: 0.3s ease;
   font-size: 18px;
   font-weight: 600;
-  color: #2E7D32;
+  color: #2e7d32;
 }
 .donation-guide-section .guide-dropdowns .guide-toggle span {
   display: flex;
@@ -1317,20 +1389,15 @@
   gap: 12px;
 }
 .donation-guide-section .guide-dropdowns .guide-toggle:hover {
-  background-color: #F1F5F1;
-}
-.donation-guide-section .guide-dropdowns {
-  /* ========================================================= */
-  /* CONTEÚDO EXPANSÍVEL                                       */
-  /* ========================================================= */
+  background-color: #f1f5f1;
 }
 .donation-guide-section .guide-dropdowns .guide-content {
   display: none;
   padding: 25px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 .donation-guide-section .guide-dropdowns .guide-content h4 {
-  color: #2E7D32;
+  color: #2e7d32;
   margin-bottom: 10px;
   margin-top: 20px;
 }
@@ -1353,70 +1420,15 @@
   display: block;
 }
 .guide-item.active .guide-toggle {
-  background-color: #EDF7EE;
+  background-color: #edf7ee;
 }
 .guide-item.active .guide-toggle i.fa-chevron-down {
   transform: rotate(180deg);
 }
 
 /* ========================================================= */
-/* RESPONSIVIDADE                                            */
+/* MODAL                                                     */
 /* ========================================================= */
-@media (max-width: 992px) {
-  .hero-section {
-    flex-direction: column;
-  }
-}
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 25px 15px 50px;
-  }
-  .hero-content,
-  .access-card,
-  .donation-guide-section,
-  .recent-activities-section {
-    padding: 25px;
-  }
-  .hero-text h1 {
-    font-size: 32px;
-  }
-  .hero-text p {
-    font-size: 16px;
-  }
-  .hero-buttons {
-    flex-direction: column;
-  }
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .section-header h2 {
-    font-size: 24px;
-  }
-  .need-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-@media (max-width: 480px) {
-  .hero-text h1 {
-    font-size: 28px;
-  }
-  .guide-toggle {
-    font-size: 16px;
-    padding: 18px;
-  }
-  .need-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .dashboard-secondary {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-}
 .modal.hidden {
   display: none;
 }
@@ -1467,6 +1479,87 @@
   color: #333;
 }
 
+/* ========================================================= */
+/* RESPONSIVIDADE                                            */
+/* ========================================================= */
+@media (max-width: 1200px) {
+  .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 992px) {
+  .dashboard-page .dashboard-container .hero-section {
+    flex-direction: column;
+  }
+  .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-page .dashboard-container {
+    padding: 25px 15px 50px;
+  }
+  .dashboard-page .dashboard-container .hero-content,
+  .dashboard-page .dashboard-container .access-card,
+  .dashboard-page .dashboard-container .donation-guide-section,
+  .dashboard-page .dashboard-container .recent-activities-section {
+    padding: 25px;
+  }
+  .dashboard-page .dashboard-container .hero-content .hero-text h1 {
+    font-size: 32px;
+  }
+  .dashboard-page .dashboard-container .hero-content .hero-text p {
+    font-size: 16px;
+  }
+  .dashboard-page .dashboard-container .hero-content .hero-buttons {
+    flex-direction: column;
+  }
+  .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-card {
+    min-height: auto;
+  }
+  .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dashboard-page .dashboard-container .dashboard-secondary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .section-header h2 {
+    font-size: 24px;
+  }
+  .donation-guide-section {
+    padding: 25px;
+  }
+}
+@media (max-width: 480px) {
+  .dashboard-page .dashboard-container .hero-content .hero-text h1 {
+    font-size: 28px;
+  }
+  .dashboard-page .dashboard-container .urgent-needs-section .urgent-needs-list .need-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .donation-guide-section .guide-dropdowns .guide-toggle {
+    font-size: 16px;
+    padding: 18px;
+  }
+  .modal__actions {
+    flex-direction: column;
+  }
+  .modal__actions button {
+    width: 100%;
+  }
+}
 .saiba-mais-page {
   background: #f5f5dc;
   color: #1f2937;
@@ -4889,20 +4982,6 @@
   .modal-pedido__actions button {
     width: 100%;
   }
-}
-
-.senha-requisitos{
-    margin-top: 10px;
-    font-size: 0.9rem;
-}
-
-.senha-requisitos p{
-    margin: 4px 0;
-    color: #dc2626;
-}
-
-.senha-requisitos .ok{
-    color: #16a34a;
 }
 
 /*# sourceMappingURL=style.css.map */
