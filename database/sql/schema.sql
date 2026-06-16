@@ -1,74 +1,176 @@
--- Tabela de cidades
-CREATE TABLE cidade (
-    id_cidade SERIAL PRIMARY KEY,
+-- EXTENSÕES
+
+-- Usada para comparar textos ignorando acentos
+-- Exemplo: Divinópolis = Divinopolis
+CREATE EXTENSION IF NOT EXISTS unaccent;
+
+
+-- TABELA DE USUÁRIOS
+
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+
     nome VARCHAR(100) NOT NULL,
-    estado VARCHAR(50) NOT NULL
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(100) NOT NULL,
+
+    cidade VARCHAR(100),
+
+    -- Tipos possíveis:
+    -- usuario = usuário comum
+    -- admin = administrador do sistema
+    role VARCHAR(20) DEFAULT 'usuario',
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de centros de doação
-CREATE TABLE centro (
-    id_centro SERIAL PRIMARY KEY NOT NULL,
-    nome VARCHAR(100) NOT NULL,
-    endereco TEXT NOT NULL,
-    id_cidade INT NOT NULL,
-	
-    FOREIGN KEY (id_cidade) REFERENCES cidade(id_cidade)
-);
 
--- Tabela de doações
-CREATE TABLE doacao (
-    id_doacao SERIAL PRIMARY KEY NOT NULL,
+-- TABELA DE CENTROS DE APOIO
+
+CREATE TABLE centros (
+    id SERIAL PRIMARY KEY,
+
+    nome VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
     tipo VARCHAR(100) NOT NULL,
-    quantidade INT NOT NULL CHECK (quantidade > 0),
-    data TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-    id_centro INT NOT NULL,
-	
-    FOREIGN KEY (id_centro) REFERENCES centro(id_centro)
-);
+    rua VARCHAR(150) NOT NULL,
+    horario_abertura TIME,
+    horario_fechamento TIME,
 
--- Tabela de voluntários
-CREATE TABLE voluntario (
-    id_voluntario SERIAL PRIMARY KEY NOT NULL,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE
-);
-
--- Tabela de voluntariado
-CREATE TABLE voluntariado (
-    id_voluntario INT NOT NULL,
-    id_centro INT NOT NULL,
-    data_inicio TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-	
-    PRIMARY KEY (id_voluntario, id_centro),
-    FOREIGN KEY (id_voluntario) REFERENCES voluntario(id_voluntario),
-    FOREIGN KEY (id_centro) REFERENCES centro(id_centro)
-);
-
--- Alterando tabela centro
-ALTER TABLE centro
-ADD COLUMN descricao TEXT,
-ADD COLUMN categoria VARCHAR(50),
-ADD COLUMN contato VARCHAR(100),
-ADD COLUMN validado BOOLEAN DEFAULT FALSE;
-
--- tabela de necessidades
-CREATE TABLE necessidade (
-    id_necessidade SERIAL PRIMARY KEY,
-
-    id_centro INT NOT NULL,
-
-    nome_item VARCHAR(100) NOT NULL,
+    cnpj VARCHAR(14),
     descricao TEXT,
+    telefone VARCHAR(30),
 
-    quantidade_necessaria INT NOT NULL CHECK (quantidade_necessaria > 0),
-    quantidade_arrecadada INT DEFAULT 0 CHECK (quantidade_arrecadada >= 0),
+    responsavel_nome VARCHAR(100),
+    email_contato VARCHAR(100),
 
-    urgencia VARCHAR(20), -- baixa, media, alta
+    -- Status possíveis:
+    -- pendente = aguardando aprovação
+    -- aprovado = liberado para aparecer no sistema
+    -- rejeitado = recusado pelo administrador
+    -- suspenso = bloqueado temporariamente
+    status VARCHAR(20) DEFAULT 'pendente',
 
-    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Usuário que solicitou/cadastrou o centro
+    usuario_id INT REFERENCES usuarios(id),
 
-    FOREIGN KEY (id_centro) REFERENCES centro(id_centro) ON DELETE CASCADE
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+
+-- TABELA DE VOLUNTÁRIOS
+
+CREATE TABLE voluntarios (
+    id SERIAL PRIMARY KEY,
+
+    -- Usuário que se candidatou como voluntário
+    usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
+
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(30) NOT NULL,
+    email VARCHAR(100),
+    cidade VARCHAR(100) NOT NULL,
+
+    habilidades TEXT,
+    disponibilidade TEXT,
+    experiencia TEXT,
+    observacao TEXT,
+
+    -- Status possíveis:
+    -- ativo = disponível para ser visto pelos centros
+    -- inativo = candidatura desativada
+    status VARCHAR(20) DEFAULT 'ativo',
+
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- TABELA DE CANDIDATURAS DE VOLUNTARIOS
+
+CREATE TABLE candidaturas (
+  id SERIAL PRIMARY KEY,
+
+  usuario_id INT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  centro_id INT NOT NULL REFERENCES centros(id) ON DELETE CASCADE,
+
+  status VARCHAR(20) DEFAULT 'pendente',
+  data_candidatura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT unique_candidatura_usuario_centro UNIQUE (usuario_id, centro_id),
+
+  CONSTRAINT check_status_candidatura
+  CHECK (status IN ('pendente', 'aprovada', 'rejeitada'))
+);
+
+CREATE TABLE pedidos_doacao (
+  id SERIAL PRIMARY KEY,
+
+  centro_id INT NOT NULL REFERENCES centros(id) ON DELETE CASCADE,
+
+  titulo VARCHAR(100) NOT NULL,
+  descricao TEXT,
+
+  categoria VARCHAR(50) NOT NULL,
+
+  quantidade_necessaria INT NOT NULL CHECK (quantidade_necessaria > 0),
+  quantidade_recebida INT DEFAULT 0 CHECK (quantidade_recebida >= 0),
+
+  urgencia VARCHAR(20) DEFAULT 'media',
+  status VARCHAR(20) DEFAULT 'ativo',
+
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT check_urgencia_pedido_doacao
+  CHECK (urgencia IN ('baixa', 'media', 'alta', 'critica')),
+
+  CONSTRAINT check_status_pedido_doacao
+  CHECK (status IN ('ativo', 'atendido', 'cancelado')),
+
+  CONSTRAINT check_quantidade_recebida
+  CHECK (quantidade_recebida <= quantidade_necessaria)
+);
+
+-- ÍNDICES / REGRAS DE DUPLICIDADE
+
+-- Evita cadastrar centros com mesmo nome na mesma cidade,
+-- ignorando letras maiúsculas/minúsculas e acentos.
+-- CREATE UNIQUE INDEX unique_centro_nome_cidade
+-- ON centros (
+--   unaccent(lower(nome)),
+--   unaccent(lower(cidade))
+-- );
+
+
+-- Evita CNPJ duplicado, mas permite vários centros sem CNPJ.
+-- Importante: CNPJ vazio deve ser salvo como NULL, não como ''.
+CREATE UNIQUE INDEX unique_cnpj
+ON centros (cnpj)
+WHERE cnpj IS NOT NULL;
+
+
+-- Evita que o mesmo usuário cadastre mais de um centro.
+-- Use apenas se a regra do projeto for: 1 usuário representa 1 centro.
+CREATE UNIQUE INDEX unique_centro_por_usuario
+ON centros (usuario_id)
+WHERE usuario_id IS NOT NULL;
+
+
+-- Evita que o mesmo voluntário seja selecionado mais de uma vez
+-- pelo mesmo centro.
+-- CREATE UNIQUE INDEX unique_voluntario_por_centro
+
+-- ON candidaturas (voluntario_id, centro_id);
+
+
+
+
+-- Evita que o mesmo usuário tenha mais de uma candidatura ativa
+-- como voluntário.
+CREATE UNIQUE INDEX unique_voluntario_ativo_por_usuario
+ON voluntarios (usuario_id)
+WHERE status = 'ativo';
 
 
 -- inserindo dados das cidades
@@ -78,6 +180,9 @@ INSERT INTO cidade (nome, estado) VALUES
 ('Betim', 'MG'),
 ('Ribeirão das Neves', 'MG'),
 ('Nova Lima', 'MG');
+
+
+
 
 -- inserindo dados dos centros
 INSERT INTO centro (nome, endereco, id_cidade, descricao, categoria, contato, validado) VALUES
@@ -199,3 +304,4 @@ VALUES
 
     -- Centro 10
     (10, 'Consultas médicas', 'Atendimento clínico básico', 100, 40, 'media');
+

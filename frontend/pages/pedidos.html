@@ -3,14 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <!--
-    viewport pra adaptar o tamanho da tela no celular
-  -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- CSS principal do projeto o pedidos.css foi colado no final desse arquivo -->
   <link rel="stylesheet" href="../css/style.css">
 
   <title>Doações | Apoie.me</title>
@@ -18,110 +15,293 @@
 
 <body class="pedidos-page">
 
-  <!--
-    Header dinamico
-    esse div começa vazio, o arq header.js (no final da pagina) busca o componente header.html e aplica aqui direto e o mesmo padrão usado no dashboard e no mapa
-  -->
   <div id="header"></div>
-
 
   <main class="pedidos-container">
 
-    <section class="pedidos-welcome">
-      <div class="welcome-text">
-        <h1>Necessidades disponíveis</h1>
-        <p>Veja o que os centros de apoio precisam e contribua com o que puder.</p>
+    <!-- ===================================================== -->
+    <!-- HERO / TOPO                                           -->
+    <!-- ===================================================== -->
+    <section class="pedidos-hero">
+
+      <div class="pedidos-hero__content">
+
+        <span class="pedidos-hero__badge">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+          Doações e necessidades
+        </span>
+
+        <h1>Ajude centros de apoio que precisam de doações</h1>
+
+        <p>
+          Veja os pedidos cadastrados pelos centros de apoio, acompanhe a urgência
+          de cada necessidade e saiba como contribuir com alimentos, roupas,
+          produtos de higiene, materiais e outros itens essenciais.
+        </p>
+
+        <div class="pedidos-hero__actions">
+
+          <a href="#pedidos-lista" class="btn-primary">
+            <i class="fa-solid fa-list-check"></i>
+            Ver necessidades
+          </a>
+
+          <a href="../pages/mapa.html" class="btn-secondary">
+            <i class="fa-solid fa-location-dot"></i>
+            Encontrar centros
+          </a>
+
+        </div>
+
       </div>
+
+      <aside class="pedidos-hero__card">
+
+        <div class="hero-card-icon">
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+
+        <h2>Como funciona?</h2>
+
+        <p>
+          O centro cadastra o que precisa, você consulta os detalhes e realiza
+          a doação diretamente no local informado.
+        </p>
+
+        <ul>
+          <li>
+            <i class="fa-solid fa-check"></i>
+            Escolha um pedido
+          </li>
+
+          <li>
+            <i class="fa-solid fa-check"></i>
+            Veja o centro responsável
+          </li>
+
+          <li>
+            <i class="fa-solid fa-check"></i>
+            Entregue ou entre em contato
+          </li>
+        </ul>
+
+      </aside>
+
     </section>
 
 
-    <!--
-      Filtros de urgencia
-      cada botao tem um atributo data/filtro com o valor do filtro
-      O pedidos.js lê esse atributo pra saber qual filtro aplicar quando o usuario clica
-    -->
-    <section class="pedidos-filtros">
-      <!-- data/filtro="todos" -> mostra os cards -->
-      <button class="filtro-btn active" data-filtro="todos">Todos</button>
+    <!-- ===================================================== -->
+    <!-- CARDS INFORMATIVOS                                    -->
+    <!-- ===================================================== -->
+    <section class="pedidos-info-grid">
 
-      <!-- data/filtro -> critica -> mostra os cards com urgencia -> critica -->
-      <button class="filtro-btn" data-filtro="critica">
-        <i class="fa-solid fa-circle-exclamation"></i> Crítica
-      </button>
+      <div class="info-card">
 
-      <button class="filtro-btn" data-filtro="alta">
-        <i class="fa-solid fa-triangle-exclamation"></i> Alta
-      </button>
+        <div class="info-card__icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
 
-      <button class="filtro-btn" data-filtro="media">
-        <i class="fa-solid fa-circle-info"></i> Média
-      </button>
+        <h3>Priorize urgências</h3>
+
+        <p>
+          Pedidos críticos e de alta urgência representam necessidades que precisam
+          de resposta mais rápida.
+        </p>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="info-card__icon">
+          <i class="fa-solid fa-location-dot"></i>
+        </div>
+
+        <h3>Doe no centro</h3>
+
+        <p>
+          Cada pedido mostra o centro responsável, endereço, telefone e horário
+          para facilitar sua contribuição.
+        </p>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="info-card__icon">
+          <i class="fa-solid fa-chart-simple"></i>
+        </div>
+
+        <h3>Acompanhe o progresso</h3>
+
+        <p>
+          A barra de progresso mostra quanto já foi recebido e quanto ainda falta
+          para atingir a meta.
+        </p>
+
+      </div>
+
     </section>
 
 
-    <!--
-      Lista de cards
-      Essa sessao começa com a mensagem de carregando e quando o pedidos.js terminar de buscar os dados da API, ele remove essa mensagem e insere os cards pelo JS
-      o id -> pedidos/lista e usado pelo JS pra achar o elemento desejado
-    -->
-    <section class="pedidos-lista" id="pedidos-lista">
+    <!-- ===================================================== -->
+    <!-- FILTROS E LISTA                                       -->
+    <!-- ===================================================== -->
+    <section class="pedidos-content">
 
-      <p class="pedidos-loading" id="pedidos-loading">
-        <i class="fa-solid fa-spinner fa-spin"></i> Carregando necessidades...
-      </p>
+      <div class="pedidos-section-header">
+
+        <div>
+          <span class="section-label">Pedidos ativos</span>
+
+          <h2>Necessidades disponíveis</h2>
+
+          <p>
+            Filtre os pedidos por urgência e clique em “Como doar” para ver todos
+            os detalhes da contribuição.
+          </p>
+        </div>
+
+        <a href="../pages/mapa.html" class="section-link">
+          <i class="fa-solid fa-map-location-dot"></i>
+          Ver centros
+        </a>
+
+      </div>
+
+
+      <div class="pedidos-filtros">
+
+        <button class="filtro-btn active" data-filtro="todos" type="button">
+          <i class="fa-solid fa-border-all"></i>
+          Todos
+        </button>
+
+        <button class="filtro-btn" data-filtro="critica" type="button">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          Crítica
+        </button>
+
+        <button class="filtro-btn" data-filtro="alta" type="button">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Alta
+        </button>
+
+        <button class="filtro-btn" data-filtro="media" type="button">
+          <i class="fa-solid fa-circle-info"></i>
+          Média
+        </button>
+
+        <button class="filtro-btn" data-filtro="baixa" type="button">
+          <i class="fa-solid fa-circle-check"></i>
+          Baixa
+        </button>
+
+      </div>
+
+
+      <section class="pedidos-lista" id="pedidos-lista">
+
+        <p class="pedidos-loading" id="pedidos-loading">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Carregando necessidades...
+        </p>
+
+      </section>
+
+
+      <div class="pedidos-ver-mais">
+        <button id="btn-ver-mais-pedidos" type="button">
+          Ver mais pedidos
+        </button>
+      </div>
 
     </section>
 
   </main>
 
 
-  <!--
-    confirmacao
-    quando o usuário clica em "quero ajudar" num card, o pedidos.js adiciona a classe .aberto nesse elemento -> modal aparece
-     esta fora do <main> de proposito —> o modal precisa cobrir a página inteira, então não e bom ficar preso dentro do container
-  -->
+  <!-- ===================================================== -->
+  <!-- MODAL COMO DOAR                                       -->
+  <!-- ===================================================== -->
   <div class="modal-overlay" id="modal-overlay">
+
     <div class="modal-box">
 
       <div class="modal-header">
-        <h2>Confirmar doação</h2>
-        <button class="modal-fechar" id="modal-fechar">
+
+        <div>
+          <span>Detalhes da contribuição</span>
+          <h2>Como doar</h2>
+        </div>
+
+        <button class="modal-fechar" id="modal-fechar" type="button">
           <i class="fa-solid fa-xmark"></i>
         </button>
+
       </div>
 
       <div class="modal-body">
-        <!--
-          esse paragrafo e preenchido pelo JS com o nome do item e do centro quando o modal abre
-         ex: "vc vai contribuir com cobertores para o centro esperança"
-        -->
-        <p id="modal-descricao">Você está prestes a confirmar uma doação.</p>
 
-        <div class="modal-input-grupo">
-          <label for="modal-quantidade">Quantidade que você vai doar:</label>
+        <div class="modal-section">
 
-          <input type="number" id="modal-quantidade" min="1" placeholder="Ex: 5">
+          <h3>
+            <i class="fa-solid fa-box-open"></i>
+            Detalhes da doação
+          </h3>
+
+          <p id="modal-item"></p>
+          <p id="modal-categoria"></p>
+          <p id="modal-quantidade-info"></p>
+          <p id="modal-urgencia"></p>
+          <p id="modal-descricao-pedido"></p>
+
         </div>
+
+        <div class="modal-section">
+
+          <h3>
+            <i class="fa-solid fa-building"></i>
+            Centro de apoio
+          </h3>
+
+          <p id="modal-centro"></p>
+          <p id="modal-cidade"></p>
+          <p id="modal-endereco"></p>
+          <p id="modal-telefone"></p>
+          <p id="modal-horario"></p>
+
+        </div>
+
+        <div class="modal-alerta">
+
+          <i class="fa-solid fa-circle-info"></i>
+
+          <p>
+            Para realizar a doação, entre em contato com o centro de apoio ou leve
+            os itens até o local informado. A confirmação da quantidade recebida
+            será feita pelo próprio centro.
+          </p>
+
+        </div>
+
       </div>
 
-      <!-- botoes de açao -->
       <div class="modal-footer">
-        <button class="btn-cancelar" id="btn-cancelar">Cancelar</button>
-        <button class="btn-confirmar" id="btn-confirmar">Confirmar doação</button>
+
+        <button class="btn-cancelar" id="btn-cancelar" type="button">
+          Fechar
+        </button>
+
       </div>
 
     </div>
+
   </div>
 
 
-  <!--
-    Scripts -> sempre no final do body, nao no <head>
-
-    header.js  -> injeta o header dinâmico
-    pedidos.js -> toda a logica dessa tela
-  -->
   <script src="../js/components/header.js"></script>
   <script src="../js/pedidos.js"></script>
+  <script src="../js/limitarPedido.js"></script>
 
 </body>
 

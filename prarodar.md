@@ -173,6 +173,35 @@ CREATE TABLE candidaturas (
   CHECK (status IN ('pendente', 'aprovada', 'rejeitada'))
 );
 
+CREATE TABLE pedidos_doacao (
+  id SERIAL PRIMARY KEY,
+
+  centro_id INT NOT NULL REFERENCES centros(id) ON DELETE CASCADE,
+
+  titulo VARCHAR(100) NOT NULL,
+  descricao TEXT,
+
+  categoria VARCHAR(50) NOT NULL,
+
+  quantidade_necessaria INT NOT NULL CHECK (quantidade_necessaria > 0),
+  quantidade_recebida INT DEFAULT 0 CHECK (quantidade_recebida >= 0),
+
+  urgencia VARCHAR(20) DEFAULT 'media',
+  status VARCHAR(20) DEFAULT 'ativo',
+
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT check_urgencia_pedido_doacao
+  CHECK (urgencia IN ('baixa', 'media', 'alta', 'critica')),
+
+  CONSTRAINT check_status_pedido_doacao
+  CHECK (status IN ('ativo', 'atendido', 'cancelado')),
+
+  CONSTRAINT check_quantidade_recebida
+  CHECK (quantidade_recebida <= quantidade_necessaria)
+);
+
 
 
 ```

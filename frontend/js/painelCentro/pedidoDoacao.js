@@ -1,46 +1,20 @@
 // ===============================
-// DADOS FAKE
+// PROTEÇÃO DA PÁGINA
 // ===============================
-// Depois, isso será substituído por dados vindos do backend.
+const token = localStorage.getItem("token");
 
-let pedidos = [
-  {
-    id: 1,
-    titulo: "Precisamos de água potável",
-    descricao: "Água para famílias que estão em abrigo temporário.",
-    categoria: "Água",
-    quantidade_necessaria: 100,
-    quantidade_recebida: 35,
-    unidade: "litros",
-    urgencia: "alta",
-    status: "aberto"
-  },
-  {
-    id: 2,
-    titulo: "Arrecadação de alimentos",
-    descricao: "Alimentos não perecíveis para montagem de cestas básicas.",
-    categoria: "Alimentos",
-    quantidade_necessaria: 80,
-    quantidade_recebida: 80,
-    unidade: "unidades",
-    urgencia: "media",
-    status: "atendido"
-  },
-  {
-    id: 3,
-    titulo: "Produtos de higiene",
-    descricao: "Sabonete, pasta de dente, papel higiênico e absorventes.",
-    categoria: "Produtos de higiene",
-    quantidade_necessaria: 50,
-    quantidade_recebida: 10,
-    unidade: "unidades",
-    urgencia: "critica",
-    status: "aberto"
-  }
-];
+if (!token) {
+  alert("Você precisa estar logado.");
+  window.location.href = "../login.html";
+}
 
-let proximoId = 4;
-let pedidosFiltrados = [...pedidos];
+
+// ===============================
+// DADOS GLOBAIS
+// ===============================
+let pedidos = [];
+let pedidosFiltrados = [];
+let pedidoSelecionadoId = null;
 
 
 // ===============================
@@ -108,12 +82,13 @@ const msgModalPedido = document.getElementById("msgModalPedido");
 // ===============================
 function textoStatus(status) {
   const statusMap = {
+    ativo: "Ativo",
     aberto: "Aberto",
     atendido: "Atendido",
     cancelado: "Cancelado"
   };
 
-  return statusMap[status] || status;
+  return statusMap[status] || status || "-";
 }
 
 function textoUrgencia(urgencia) {
@@ -124,13 +99,16 @@ function textoUrgencia(urgencia) {
     critica: "Crítica"
   };
 
-  return urgenciaMap[urgencia] || urgencia;
+  return urgenciaMap[urgencia] || urgencia || "-";
 }
 
 function calcularPorcentagem(recebida, necessaria) {
-  if (!necessaria || necessaria <= 0) return 0;
+  const quantidadeRecebida = Number(recebida || 0);
+  const quantidadeNecessaria = Number(necessaria || 0);
 
-  const porcentagem = (recebida / necessaria) * 100;
+  if (!quantidadeNecessaria || quantidadeNecessaria <= 0) return 0;
+
+  const porcentagem = (quantidadeRecebida / quantidadeNecessaria) * 100;
 
   return Math.min(Math.round(porcentagem), 100);
 }
@@ -140,9 +118,115 @@ function encontrarPedidoPorId(id) {
 }
 
 function limparMensagemDepois(elemento) {
+  if (!elemento) return;
+
   setTimeout(() => {
     elemento.textContent = "";
   }, 2500);
+}
+
+function mostrarMensagem(elemento, texto, cor = "#333") {
+  if (!elemento) return;
+
+  elemento.textContent = texto;
+  elemento.style.color = cor;
+}
+
+function converterStatusParaBackend(status) {
+  if (status === "aberto") return "ativo";
+  return status;
+}
+
+function converterStatusParaFront(status) {
+  if (status === "ativo") return "aberto";
+  return status;
+}
+
+function normalizarPedido(pedido) {
+  return {
+    id: pedido.id,
+
+    titulo: pedido.titulo || pedido.item || "",
+    descricao: pedido.descricao || "",
+    categoria: pedido.categoria || "",
+
+    quantidade_necessaria:
+      pedido.quantidade_necessaria ??
+      pedido.quantidadeNecessaria ??
+      0,
+
+    quantidade_recebida:
+      pedido.quantidade_recebida ??
+      pedido.quantidadeAtendida ??
+      0,
+
+    unidade: pedido.unidade || "unidades",
+
+    urgencia: pedido.urgencia || "media",
+
+    // No backend novo o status é "ativo".
+    // No front antigo era "aberto".
+    // Aqui convertemos para manter seu SCSS funcionando.
+    status: converterStatusParaFront(pedido.status || "ativo"),
+
+    criado_em: pedido.criado_em || pedido.criadoEm,
+    atualizado_em: pedido.atualizado_em || pedido.atualizadoEm
+  };
+}
+
+
+// ===============================
+// CARREGAR PEDIDOS DO BACKEND
+// ===============================
+async function carregarPedidos() {
+  try {
+    listaPedidos.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <h3>Carregando pedidos...</h3>
+        <p>Aguarde enquanto buscamos os pedidos do centro.</p>
+      </div>
+    `;
+
+    const res = await fetch("http://localhost:3000/api/pedidos-doacao/meu-centro", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.sucesso) {
+      listaPedidos.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <h3>Erro ao carregar pedidos</h3>
+          <p>${data.mensagem || "Não foi possível buscar os pedidos do centro."}</p>
+        </div>
+      `;
+      return;
+    }
+
+    pedidos = Array.isArray(data.dados)
+      ? data.dados.map(normalizarPedido)
+      : [];
+
+    pedidosFiltrados = [...pedidos];
+
+    renderizarPedidos(pedidosFiltrados);
+    atualizarResumo();
+
+  } catch (err) {
+    console.error("Erro ao carregar pedidos:", err);
+
+    listaPedidos.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <h3>Erro inesperado</h3>
+        <p>Não foi possível carregar os pedidos.</p>
+      </div>
+    `;
+  }
 }
 
 
@@ -231,89 +315,110 @@ function renderizarPedidos(lista = pedidosFiltrados) {
 function atualizarResumo() {
   const ativos = pedidos.filter((p) => p.status === "aberto").length;
 
-  const urgentes = pedidos.filter(
-    (p) =>
+  const urgentes = pedidos.filter((p) => {
+    return (
       p.status === "aberto" &&
       (p.urgencia === "alta" || p.urgencia === "critica")
-  ).length;
+    );
+  }).length;
 
   const atendidos = pedidos.filter((p) => p.status === "atendido").length;
 
-  totalPedidosAtivos.textContent = ativos;
-  totalPedidosUrgentes.textContent = urgentes;
-  totalPedidosAtendidos.textContent = atendidos;
+  if (totalPedidosAtivos) totalPedidosAtivos.textContent = ativos;
+  if (totalPedidosUrgentes) totalPedidosUrgentes.textContent = urgentes;
+  if (totalPedidosAtendidos) totalPedidosAtendidos.textContent = atendidos;
 }
 
 
 // ===============================
-// CRIAR PEDIDO
+// CRIAR PEDIDO NO BACKEND
 // ===============================
-formPedidoDoacao.addEventListener("submit", (e) => {
+formPedidoDoacao.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const titulo = inputTitulo.value.trim();
   const categoria = inputCategoria.value;
   const quantidadeNecessaria = Number(inputQuantidadeNecessaria.value);
   const quantidadeRecebida = Number(inputQuantidadeRecebida.value || 0);
-  const unidade = inputUnidade.value;
-  const urgencia = inputUrgencia.value;
+  const unidade = inputUnidade ? inputUnidade.value : "unidades";
+  const urgencia = inputUrgencia.value || "media";
   const descricao = inputDescricao.value.trim();
 
   if (!titulo || !categoria || !quantidadeNecessaria) {
-    msgPedido.textContent = "Preencha título, categoria e quantidade necessária.";
-    msgPedido.style.color = "red";
+    mostrarMensagem(msgPedido, "Preencha título, categoria e quantidade necessária.", "red");
     limparMensagemDepois(msgPedido);
     return;
   }
 
   if (quantidadeNecessaria <= 0) {
-    msgPedido.textContent = "A quantidade necessária deve ser maior que zero.";
-    msgPedido.style.color = "red";
+    mostrarMensagem(msgPedido, "A quantidade necessária deve ser maior que zero.", "red");
     limparMensagemDepois(msgPedido);
     return;
   }
 
   if (quantidadeRecebida < 0) {
-    msgPedido.textContent = "A quantidade recebida não pode ser negativa.";
-    msgPedido.style.color = "red";
+    mostrarMensagem(msgPedido, "A quantidade recebida não pode ser negativa.", "red");
     limparMensagemDepois(msgPedido);
     return;
   }
 
   if (quantidadeRecebida > quantidadeNecessaria) {
-    msgPedido.textContent = "A quantidade recebida não pode ser maior que a necessária.";
-    msgPedido.style.color = "red";
+    mostrarMensagem(msgPedido, "A quantidade recebida não pode ser maior que a necessária.", "red");
     limparMensagemDepois(msgPedido);
     return;
   }
 
-  const status = quantidadeRecebida === quantidadeNecessaria ? "atendido" : "aberto";
+  try {
+    mostrarMensagem(msgPedido, "Criando pedido...", "#555");
 
-  const novoPedido = {
-    id: proximoId++,
-    titulo,
-    descricao,
-    categoria,
-    quantidade_necessaria: quantidadeNecessaria,
-    quantidade_recebida: quantidadeRecebida,
-    unidade,
-    urgencia,
-    status
-  };
+    const res = await fetch("http://localhost:3000/api/pedidos-doacao", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        titulo,
+        item: titulo,
+        descricao,
+        categoria,
+        quantidadeNecessaria,
+        unidade,
+        urgencia
+      })
+    });
 
-  pedidos.unshift(novoPedido);
+    const data = await res.json();
 
-  formPedidoDoacao.reset();
+    if (!res.ok || !data.sucesso) {
+      mostrarMensagem(msgPedido, data.mensagem || "Erro ao criar pedido.", "red");
+      limparMensagemDepois(msgPedido);
+      return;
+    }
 
-  inputUnidade.value = "unidades";
-  inputUrgencia.value = "media";
+    const pedidoCriado = normalizarPedido(data.dados);
 
-  msgPedido.textContent = "Pedido criado com sucesso.";
-  msgPedido.style.color = "green";
-  limparMensagemDepois(msgPedido);
+    // O backend cria com recebidos = 0.
+    // Se o usuário já informou recebidos no formulário, atualiza em seguida.
+    if (quantidadeRecebida > 0) {
+      await atualizarRecebimentoPedido(pedidoCriado.id, quantidadeRecebida, false);
+    }
 
-  aplicarFiltros();
-  atualizarResumo();
+    formPedidoDoacao.reset();
+
+    if (inputUnidade) inputUnidade.value = "unidades";
+    if (inputUrgencia) inputUrgencia.value = "media";
+
+    mostrarMensagem(msgPedido, "Pedido criado com sucesso.", "green");
+    limparMensagemDepois(msgPedido);
+
+    await carregarPedidos();
+
+  } catch (err) {
+    console.error("Erro ao criar pedido:", err);
+    mostrarMensagem(msgPedido, "Erro na requisição.", "red");
+    limparMensagemDepois(msgPedido);
+  }
 });
 
 
@@ -322,6 +427,8 @@ formPedidoDoacao.addEventListener("submit", (e) => {
 // ===============================
 function abrirModalPedido(pedido) {
   if (!pedido) return;
+
+  pedidoSelecionadoId = pedido.id;
 
   pedidoIdEditar.value = pedido.id;
 
@@ -346,22 +453,24 @@ function abrirModalPedido(pedido) {
 // FECHAR MODAL
 // ===============================
 function fecharModalPedido() {
+  pedidoSelecionadoId = null;
+
   pedidoIdEditar.value = "";
   msgModalPedido.textContent = "";
+
   modalPedido.classList.add("hidden");
 }
 
 
 // ===============================
-// EDITAR PEDIDO
+// EDITAR PEDIDO NO BACKEND
 // ===============================
-formEditarPedido.addEventListener("submit", (e) => {
+formEditarPedido.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const id = pedidoIdEditar.value;
-  const pedido = encontrarPedidoPorId(id);
 
-  if (!pedido) return;
+  if (!id) return;
 
   const titulo = modalTitulo.value.trim();
   const categoria = modalCategoria.value;
@@ -372,42 +481,120 @@ formEditarPedido.addEventListener("submit", (e) => {
   const descricao = modalDescricao.value.trim();
 
   if (!titulo || !categoria || !quantidadeNecessaria) {
-    msgModalPedido.textContent = "Preencha os campos obrigatórios.";
-    msgModalPedido.style.color = "red";
+    mostrarMensagem(msgModalPedido, "Preencha os campos obrigatórios.", "red");
+    return;
+  }
+
+  if (quantidadeNecessaria <= 0) {
+    mostrarMensagem(msgModalPedido, "Quantidade necessária inválida.", "red");
     return;
   }
 
   if (quantidadeRecebida > quantidadeNecessaria) {
-    msgModalPedido.textContent = "Recebido não pode ser maior que necessário.";
-    msgModalPedido.style.color = "red";
+    mostrarMensagem(msgModalPedido, "Recebido não pode ser maior que necessário.", "red");
     return;
   }
 
-  pedido.titulo = titulo;
-  pedido.categoria = categoria;
-  pedido.quantidade_necessaria = quantidadeNecessaria;
-  pedido.quantidade_recebida = quantidadeRecebida;
-  pedido.unidade = unidade;
-  pedido.urgencia = urgencia;
-  pedido.descricao = descricao;
-  pedido.status = quantidadeRecebida === quantidadeNecessaria ? "atendido" : "aberto";
+  try {
+    mostrarMensagem(msgModalPedido, "Salvando alterações...", "#555");
 
-  msgModalPedido.textContent = "Pedido atualizado com sucesso.";
-  msgModalPedido.style.color = "green";
+    const res = await fetch(`http://localhost:3000/api/pedidos-doacao/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        titulo,
+        item: titulo,
+        descricao,
+        categoria,
+        quantidadeNecessaria,
+        unidade,
+        urgencia
+      })
+    });
 
-  aplicarFiltros();
-  atualizarResumo();
+    const data = await res.json();
 
-  setTimeout(() => {
-    fecharModalPedido();
-  }, 700);
+    if (!res.ok || !data.sucesso) {
+      mostrarMensagem(msgModalPedido, data.mensagem || "Erro ao editar pedido.", "red");
+      return;
+    }
+
+    // Depois de editar os dados gerais, atualiza a quantidade recebida
+    const recebimentoAtualizado = await atualizarRecebimentoPedido(id, quantidadeRecebida, false);
+
+    if (!recebimentoAtualizado) {
+      mostrarMensagem(
+        msgModalPedido,
+        "Pedido editado, mas houve erro ao atualizar recebidos.",
+        "orange"
+      );
+
+      await carregarPedidos();
+      return;
+    }
+
+    mostrarMensagem(msgModalPedido, "Pedido atualizado com sucesso.", "green");
+
+    await carregarPedidos();
+
+    setTimeout(() => {
+      fecharModalPedido();
+    }, 700);
+
+  } catch (err) {
+    console.error("Erro ao editar pedido:", err);
+    mostrarMensagem(msgModalPedido, "Erro na requisição.", "red");
+  }
 });
 
 
 // ===============================
-// ATUALIZAR RECEBIDOS
+// ATUALIZAR RECEBIDOS NO BACKEND
 // ===============================
-btnAtualizarRecebidos.addEventListener("click", () => {
+async function atualizarRecebimentoPedido(id, quantidadeRecebida, mostrarMsg = true) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/pedidos-doacao/${id}/recebimento`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        quantidadeRecebida
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.sucesso) {
+      if (mostrarMsg) {
+        mostrarMensagem(msgModalPedido, data.mensagem || "Erro ao atualizar recebidos.", "red");
+      }
+
+      return false;
+    }
+
+    if (mostrarMsg) {
+      mostrarMensagem(msgModalPedido, "Quantidade recebida atualizada.", "green");
+    }
+
+    return true;
+
+  } catch (err) {
+    console.error("Erro ao atualizar recebimento:", err);
+
+    if (mostrarMsg) {
+      mostrarMensagem(msgModalPedido, "Erro na requisição.", "red");
+    }
+
+    return false;
+  }
+}
+
+btnAtualizarRecebidos.addEventListener("click", async () => {
   const id = pedidoIdEditar.value;
   const pedido = encontrarPedidoPorId(id);
 
@@ -416,26 +603,20 @@ btnAtualizarRecebidos.addEventListener("click", () => {
   const quantidadeRecebida = Number(modalQuantidadeRecebida.value || 0);
 
   if (quantidadeRecebida < 0) {
-    msgModalPedido.textContent = "Recebido não pode ser negativo.";
-    msgModalPedido.style.color = "red";
+    mostrarMensagem(msgModalPedido, "Recebido não pode ser negativo.", "red");
     return;
   }
 
-  if (quantidadeRecebida > pedido.quantidade_necessaria) {
-    msgModalPedido.textContent = "Recebido não pode ser maior que necessário.";
-    msgModalPedido.style.color = "red";
+  if (quantidadeRecebida > Number(pedido.quantidade_necessaria)) {
+    mostrarMensagem(msgModalPedido, "Recebido não pode ser maior que necessário.", "red");
     return;
   }
 
-  pedido.quantidade_recebida = quantidadeRecebida;
-  pedido.status =
-    quantidadeRecebida === pedido.quantidade_necessaria ? "atendido" : "aberto";
+  const atualizado = await atualizarRecebimentoPedido(id, quantidadeRecebida, true);
 
-  msgModalPedido.textContent = "Quantidade recebida atualizada.";
-  msgModalPedido.style.color = "green";
+  if (!atualizado) return;
 
-  aplicarFiltros();
-  atualizarResumo();
+  await carregarPedidos();
 
   setTimeout(() => {
     fecharModalPedido();
@@ -444,36 +625,40 @@ btnAtualizarRecebidos.addEventListener("click", () => {
 
 
 // ===============================
-// EXCLUIR PEDIDO
+// EXCLUIR / CANCELAR PEDIDO NO BACKEND
 // ===============================
-btnCancelarPedido.addEventListener("click", () => {
-  const id = pedidoIdEditar.value;
-  const pedido = encontrarPedidoPorId(id);
+async function excluirPedido(id) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/pedidos-doacao/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-  if (!pedido) return;
+    const data = await res.json();
 
-  const confirmar = confirm(`Deseja excluir pedido "${pedido.titulo}"?`);
+    if (!res.ok || !data.sucesso) {
+      alert(data.mensagem || "Erro ao excluir pedido.");
+      return false;
+    }
 
-  if (!confirmar) return;
+    await carregarPedidos();
 
-  pedidos = pedidos.filter((p) => Number(p.id) !== Number(id));
+    return true;
 
-  msgModalPedido.textContent = "Pedido excluído com sucesso.";
-  msgModalPedido.style.color = "green";
-
-  aplicarFiltros();
-  atualizarResumo();
-
-  setTimeout(() => {
-    fecharModalPedido();
-  }, 700);
-});
+  } catch (err) {
+    console.error("Erro ao excluir pedido:", err);
+    alert("Erro na requisição.");
+    return false;
+  }
+}
 
 
 // ===============================
 // EVENTOS DA LISTA
 // ===============================
-listaPedidos.addEventListener("click", (e) => {
+listaPedidos.addEventListener("click", async (e) => {
   const btnEditar = e.target.closest(".btn-editar");
   const btnRecebidos = e.target.closest(".btn-recebidos");
   const btnExcluir = e.target.closest(".btn-excluir");
@@ -507,10 +692,7 @@ listaPedidos.addEventListener("click", (e) => {
 
     if (!confirmar) return;
 
-    pedidos = pedidos.filter((p) => Number(p.id) !== Number(id));
-
-    aplicarFiltros();
-    atualizarResumo();
+    await excluirPedido(id);
   }
 });
 
@@ -526,14 +708,36 @@ modalPedido.addEventListener("click", (e) => {
   }
 });
 
+btnCancelarPedido.addEventListener("click", async () => {
+  const id = pedidoIdEditar.value;
+  const pedido = encontrarPedidoPorId(id);
+
+  if (!pedido) return;
+
+  const confirmar = confirm(`Deseja excluir pedido "${pedido.titulo}"?`);
+
+  if (!confirmar) return;
+
+  const excluido = await excluirPedido(id);
+
+  if (excluido) {
+    fecharModalPedido();
+  }
+});
+
 
 // ===============================
 // FILTROS
 // ===============================
 function aplicarFiltros() {
   const categoria = filtroCategoria.value;
-  const status = filtroStatus.value;
+  let status = filtroStatus.value;
   const urgencia = filtroUrgencia.value;
+
+  // Se no HTML ainda estiver "ativo", converte para "aberto" porque no front usamos aberto.
+  if (status === "ativo") {
+    status = "aberto";
+  }
 
   pedidosFiltrados = pedidos.filter((pedido) => {
     const categoriaOk = !categoria || pedido.categoria === categoria;
@@ -556,7 +760,9 @@ btnLimparFiltrosPedidos.addEventListener("click", () => {
   filtroStatus.value = "";
   filtroUrgencia.value = "";
 
-  aplicarFiltros();
+  pedidosFiltrados = [...pedidos];
+
+  renderizarPedidos(pedidosFiltrados);
 });
 
 
@@ -564,6 +770,5 @@ btnLimparFiltrosPedidos.addEventListener("click", () => {
 // INICIALIZAÇÃO
 // ===============================
 window.addEventListener("load", () => {
-  renderizarPedidos(pedidos);
-  atualizarResumo();
+  carregarPedidos();
 });

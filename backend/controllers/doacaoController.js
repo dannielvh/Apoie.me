@@ -1,210 +1,560 @@
-const jwt = require('jsonwebtoken');
-const { centros, usuarios, doacoes, necessidades } = require('../db');
-const { registrarUso, registrarErro } = require('../logger');
-
-exports.listarNecessidades = (req, res) => {
-  try {
-    const resultado = necessidades.map((n) => {
-      const centro = centros.find((c) => c.id === n.centroId);
-      return {
-        id: n.id,
-        centroId: n.centroId,
-        nomeCentro: centro ? centro.nome : "Centro não encontrado",
-        item: n.item,
-        categoria: n.categoria,
-        quantidadeNecessaria: n.quantidadeNecessaria,
-        quantidadeAtendida: n.quantidadeAtendida,
-        urgencia: n.urgencia
-      };
-    });
-
-    registrarUso(null, 'Listou necessidades');
-    res.json({ sucesso: true, dados: resultado });
-  } catch (err) {
-    registrarErro(null, 'GET /necessidades', err.message);
-    res.status(500).json({ sucesso: false, mensagem: 'Erro interno do servidor.' });
-  }
-};
-
-exports.criarDoacao = (req, res) => {
-  try {
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({ sucesso: false, mensagem: 'Usuário não está logado.' });
-    }
-
-    const { necessidadeId, quantidade } = req.body;
-
-    if (!necessidadeId || !quantidade) {
-      return res.status(400).json({ sucesso: false, mensagem: 'Campos obrigatórios: necessidadeId, quantidade.' });
-    }
-
-    if (quantidade <= 0) {
-      return res.status(400).json({ sucesso: false, mensagem: 'Quantidade deve ser maior que zero.' });
-    }
-
-    const necessidade = necessidades.find((n) => n.id === necessidadeId);
-    if (!necessidade) {
-      return res.status(404).json({ sucesso: false, mensagem: 'Necessidade não encontrada.' });
-    }
-
-    const falta = necessidade.quantidadeNecessaria - necessidade.quantidadeAtendida;
-    if (quantidade > falta) {
-      return res.status(400).json({ sucesso: false, mensagem: `Quantidade excede o necessário. Ainda faltam ${falta} unidades.` });
-    }
-
-    let usuarioId;
-    try {
-      const decoded = jwt.verify(token, 'segredo');
-      usuarioId = decoded.id;
-    } catch (err) {
-      return res.status(401).json({ sucesso: false, mensagem: 'Token inválido ou expirado.' });
-    }
-
-    necessidade.quantidadeAtendida += quantidade;
-
-    const novaDoacao = {
-      id: doacoes.length + 1,
-      usuarioId,
-      centroId: necessidade.centroId,
-      necessidadeId,
-      item: necessidade.item,
-      quantidade,
-      unidade: 'unidades',
-      criadoEm: new Date().toISOString(),
-      status: 'pendente',
-    };
-
-    doacoes.push(novaDoacao);
-
-    registrarUso(usuarioId, `Doou ${quantidade} unidades de "${necessidade.item}"`);
-    res.status(201).json({ sucesso: true, dados: novaDoacao });
-  } catch (err) {
-    registrarErro(null, 'POST /doacoes', err.message);
-    res.status(500).json({ sucesso: false, mensagem: 'Erro interno do servidor.' });
-  }
-};
-
+// conexão com banco de dados
 const pool = require("../config/db");
 
-/**
- * REGRA: Criar uma nova doação no sistema
- * Segurança implementada: Validação de tipos, valores lógicos e proteção contra Double Submit.
- */
-exports.criarDoacao = async (req, res) => {
-  // O 'valor' veio do esqueleto original do grupo. Mantido para consistência.
-  const { valor } = req.body;
-  
-  // ID extraído de forma segura do Token JWT através do middleware 'autenticar'
-  const usuario_id = req.usuario.id; 
 
+// ======================================
+// LISTAR PEDIDOS DE DOAÇÃO / NECESSIDADES
+// ======================================
+exports.listarNecessidades = async (req, res) => {
   try {
-    // 1. VALIDAÇÃO DE ENTRADA: Impede campos vazios ou formatos inesperados (Ex: strings ou objetos)
-    if (!valor || typeof valor !== "number") {
-      return res.status(400).json({
-        sucesso: false,
-        mensagem: "Valor da doação é obrigatório e deve ser um número.",
-        dados: null
-      });
-    }
+    const result = await pool.query(`
+      SELECT
+        p.id,
+        p.centro_id AS "centroId",
 
-    // 2. VALIDAÇÃO DE NEGÓCIO: Garante que o valor seja coerente (não permite doações negativas ou zeradas)
-    if (valor <= 0) {
-      return res.status(400).json({
-        sucesso: false,
-        mensagem: "O valor da doação deve ser maior que zero.",
-        dados: null
-      });
-    }
+        c.nome AS "nomeCentro",
+        c.cidade AS "centroCidade",
+        c.rua AS "centroEndereco",
+        c.telefone AS "centroTelefone",
+        c.horario AS "centroHorario",
 
-    // 3. DEFESA CONTRA DOUBLE SUBMIT (Clique Duplo):
-    // Checa se o mesmo usuário tentou enviar exatamente o mesmo valor nos últimos 5 segundos.
-    // Evita inserções duplicadas por lag na rede ou múltiplos cliques rápidos no botão do frontend.
-    const doacaoDuplicada = await pool.query(
-      `SELECT id FROM doacoes 
-       WHERE usuario_id = $1 AND valor = $2 
-       AND data_doacao > NOW() - INTERVAL '5 seconds'`,
-      [usuario_id, valor]
-    );
+        p.titulo AS item,
+        p.descricao,
+        p.categoria,
 
-    if (doacaoDuplicada.rows.length > 0) {
-      return res.status(409).json({ // 409: Conflict
-        sucesso: false,
-        mensagem: "Doação duplicada detectada. Por favor, aguarde um momento.",
-        dados: null
-      });
-    }
+        p.quantidade_necessaria AS "quantidadeNecessaria",
+        p.quantidade_recebida AS "quantidadeAtendida",
 
-    // 4. INSERÇÃO SEGURA: Uso de queries parametrizadas ($1, $2) para blindar contra SQL Injection
-    const novaDoacao = await pool.query(
-      `INSERT INTO doacoes (usuario_id, valor, data_doacao)
-       VALUES ($1, $2, NOW())
-       RETURNING *`,
-      [usuario_id, valor]
-    );
+        p.urgencia,
+        p.status,
+        p.criado_em AS "criadoEm",
+        p.atualizado_em AS "atualizadoEm"
 
-    // Retorno padronizado com o formato { sucesso, mensagem, dados }
-    return res.status(201).json({
+      FROM pedidos_doacao p
+
+      JOIN centros c
+        ON c.id = p.centro_id
+
+      WHERE p.status <> 'cancelado'
+
+      ORDER BY
+        CASE p.urgencia
+          WHEN 'critica' THEN 1
+          WHEN 'alta' THEN 2
+          WHEN 'media' THEN 3
+          WHEN 'baixa' THEN 4
+          ELSE 5
+        END,
+        p.criado_em DESC
+    `);
+
+    return res.json({
       sucesso: true,
-      mensagem: "Doação realizada com sucesso",
-      dados: novaDoacao.rows[0]
+      dados: result.rows
     });
 
-  } catch (erro) {
-    console.error("Erro ao criar doação:", erro);
+  } catch (err) {
+    console.error("Erro ao listar necessidades:", err);
+
     return res.status(500).json({
       sucesso: false,
-      mensagem: "Erro interno no servidor ao processar doação.",
+      mensagem: "Erro interno do servidor.",
       dados: null
     });
   }
 };
 
-/**
- * REGRA: Buscar histórico de doações de um usuário específico
- * Segurança implementada: Controle de Acesso Baseado no Usuário (Privacidade de Dados).
- */
-exports.obterHistorico = async (req, res) => {
-  const { idUsuario } = req.params; // ID enviado na rota/URL (/historico/5)
-  const idLogado = req.usuario.id;   // ID real extraído e validado do Token JWT
+
+// ======================================
+// LISTAR PEDIDOS DO CENTRO LOGADO
+// ======================================
+exports.listarPedidosMeuCentro = async (req, res) => {
+  const usuarioId = req.usuario.id;
 
   try {
-    // 1. PARSE E VALIDAÇÃO DE PARÂMETROS: Garante que o ID da URL seja estritamente um número válido
-    if (isNaN(idUsuario) || parseInt(idUsuario) <= 0) {
-      return res.status(400).json({
+    const centroResult = await pool.query(
+      `SELECT id
+       FROM centros
+       WHERE usuario_id = $1`,
+      [usuarioId]
+    );
+
+    if (centroResult.rows.length === 0) {
+      return res.status(404).json({
         sucesso: false,
-        mensagem: "ID de usuário inválido.",
+        mensagem: "Centro não encontrado para este usuário.",
         dados: null
       });
     }
 
-    // 2. CONTROLE DE PRIVACIDADE: Impede que o Usuário A altere o ID na URL para espionar o histórico do Usuário B.
-    // O usuário só prossegue se o ID que ele está tentando acessar for estritamente igual ao ID do Token dele.
-    if (parseInt(idUsuario) !== parseInt(idLogado)) {
-      return res.status(403).json({ // 403: Forbidden
-        sucesso: false,
-        mensagem: "Acesso negado. Você só pode visualizar o seu próprio histórico.",
-        dados: null
-      });
-    }
+    const centroId = centroResult.rows[0].id;
 
-    // 3. BUSCA E ORDENAÇÃO: Traz os dados ordenados cronologicamente do mais recente para o mais antigo
-    const historico = await pool.query(
-      "SELECT * FROM doacoes WHERE usuario_id = $1 ORDER BY data_doacao DESC",
-      [idLogado]
+    const result = await pool.query(
+      `
+      SELECT
+        id,
+        centro_id AS "centroId",
+        titulo AS item,
+        descricao,
+        categoria,
+        quantidade_necessaria AS "quantidadeNecessaria",
+        quantidade_recebida AS "quantidadeAtendida",
+        urgencia,
+        status,
+        criado_em AS "criadoEm",
+        atualizado_em AS "atualizadoEm"
+      FROM pedidos_doacao
+      WHERE centro_id = $1
+      ORDER BY criado_em DESC
+      `,
+      [centroId]
     );
 
     return res.json({
       sucesso: true,
-      mensagem: "Histórico recuperado com sucesso.",
-      dados: historico.rows
+      dados: result.rows
     });
 
-  } catch (erro) {
-    console.error("Erro ao buscar histórico:", erro);
+  } catch (err) {
+    console.error("Erro ao listar pedidos do centro:", err);
+
     return res.status(500).json({
       sucesso: false,
-      mensagem: "Erro no servidor ao buscar histórico.",
+      mensagem: "Erro interno do servidor.",
+      dados: null
+    });
+  }
+};
+
+
+// ======================================
+// CRIAR PEDIDO DE DOAÇÃO
+// antigo: criarDoacao
+// ======================================
+exports.criarDoacao = async (req, res) => {
+  const usuarioId = req.usuario.id;
+
+  let {
+    titulo,
+    item,
+    descricao,
+    categoria,
+    quantidadeNecessaria,
+    quantidade_necessaria,
+    urgencia
+  } = req.body;
+
+  try {
+    titulo = titulo || item;
+    quantidadeNecessaria = quantidadeNecessaria || quantidade_necessaria;
+
+    if (!titulo || !categoria || !quantidadeNecessaria) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Campos obrigatórios: título/item, categoria e quantidade necessária.",
+        dados: null
+      });
+    }
+
+    quantidadeNecessaria = Number(quantidadeNecessaria);
+
+    if (isNaN(quantidadeNecessaria) || quantidadeNecessaria <= 0) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Quantidade necessária deve ser maior que zero.",
+        dados: null
+      });
+    }
+
+    urgencia = urgencia || "media";
+
+    const urgenciasValidas = ["baixa", "media", "alta", "critica"];
+
+    if (!urgenciasValidas.includes(urgencia)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Urgência inválida.",
+        dados: null
+      });
+    }
+
+    const centroResult = await pool.query(
+      `SELECT id, status
+       FROM centros
+       WHERE usuario_id = $1`,
+      [usuarioId]
+    );
+
+    if (centroResult.rows.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: "Centro não encontrado para este usuário.",
+        dados: null
+      });
+    }
+
+    const centro = centroResult.rows[0];
+
+    if (centro.status !== "aprovado") {
+      return res.status(403).json({
+        sucesso: false,
+        mensagem: "Apenas centros aprovados podem criar pedidos de doação.",
+        dados: null
+      });
+    }
+
+    const result = await pool.query(
+      `
+      INSERT INTO pedidos_doacao
+      (
+        centro_id,
+        titulo,
+        descricao,
+        categoria,
+        quantidade_necessaria,
+        quantidade_recebida,
+        urgencia,
+        status
+      )
+      VALUES ($1, $2, $3, $4, $5, 0, $6, 'ativo')
+      RETURNING *
+      `,
+      [
+        centro.id,
+        titulo.trim(),
+        descricao ? descricao.trim() : null,
+        categoria.trim(),
+        quantidadeNecessaria,
+        urgencia
+      ]
+    );
+
+    return res.status(201).json({
+      sucesso: true,
+      mensagem: "Pedido de doação criado com sucesso.",
+      dados: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error("Erro ao criar pedido de doação:", err);
+
+    return res.status(500).json({
+      sucesso: false,
+      mensagem: "Erro interno do servidor.",
+      dados: null
+    });
+  }
+};
+
+
+// ======================================
+// EDITAR PEDIDO DE DOAÇÃO
+// ======================================
+exports.editarDoacao = async (req, res) => {
+  const usuarioId = req.usuario.id;
+  const { id } = req.params;
+
+  let {
+    titulo,
+    item,
+    descricao,
+    categoria,
+    quantidadeNecessaria,
+    quantidade_necessaria,
+    urgencia,
+    status
+  } = req.body;
+
+  try {
+    titulo = titulo || item;
+    quantidadeNecessaria = quantidadeNecessaria || quantidade_necessaria;
+
+    const centroResult = await pool.query(
+      `SELECT id
+       FROM centros
+       WHERE usuario_id = $1`,
+      [usuarioId]
+    );
+
+    if (centroResult.rows.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: "Centro não encontrado para este usuário.",
+        dados: null
+      });
+    }
+
+    const centroId = centroResult.rows[0].id;
+
+    const pedidoResult = await pool.query(
+      `SELECT *
+       FROM pedidos_doacao
+       WHERE id = $1
+       AND centro_id = $2`,
+      [id, centroId]
+    );
+
+    if (pedidoResult.rows.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: "Pedido não encontrado ou não pertence ao seu centro.",
+        dados: null
+      });
+    }
+
+    const pedidoAtual = pedidoResult.rows[0];
+
+    const novoTitulo = titulo ? titulo.trim() : pedidoAtual.titulo;
+    const novaDescricao = descricao !== undefined ? descricao : pedidoAtual.descricao;
+    const novaCategoria = categoria ? categoria.trim() : pedidoAtual.categoria;
+    const novaQuantidade = quantidadeNecessaria
+      ? Number(quantidadeNecessaria)
+      : pedidoAtual.quantidade_necessaria;
+
+    const novaUrgencia = urgencia || pedidoAtual.urgencia;
+    const novoStatus = status || pedidoAtual.status;
+
+    if (novaQuantidade <= 0) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Quantidade necessária deve ser maior que zero.",
+        dados: null
+      });
+    }
+
+    if (pedidoAtual.quantidade_recebida > novaQuantidade) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "A quantidade necessária não pode ser menor que a quantidade já recebida.",
+        dados: null
+      });
+    }
+
+    const urgenciasValidas = ["baixa", "media", "alta", "critica"];
+    const statusValidos = ["ativo", "atendido", "cancelado"];
+
+    if (!urgenciasValidas.includes(novaUrgencia)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Urgência inválida.",
+        dados: null
+      });
+    }
+
+    if (!statusValidos.includes(novoStatus)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Status inválido.",
+        dados: null
+      });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE pedidos_doacao
+      SET titulo = $1,
+          descricao = $2,
+          categoria = $3,
+          quantidade_necessaria = $4,
+          urgencia = $5,
+          status = $6,
+          atualizado_em = NOW()
+      WHERE id = $7
+      AND centro_id = $8
+      RETURNING *
+      `,
+      [
+        novoTitulo,
+        novaDescricao,
+        novaCategoria,
+        novaQuantidade,
+        novaUrgencia,
+        novoStatus,
+        id,
+        centroId
+      ]
+    );
+
+    return res.json({
+      sucesso: true,
+      mensagem: "Pedido atualizado com sucesso.",
+      dados: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error("Erro ao editar pedido:", err);
+
+    return res.status(500).json({
+      sucesso: false,
+      mensagem: "Erro interno do servidor.",
+      dados: null
+    });
+  }
+};
+
+
+// ======================================
+// ATUALIZAR QUANTIDADE RECEBIDA
+// ======================================
+exports.atualizarRecebimento = async (req, res) => {
+  const usuarioId = req.usuario.id;
+  const { id } = req.params;
+  const { quantidadeRecebida, quantidade_recebida } = req.body;
+
+  try {
+    const novaQuantidadeRecebida = Number(
+      quantidadeRecebida || quantidade_recebida
+    );
+
+    if (isNaN(novaQuantidadeRecebida) || novaQuantidadeRecebida < 0) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Quantidade recebida inválida.",
+        dados: null
+      });
+    }
+
+    const centroResult = await pool.query(
+      `SELECT id
+       FROM centros
+       WHERE usuario_id = $1`,
+      [usuarioId]
+    );
+
+    if (centroResult.rows.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: "Centro não encontrado para este usuário.",
+        dados: null
+      });
+    }
+
+    const centroId = centroResult.rows[0].id;
+
+    const pedidoResult = await pool.query(
+      `SELECT *
+       FROM pedidos_doacao
+       WHERE id = $1
+       AND centro_id = $2`,
+      [id, centroId]
+    );
+
+    if (pedidoResult.rows.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: "Pedido não encontrado ou não pertence ao seu centro.",
+        dados: null
+      });
+    }
+
+    const pedido = pedidoResult.rows[0];
+
+    if (novaQuantidadeRecebida > pedido.quantidade_necessaria) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Quantidade recebida não pode ser maior que a quantidade necessária.",
+        dados: null
+      });
+    }
+
+    const novoStatus =
+      novaQuantidadeRecebida >= pedido.quantidade_necessaria
+        ? "atendido"
+        : "ativo";
+
+    const result = await pool.query(
+      `
+      UPDATE pedidos_doacao
+      SET quantidade_recebida = $1,
+          status = $2,
+          atualizado_em = NOW()
+      WHERE id = $3
+      AND centro_id = $4
+      RETURNING *
+      `,
+      [
+        novaQuantidadeRecebida,
+        novoStatus,
+        id,
+        centroId
+      ]
+    );
+
+    return res.json({
+      sucesso: true,
+      mensagem: "Quantidade recebida atualizada com sucesso.",
+      dados: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error("Erro ao atualizar recebimento:", err);
+
+    return res.status(500).json({
+      sucesso: false,
+      mensagem: "Erro interno do servidor.",
+      dados: null
+    });
+  }
+};
+
+
+// ======================================
+// EXCLUIR / CANCELAR PEDIDO DE DOAÇÃO
+// ======================================
+exports.excluirDoacao = async (req, res) => {
+  const usuarioId = req.usuario.id;
+  const { id } = req.params;
+
+  try {
+    const centroResult = await pool.query(
+      `SELECT id
+       FROM centros
+       WHERE usuario_id = $1`,
+      [usuarioId]
+    );
+
+    if (centroResult.rows.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: "Centro não encontrado para este usuário.",
+        dados: null
+      });
+    }
+
+    const centroId = centroResult.rows[0].id;
+
+    const result = await pool.query(
+      `
+      UPDATE pedidos_doacao
+      SET status = 'cancelado',
+          atualizado_em = NOW()
+      WHERE id = $1
+      AND centro_id = $2
+      RETURNING *
+      `,
+      [id, centroId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        sucesso: false,
+        mensagem: "Pedido não encontrado ou não pertence ao seu centro.",
+        dados: null
+      });
+    }
+
+    return res.json({
+      sucesso: true,
+      mensagem: "Pedido cancelado com sucesso.",
+      dados: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error("Erro ao excluir pedido:", err);
+
+    return res.status(500).json({
+      sucesso: false,
+      mensagem: "Erro interno do servidor.",
       dados: null
     });
   }

@@ -1,16 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const doacaoController = require('../controllers/doacaoController');
-const autenticar = require('../middlewares/authMiddlewares');
+const doacaoController = require("../controllers/doacaoController");
+const autenticar = require("../middlewares/authMiddlewares");
 
-// Listar necessidades dos centros
-router.get('/necessidades', doacaoController.listarNecessidades);
+// Público: usuário comum vê pedidos ativos
+router.get("/necessidades", doacaoController.listarNecessidades);
 
-// Registrar uma doação
-router.post('/doacao', autenticar, doacaoController.criarDoacao);
-
-// Histórico de doações do usuário
-router.get('/historico/:idUsuario', autenticar, doacaoController.obterHistorico);
+// Centro logado: gerencia seus pedidos
+router.get("/pedidos-doacao/meu-centro", autenticar, doacaoController.listarPedidosMeuCentro);
+router.post("/pedidos-doacao", autenticar, doacaoController.criarDoacao);
+router.put("/pedidos-doacao/:id", autenticar, doacaoController.editarDoacao);
+router.patch("/pedidos-doacao/:id/recebimento", autenticar, doacaoController.atualizarRecebimento);
+router.delete("/pedidos-doacao/:id", autenticar, doacaoController.excluirDoacao);
 
 module.exports = router;

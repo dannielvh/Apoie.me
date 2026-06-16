@@ -187,7 +187,8 @@ exports.criarCentro = async (req, res) => {
     cidade,
     tipo,
     rua,
-    horario,
+    horario_abertura,
+    horario_fechamento,
     cnpj,
     descricao,
     telefone,
@@ -244,7 +245,7 @@ exports.criarCentro = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO centros 
-      (nome, cidade, tipo, rua, horario, cnpj, descricao, telefone, status, responsavel_nome, email_contato, usuario_id)
+      (nome, cidade, tipo, rua, horario_abertura, horario_fechamento, cnpj, descricao, telefone, status, responsavel_nome, email_contato, usuario_id)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente',$9,$10,$11)
       RETURNING *`,
       [
@@ -269,73 +270,33 @@ exports.criarCentro = async (req, res) => {
   }
 };
 
-
-// LISTAR  + NECESSIDADES (NOVA MODELAGEM)
+// LISTAR
 exports.listarCentros = async (req, res) => {
   let { cidade } = req.query;
 
   try {
-
-
     let query = `
-      SELECT 
-        c.id_centro,
-        c.nome,
-        c.descricao,
-        c.categoria,
-        c.endereco,
-        c.contato,
-        c.validado,
-
-        n.id_necessidade,
-        n.nome_item,
-        n.descricao AS necessidade_descricao,
-        n.quantidade_necessaria,
-        n.quantidade_arrecadada,
-        n.urgencia
-
-      FROM centro c
-
-      /*
-        LEFT JOIN:
-        garante que centros apareçam mesmo sem necessidades
-      */
-      LEFT JOIN necessidade n
-        ON c.id_centro = n.id_centro
-
-      WHERE c.validado = true
+      SELECT * FROM centros
+      WHERE status = 'aprovado'
     `;
-
     let values = [];
 
-    // filtro opcional por cidade
     if (cidade) {
-      query += ` AND LOWER(c.endereco) LIKE LOWER($1)`;
+      cidade = cidade.trim();
+
+      query += `
+        AND unaccent(lower(cidade)) 
+        LIKE unaccent(lower($1))
+      `;
       values.push(`%${cidade}%`);
     }
 
-    query += ` ORDER BY c.id_centro`;
-
     const result = await pool.query(query, values);
 
-    /*
-      PADRÃO NOVO DE RESPOSTA DA API
-    */
-    return res.json({
-      sucesso: true,
-      mensagem: "Centros listados com necessidades",
-      dados: result.rows
-    });
-
-  } catch (err) {
-
-    console.error("Erro ao listar centros:", err);
-
-    return res.status(500).json({
-      sucesso: false,
-      mensagem: "Erro ao buscar centros",
-      dados: null
-    });
+    res.json(result.rows);
+  } catch (err)
+  {
+    res.status(500).json({ erro: 'Erro ao buscar centros' });
   }
 };
 

@@ -8,7 +8,6 @@ if (!token) {
   window.location.href = "login.html";
 }
 
-
 // ===============================
 // ELEMENTOS DA PÁGINA
 // ===============================
@@ -33,7 +32,6 @@ const inputObservacao = document.getElementById("observacao");
 
 let centrosCarregados = [];
 
-
 // ===============================
 // FUNÇÕES AUXILIARES
 // ===============================
@@ -54,14 +52,15 @@ function formatarStatus(status) {
   const statusMap = {
     pendente: "Pendente",
     aprovada: "Aprovada",
-    rejeitada: "Rejeitada"
+    rejeitada: "Rejeitada",
   };
 
   return statusMap[status] || status || "Pendente";
 }
 
 function pegarUsuarioLogado() {
-  const userStorage = localStorage.getItem("user") || localStorage.getItem("usuario");
+  const userStorage =
+    localStorage.getItem("user") || localStorage.getItem("usuario");
 
   if (!userStorage) return null;
 
@@ -72,7 +71,6 @@ function pegarUsuarioLogado() {
   }
 }
 
-
 // ===============================
 // CARREGAR CENTROS
 // ===============================
@@ -80,8 +78,8 @@ async function carregarCentros() {
   try {
     const res = await fetch("http://localhost:3000/api/centros", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const data = await res.json();
@@ -101,12 +99,10 @@ async function carregarCentros() {
     });
 
     carregarCidades();
-
   } catch (err) {
     console.error("Erro ao carregar centros:", err);
   }
 }
-
 
 // ===============================
 // CARREGAR CIDADES A PARTIR DOS CENTROS
@@ -140,14 +136,14 @@ function carregarCidades() {
   });
 }
 
-
 // ===============================
 // CARREGAR CENTROS PELA CIDADE
 // ===============================
 selectCidade.addEventListener("change", () => {
   const cidadeSelecionada = selectCidade.value;
 
-  selectCentro.innerHTML = '<option value="">Selecione um centro de apoio</option>';
+  selectCentro.innerHTML =
+    '<option value="">Selecione um centro de apoio</option>';
 
   if (!cidadeSelecionada) {
     selectCentro.disabled = true;
@@ -160,7 +156,8 @@ selectCidade.addEventListener("change", () => {
 
   if (centrosDaCidade.length === 0) {
     selectCentro.disabled = true;
-    selectCentro.innerHTML = '<option value="">Nenhum centro disponível nesta cidade</option>';
+    selectCentro.innerHTML =
+      '<option value="">Nenhum centro disponível nesta cidade</option>';
     return;
   }
 
@@ -177,7 +174,6 @@ selectCidade.addEventListener("change", () => {
     selectCentro.appendChild(option);
   });
 });
-
 
 // ===============================
 // MÁSCARA DE TELEFONE
@@ -198,7 +194,6 @@ if (inputTelefone) {
   });
 }
 
-
 // ===============================
 // CADASTRAR OU GARANTIR PERFIL DE VOLUNTÁRIO
 // ===============================
@@ -208,9 +203,9 @@ async function salvarPerfilVoluntario(dadosVoluntario) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(dadosVoluntario)
+      body: JSON.stringify(dadosVoluntario),
     });
 
     const data = await res.json();
@@ -233,14 +228,12 @@ async function salvarPerfilVoluntario(dadosVoluntario) {
     }
 
     return true;
-
   } catch (err) {
     console.error("Erro ao salvar perfil de voluntário:", err);
     mostrarMensagem("Erro ao salvar perfil de voluntário.", "red");
     return false;
   }
 }
-
 
 // ===============================
 // CRIAR CANDIDATURA
@@ -251,30 +244,31 @@ async function criarCandidatura(centroId) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        centro_id: Number(centroId)
-      })
+        centro_id: Number(centroId),
+      }),
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      mostrarMensagem(data.erro || data.msg || "Erro ao enviar candidatura.", "red");
+      mostrarMensagem(
+        data.erro || data.msg || "Erro ao enviar candidatura.",
+        "red",
+      );
       return false;
     }
 
     mostrarMensagem("Candidatura enviada com sucesso!", "green");
     return true;
-
   } catch (err) {
     console.error("Erro ao criar candidatura:", err);
     mostrarMensagem("Erro na requisição.", "red");
     return false;
   }
 }
-
 
 // ===============================
 // SUBMIT DO FORMULÁRIO
@@ -290,21 +284,21 @@ form.addEventListener("submit", async (e) => {
     email: inputEmail.value.trim(),
     telefone: inputTelefone.value.trim(),
     cidade: cidadeSelecionada,
+
+    // Campo específico para habilidades separadas por vírgula
     habilidades: inputHabilidades.value.trim(),
 
-    // Se tiver campo no HTML, pega o valor.
-    // Se não tiver, manda um padrão para não quebrar o backend.
-    disponibilidade: inputDisponibilidade
-      ? inputDisponibilidade.value.trim()
-      : "A combinar",
+    // Como não temos campo separado no HTML,
+    // disponibilidade fica com valor padrão
+    disponibilidade: "Informada na descrição",
 
-    experiencia: inputExperiencia
-      ? inputExperiencia.value.trim()
-      : "",
+    // Como não temos campo separado no HTML,
+    // experiência fica vazia
+    experiencia: "",
 
-    observacao: inputObservacao
-      ? inputObservacao.value.trim()
-      : ""
+    // Campo de descrição geral
+    // Aqui a pessoa informa disponibilidade, experiência e observações
+    observacao: inputObservacao.value.trim(),
   };
 
   if (
@@ -313,7 +307,8 @@ form.addEventListener("submit", async (e) => {
     !dadosVoluntario.telefone ||
     !dadosVoluntario.cidade ||
     !centroId ||
-    !dadosVoluntario.habilidades
+    !dadosVoluntario.habilidades ||
+    !dadosVoluntario.observacao
   ) {
     mostrarMensagem("Preencha os campos obrigatórios.", "red");
     return;
@@ -332,11 +327,11 @@ form.addEventListener("submit", async (e) => {
   form.reset();
 
   selectCentro.disabled = true;
-  selectCentro.innerHTML = '<option value="">Selecione um centro de apoio</option>';
+  selectCentro.innerHTML =
+    '<option value="">Selecione um centro de apoio</option>';
 
   carregarCandidaturas();
 });
-
 
 // ===============================
 // VISUALIZAR CANDIDATURAS DO USUÁRIO
@@ -349,8 +344,8 @@ async function carregarCandidaturas() {
   try {
     const res = await fetch("http://localhost:3000/api/candidaturas", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const data = await res.json();
@@ -372,7 +367,8 @@ async function carregarCandidaturas() {
     }
 
     if (candidaturas.length === 0) {
-      containerCandidaturas.innerHTML = "<p>Nenhuma candidatura enviada ainda.</p>";
+      containerCandidaturas.innerHTML =
+        "<p>Nenhuma candidatura enviada ainda.</p>";
       return;
     }
 
@@ -404,13 +400,11 @@ async function carregarCandidaturas() {
 
       containerCandidaturas.appendChild(card);
     });
-
   } catch (err) {
     console.error("Erro ao carregar candidaturas:", err);
     containerCandidaturas.innerHTML = "<p>Erro ao carregar candidaturas.</p>";
   }
 }
-
 
 // ===============================
 // INICIALIZAÇÃO

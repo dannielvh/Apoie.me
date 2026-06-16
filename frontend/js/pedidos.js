@@ -1,17 +1,32 @@
 const listaNecessidades = document.getElementById("pedidos-lista");
 const loadingMsg = document.getElementById("pedidos-loading");
+
 const modalOverlay = document.getElementById("modal-overlay");
 const modalFechar = document.getElementById("modal-fechar");
 const btnCancelar = document.getElementById("btn-cancelar");
-const btnConfirmar = document.getElementById("btn-confirmar");
-const modalDescricao = document.getElementById("modal-descricao");
-const modalQuantidade = document.getElementById("modal-quantidade");
 
-let necessidadeAtual = null;
+const modalItem = document.getElementById("modal-item");
+const modalCategoria = document.getElementById("modal-categoria");
+const modalQuantidadeInfo = document.getElementById("modal-quantidade-info");
+const modalUrgencia = document.getElementById("modal-urgencia");
+const modalDescricaoPedido = document.getElementById("modal-descricao-pedido");
 
+const modalCentro = document.getElementById("modal-centro");
+const modalCidade = document.getElementById("modal-cidade");
+const modalEndereco = document.getElementById("modal-endereco");
+const modalTelefone = document.getElementById("modal-telefone");
+const modalHorario = document.getElementById("modal-horario");
+
+let necessidadesCarregadas = [];
+
+
+// ===============================
+// CARREGAR NECESSIDADES
+// ===============================
 async function carregarNecessidades() {
   try {
-    loadingMsg.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Carregando necessidades...";
+    loadingMsg.innerHTML =
+      "<i class='fa-solid fa-spinner fa-spin'></i> Carregando necessidades...";
 
     const res = await fetch("http://localhost:3000/api/necessidades");
     const data = await res.json();
@@ -19,26 +34,48 @@ async function carregarNecessidades() {
     loadingMsg.remove();
 
     if (data.sucesso && data.dados.length > 0) {
-      renderizarCards(data.dados);
+      necessidadesCarregadas = data.dados;
+      renderizarCards(necessidadesCarregadas);
     } else {
-      listaNecessidades.innerHTML = "<p class='pedidos-loading'>Nenhuma necessidade encontrada.</p>";
+      listaNecessidades.innerHTML =
+        "<p class='pedidos-loading'>Nenhuma necessidade encontrada.</p>";
     }
+
   } catch (err) {
-    loadingMsg.innerHTML = "<i class='fa-solid fa-circle-exclamation'></i> Erro ao carregar necessidades.";
+    loadingMsg.innerHTML =
+      "<i class='fa-solid fa-circle-exclamation'></i> Erro ao carregar necessidades.";
+
     console.error("Erro ao carregar necessidades:", err);
   }
 }
 
+
+// ===============================
+// RENDERIZAR CARDS
+// ===============================
 function renderizarCards(necessidades) {
-  necessidades.forEach(n => {
-    const card = criarCard(n);
+  listaNecessidades.innerHTML = "";
+
+  necessidades.forEach((necessidade) => {
+    const card = criarCard(necessidade);
     listaNecessidades.appendChild(card);
   });
 }
 
+
+// ===============================
+// CRIAR CARD
+// ===============================
 function criarCard(necessidade) {
-  const porcentagem = Math.round((necessidade.quantidadeAtendida / necessidade.quantidadeNecessaria) * 100);
-  const faltam = necessidade.quantidadeNecessaria - necessidade.quantidadeAtendida;
+  const quantidadeAtendida = Number(necessidade.quantidadeAtendida || 0);
+  const quantidadeNecessaria = Number(necessidade.quantidadeNecessaria || 0);
+
+  const porcentagem =
+    quantidadeNecessaria > 0
+      ? Math.round((quantidadeAtendida / quantidadeNecessaria) * 100)
+      : 0;
+
+  const faltam = quantidadeNecessaria - quantidadeAtendida;
 
   const card = document.createElement("div");
   card.classList.add("pedido-card");
@@ -47,24 +84,26 @@ function criarCard(necessidade) {
   const textoUrgencia = {
     critica: "Crítica",
     alta: "Alta",
-    media: "Média"
+    media: "Média",
+    baixa: "Baixa"
   };
 
   card.innerHTML = `
     <div class="pedido-card-header">
-      <h3>${necessidade.nomeCentro}</h3>
+      <h3>${necessidade.nomeCentro || "Centro não informado"}</h3>
+
       <span class="urgency-badge ${necessidade.urgencia}">
-        ${textoUrgencia[necessidade.urgencia]}
+        ${textoUrgencia[necessidade.urgencia] || "Média"}
       </span>
     </div>
 
     <p class="pedido-item">
-      Item solicitado: <strong>${necessidade.item}</strong>
+      Item solicitado: <strong>${necessidade.item || necessidade.titulo || "-"}</strong>
     </p>
 
     <div class="pedido-quantidade">
-      <span>${necessidade.quantidadeAtendida} arrecadados</span>
-      <span>${necessidade.quantidadeNecessaria} necessários</span>
+      <span>${quantidadeAtendida} recebidos/</span>
+      <span>${quantidadeNecessaria} necessários</span>
     </div>
 
     <div class="progress-bar">
@@ -72,30 +111,37 @@ function criarCard(necessidade) {
     </div>
 
     <p class="pedido-progresso-texto">
-      ${necessidade.quantidadeAtendida} de ${necessidade.quantidadeNecessaria} unidades arrecadadas — faltam ${faltam}
+      ${quantidadeAtendida} de ${quantidadeNecessaria} unidades recebidas — faltam ${faltam}
     </p>
 
     <button class="btn-quero-ajudar" data-id="${necessidade.id}">
-      <i class="fa-solid fa-hand-holding-heart"></i>
-      Quero ajudar
+      <i class="fa-solid fa-circle-info"></i>
+      Como doar
     </button>
   `;
 
   card.querySelector(".btn-quero-ajudar").addEventListener("click", () => {
-    abrirModal(necessidade);
+    abrirModalComoDoar(necessidade);
   });
 
   return card;
 }
 
-document.querySelectorAll(".filtro-btn").forEach(btn => {
+
+// ===============================
+// FILTROS
+// ===============================
+document.querySelectorAll(".filtro-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".filtro-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".filtro-btn").forEach((b) => {
+      b.classList.remove("active");
+    });
+
     btn.classList.add("active");
 
     const filtro = btn.dataset.filtro;
 
-    document.querySelectorAll(".pedido-card").forEach(card => {
+    document.querySelectorAll(".pedido-card").forEach((card) => {
       if (filtro === "todos" || card.dataset.urgencia === filtro) {
         card.style.display = "flex";
       } else {
@@ -105,17 +151,74 @@ document.querySelectorAll(".filtro-btn").forEach(btn => {
   });
 });
 
-function abrirModal(necessidade) {
-  necessidadeAtual = necessidade;
-  modalDescricao.textContent =
-    `Você vai contribuir com "${necessidade.item}" para o ${necessidade.nomeCentro}. Informe a quantidade que consegue doar:`;
-  modalQuantidade.value = "";
+
+// ===============================
+// ABRIR MODAL DE COMO DOAR
+// ===============================
+function abrirModalComoDoar(necessidade) {
+  const quantidadeAtendida = Number(necessidade.quantidadeAtendida || 0);
+  const quantidadeNecessaria = Number(necessidade.quantidadeNecessaria || 0);
+  const faltam = quantidadeNecessaria - quantidadeAtendida;
+
+  modalItem.innerHTML = `
+    <strong>Item:</strong>
+    ${necessidade.item || "-"}
+  `;
+
+  modalCategoria.innerHTML = `
+    <strong>Categoria:</strong>
+    ${necessidade.categoria || "Categoria não informada"}
+  `;
+
+  modalQuantidadeInfo.innerHTML = `
+    <strong>Quantidade:</strong>
+    faltam ${faltam} de ${quantidadeNecessaria} unidades
+  `;
+
+  modalUrgencia.innerHTML = `
+    <strong>Urgência:</strong>
+    ${formatarUrgencia(necessidade.urgencia)}
+  `;
+
+  modalDescricaoPedido.innerHTML = `
+    <strong>Descrição:</strong>
+    ${necessidade.descricao || "Nenhuma descrição informada."}
+  `;
+
+  modalCentro.innerHTML = `
+    <strong>Centro:</strong>
+    ${necessidade.nomeCentro || "Centro não informado"}
+  `;
+
+  modalCidade.innerHTML = `
+    <strong>Cidade:</strong>
+    ${necessidade.centroCidade || "Cidade não informada"}
+  `;
+
+  modalEndereco.innerHTML = `
+    <strong>Endereço:</strong>
+    ${necessidade.centroEndereco || "Endereço não informado"}
+  `;
+
+  modalTelefone.innerHTML = `
+    <strong>Telefone:</strong>
+    ${necessidade.centroTelefone || "Telefone não informado"}
+  `;
+
+  modalHorario.innerHTML = `
+    <strong>Horário de atendimento:</strong>
+    ${necessidade.centroHorario || "Horário não informado"}
+  `;
+
   modalOverlay.classList.add("aberto");
 }
 
+
+// ===============================
+// FECHAR MODAL
+// ===============================
 function fecharModal() {
   modalOverlay.classList.remove("aberto");
-  necessidadeAtual = null;
 }
 
 modalFechar.addEventListener("click", fecharModal);
@@ -127,50 +230,23 @@ modalOverlay.addEventListener("click", (e) => {
   }
 });
 
-btnConfirmar.addEventListener("click", async () => {
-  const quantidade = parseInt(modalQuantidade.value);
 
-  if (!quantidade || quantidade <= 0) {
-    alert("Informe uma quantidade válida.");
-    return;
-  }
+// ===============================
+// FORMATAR URGÊNCIA
+// ===============================
+function formatarUrgencia(urgencia) {
+  const urgencias = {
+    critica: "Crítica",
+    alta: "Alta",
+    media: "Média",
+    baixa: "Baixa"
+  };
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Faça login para realizar uma doação.");
-    window.location.href = "login.html";
-    return;
-  }
+  return urgencias[urgencia] || "Média";
+}
 
-  try {
-    const res = await fetch("http://localhost:3000/api/doacoes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": token
-      },
-      body: JSON.stringify({
-        necessidadeId: necessidadeAtual.id,
-        quantidade: quantidade
-      })
-    });
 
-    const data = await res.json();
-
-    if (!res.ok || !data.sucesso) {
-      alert(data.mensagem || "Erro ao registrar doação.");
-      return;
-    }
-
-    alert("Doação registrada! Obrigada pela sua contribuição.");
-    fecharModal();
-
-    listaNecessidades.innerHTML = '<p class="pedidos-loading">Atualizando...</p>';
-    carregarNecessidades();
-  } catch (err) {
-    alert("Erro na requisição. Tente novamente.");
-    console.error("Erro ao registrar doação:", err);
-  }
-});
-
+// ===============================
+// INICIALIZAÇÃO
+// ===============================
 window.addEventListener("load", carregarNecessidades);

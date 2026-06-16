@@ -1,183 +1,205 @@
-.container-form {
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5dc 0%, #e8f5e9 100%);
+
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  max-width: 450px;
-  min-height: 550px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  align-items: center;
+
+  padding: 30px 16px;
+
+  .container-form {
+    width: 100%;
+    max-width: 410px;
+
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 36px 30px;
+
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 6px;
+
+      background: linear-gradient(90deg, #2e7d32, #66bb6a);
+    }
+  }
 
   .text-form {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     gap: 10px;
-     margin-bottom: 30px;
+    text-align: center;
+    margin-bottom: 28px;
 
-     i {
-          font-size: 48px;
-          color: #fff;
-          background-color: #2E7D32;
-          padding: 15px;
-          border-radius: 50%;
-     }
+    .logo {
+      width: 102px;
+      height: 102px;
+      margin: 0 auto 15px;
 
-     h1 {
-      text-align: center;
-      font-family: 'Inter', sans-serif;
-      color: #2E7D32;
-      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      // background: #e8f5e9;
+      border-radius: 50%;
+      // border: 1px solid #d6ead8;
+
+      img {
+        max-width: 102px;
+        object-fit: contain;
+      }
     }
 
-     p {
-      text-align: center;
-      font-family: 'Inter', sans-serif;
+    h1 {
+      color: #2e7d32;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    p {
       color: #666666;
-      font-size: 18px;
-     }
+      font-size: 15px;
+      line-height: 1.5;
+      max-width: 320px;
+      margin: 0 auto;
+    }
   }
 
   form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
+    gap: 16px;
+  }
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      align-items: start;
-      justify-content: center;
-      gap: 5px;
-      width: 100%;
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
 
-      label {
-        font-family: 'Inter', sans-serif;
-        color: #666666;
-        font-size: 18px;
-      }
-
-      input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 16px;
-
-        &:focus {
-          border-color: #2E7D32;
-          outline: none;
-        }
-      }
+    label {
+      color: #333333;
+      font-size: 14px;
+      font-weight: 700;
     }
 
-    button {
+    input {
       width: 100%;
-      padding: 10px;
-      background-color: #2E7D32;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 18px;
-      cursor: pointer;
-      margin-top: 15px;
+      padding: 13px 14px;
 
-      &:hover {
-        background-color: #1B5E20;
+      border: 1px solid #d7d7d7;
+      border-radius: 10px;
+
+      background: #ffffff;
+      color: #333333;
+
+      font-size: 14px;
+      font-family: inherit;
+
+      transition: 0.2s ease;
+
+      &::placeholder {
+        color: #9a9a9a;
       }
+
+      &:focus {
+        outline: none;
+        border-color: #2e7d32;
+        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.13);
+      }
+    }
+  }
+
+  button[type="submit"] {
+    margin-top: 6px;
+
+    width: 100%;
+    padding: 13px 16px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #2e7d32;
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+    &:hover {
+      background: #1b5e20;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(46, 125, 50, 0.25);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
     }
   }
 
   .register-link {
-    margin-top: 20px;
-    font-family: 'Inter', sans-serif;
-    color: #666666;
-    font-size: 16px;
-    color: #2E7D32;
-      text-decoration: none;
+    display: block;
+    margin-top: 22px;
 
-      &:hover {
-        text-decoration: underline;
-      }
-    
-  }
-}
+    text-align: center;
+    color: #2e7d32;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
 
-@media (max-width: 768px) {
+    transition: 0.2s ease;
 
-  .container-form {
-    max-width: 90%;
-    min-height: auto;
-    padding: 25px;
-  }
-
-  .container-form .text-form {
-
-    i {
-      font-size: 40px;
-      padding: 12px;
+    &::before {
+      content: "Ainda não tem conta? ";
+      color: #666666;
+      font-weight: 500;
     }
 
-    h1 {
-      font-size: 22px;
-    }
-
-    p {
-      font-size: 16px;
+    &:hover {
+      color: #1b5e20;
+      text-decoration: underline;
     }
   }
-
-  .container-form form {
-
-    .input-group {
-
-      label {
-        font-size: 16px;
-      }
-
-      input {
-        font-size: 15px;
-      }
-
-    }
-
-    button {
-      font-size: 16px;
-      padding: 12px;
-    }
-
-  }
-
 }
 
 @media (max-width: 480px) {
+  .login-page {
+    align-items: flex-start;
+    padding: 28px 14px;
 
-  .container-form {
-    max-width: 95%;
-    padding: 20px;
+    .container-form {
+      padding: 30px 22px;
+      border-radius: 16px;
+    }
+
+    .text-form {
+      .logo {
+        width: 76px;
+        height: 76px;
+
+        img {
+          max-width: 58px;
+          max-height: 58px;
+        }
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
   }
-
-  .container-form .text-form {
-
-    i {
-      font-size: 34px;
-      padding: 10px;
-    }
-
-    h1 {
-      font-size: 20px;
-    }
-
-    p {
-      font-size: 14px;
-    }
-
-  }
-
 }

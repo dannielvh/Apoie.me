@@ -132,8 +132,23 @@
 
           <!-- HORÁRIO -->
           <div class="form-group">
-            <label for="horario">Horário de funcionamento</label>
-            <input type="text" id="horario" placeholder="Ex: 08h - 18h">
+              <label>Horário de funcionamento</label>
+
+              <div class="horario-container">
+                  <input
+                      type="time"
+                      id="horario_abertura"
+                      aria-label="Horário de abertura"
+                  >
+
+                  <span>às</span>
+
+                  <input
+                      type="time"
+                      id="horario_fechamento"
+                      aria-label="Horário de fechamento"
+                  >
+              </div>
           </div>
 
           <!-- CNPJ -->

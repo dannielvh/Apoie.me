@@ -1,4 +1,4 @@
-fetch("../components/header.html")
+fetch("/frontend/components/header.html")
    .then((res) => res.text())
   .then(async (data) => {
     document.getElementById("header").innerHTML = data;
@@ -33,8 +33,21 @@ fetch("../components/header.html")
     // USUÁRIO LOGADO / DROPDOWN
     // ===============================
     const areaUsuario = document.getElementById("area-usuario");
+    //const token = localStorage.getItem("token");
+    //const user = JSON.parse(localStorage.getItem("user"));
+
     const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
+
+    let user = null;
+
+    try {
+      user = JSON.parse(localStorage.getItem("user"));
+    } catch (err) {
+      console.error("Erro ao ler usuário do localStorage:", err);
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    }
 
     if (!areaUsuario) return;
 
