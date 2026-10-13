@@ -200,7 +200,17 @@ exports.criarCentro = async (req, res) => {
 
 
 
-  let cnpjTratado = cnpj ? cnpj : null;
+  // CNPJ vazio precisa ir como NULL (nunca ''), por causa do índice unique_cnpj
+  const cnpjTratado = cnpj ? String(cnpj).replace(/\D/g, "") : null;
+
+  // A tabela tem uma única coluna "horario" (VARCHAR 50).
+  // O formulário envia abertura e fechamento separados, então juntamos aqui.
+  let horario = null;
+  if (horario_abertura && horario_fechamento) {
+    horario = `${horario_abertura} - ${horario_fechamento}`;
+  } else if (horario_abertura || horario_fechamento) {
+    horario = horario_abertura || horario_fechamento;
+  }
 
   try {
     const centroDoUsuario = await pool.query(
@@ -228,7 +238,7 @@ exports.criarCentro = async (req, res) => {
     nome = nome.trim();
     cidade = cidade.trim();
 
-    if (!validarCNPJ(cnpj)) {
+    if (!validarCNPJ(cnpjTratado)) {
       return res.status(400).json({ erro: "CNPJ inválido" });
     }
 
@@ -244,21 +254,22 @@ exports.criarCentro = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO centros 
-      (nome, cidade, tipo, rua, horario_abertura, horario_fechamento, cnpj, descricao, telefone, status, responsavel_nome, email_contato, usuario_id)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente',$9,$10,$11)
-      RETURNING *`,
+      `INSERT INTO centros
+        (nome, cidade, tipo, rua, horario, cnpj, descricao, telefone,
+         responsavel_nome, email_contato, status, usuario_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'pendente',$11)
+       RETURNING *`,
       [
         nome,
         cidade,
         tipo,
-        rua,
+        rua.trim(),
         horario,
         cnpjTratado,
-        descricao,
-        telefone,
-        responsavel_nome,
-        email_contato,
+        descricao || null,
+        telefone || null,
+        responsavel_nome.trim(),
+        email_contato.trim(),
         usuarioId,
       ],
     );
@@ -294,8 +305,7 @@ exports.listarCentros = async (req, res) => {
     const result = await pool.query(query, values);
 
     res.json(result.rows);
-  } catch (err)
-  {
+  } catch (err) {
     res.status(500).json({ erro: 'Erro ao buscar centros' });
   }
 };
